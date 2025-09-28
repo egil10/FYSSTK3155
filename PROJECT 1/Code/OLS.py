@@ -1,6 +1,6 @@
 import numpy as np
 
-def fit_ols(X_train, y_train, X_test, y_test):
+def fit_ols(X_train, y_train):
     """
     Fit an Ordinary Least Squares (OLS) regression model from scratch
     using the closed-form normal equation.
@@ -29,6 +29,6 @@ def fit_ols(X_train, y_train, X_test, y_test):
     """
     # Add intercept column (bias term)
     X_train_bias = np.c_[np.ones(X_train.shape[0]), X_train]
-    
+
     return np.linalg.pinv(X_train_bias.T @ X_train_bias) @ X_train_bias.T @ y_train
 
