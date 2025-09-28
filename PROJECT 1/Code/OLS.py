@@ -31,4 +31,4 @@ def OLS_parameters(X, y):
     - If XᵀX is not invertible (e.g. multicollinearity), consider using the 
       Moore–Penrose pseudoinverse via `np.linalg.pinv(X) @ y`.
     """
-    return np.linalg.inv(X.T @ X) @ X.T @ y
+    return np.linalg.pinv(X.T @ X) @ X.T @ y
