@@ -214,7 +214,7 @@ def ADAGrad_gradient_descent_Ridge(X, y, eta=0.01, lam=1 ,num_iters=1000, print_
         adjusted_grad = eta/(np.sqrt(r)+eps)*grad 
         
         theta_new = theta - adjusted_grad
-        if np.allclose(theta, theta_new, rtol=1e-8, atol=1e-8):
+        if np.allclose(theta, theta_new, rtol=1e-8, atol=1e-5):
             if print_num_iters:
                 print("Number of iterations: ", t+1)
             return theta_new
@@ -222,3 +222,53 @@ def ADAGrad_gradient_descent_Ridge(X, y, eta=0.01, lam=1 ,num_iters=1000, print_
     if print_num_iters:
         print("Number of iterations: ", t+1)
     return theta
+
+def RMSProp_gradient_descent_OLS(X, y, eta=0.01, rho=0.99 ,num_iters=1000, print_num_iters = False):
+    n_samples, n_features = X.shape
+    theta = np.zeros(n_features)
+    v = np.zeros(n_features)
+    eps = 1e-8
+    tol = 1e-4
+    
+    for t in range(num_iters):
+        grad = 2/n_samples * X.T @ (X @ theta - y)
+        v = rho*v + (1-rho)*grad**2
+        
+        adjusted_grad = eta/(np.sqrt(v)+eps)*grad 
+
+        theta_new = theta - adjusted_grad
+        if np.linalg.norm(theta_new - theta, ord=np.inf) < tol:
+            if print_num_iters:
+               print("Number of iterations: ", t+1)
+            return theta_new
+            
+        theta = theta_new
+    if print_num_iters:
+        print("Number of iterations: ", t+1)
+    return theta
+
+
+def RMSProp_gradient_descent_Ridge(X, y, lam=1, eta=0.01, rho=0.9 ,num_iters=1000, print_num_iters = False):
+    n_samples, n_features = X.shape
+    theta = np.zeros(n_features)
+    v = np.zeros(n_features)
+    eps = 1e-8
+    
+    for t in range(num_iters):
+        grad = 2 * (X.T @ (X @ theta - y) + lam * theta)
+        v = rho*v + (1-rho)*grad**2
+        
+        adjusted_grad = eta/(np.sqrt(v)+eps)*grad 
+        
+        theta_new = theta - adjusted_grad
+        if np.linalg.norm(theta_new - theta, ord=np.inf) < 1e-4:
+            if print_num_iters:
+                print("Number of iterations: ", t+1)
+            return theta_new
+        else: theta = theta_new
+    if print_num_iters:
+        print("Number of iterations: ", t+1)
+    return theta
+
+def ADAM_gradient_descent_OLS(X, y, eta=0.01, beta_1 = 0.9, beta_2 = 0.999 ,num_iters=1000, print_num_iters = False):
+    
