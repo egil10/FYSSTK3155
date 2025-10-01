@@ -34,11 +34,11 @@ def gradient_descent_OLS(X, y, eta=0.01, num_iters=1000, print_num_iters = False
         if np.allclose(theta, theta_new, rtol=1e-8, atol=1e-8):
             if print_num_iters:
                 print("Number of iterations: ", t+1)
-            return theta_new
+            return theta_new, t+1
         else: theta = theta_new
     if print_num_iters:
         print("Number of iterations: ", t+1)
-    return theta
+    return theta, t+1
 
 def gradient_descent_Ridge(X, y, eta=0.01, lam=1, num_iters=1000, print_num_iters = False):
     """
