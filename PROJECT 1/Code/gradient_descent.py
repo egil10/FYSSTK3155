@@ -1,26 +1,18 @@
 import numpy as np
 
 def gradient_descent_OLS(X, y, eta=0.01, num_iters=1000, print_num_iters = False):
-    """
-    Perform gradient descent to estimate coefficients for Ordinary Least Squares (OLS) regression.
+    """Perform gradient descent for OLS regression (fixed learning rate)
 
-    Parameters
-    ----------
-    X : numpy.ndarray, shape (n_samples, n_features)
-        The input feature matrix.
-    y : numpy.ndarray, shape (n_samples,)
-        The target values.
-    eta : float, default=0.01
-        Learning rate that controls the step size in the gradient descent updates.
-    num_iters : int, default=1000
-        Number of iterations to run the gradient descent algorithm.
-    print_num_iters : bool, default=False
-        If True, prints the actual number of iterations taken before convergence.
+    Args:
+        X (numpy.ndarray): Feature matrix
+        y (numpy.ndarray): Target values
+        eta (float, optional): Learning rate. Defaults to 0.01.
+        num_iters (int, optional): Number of iterations. Defaults to 1000.
+        print_num_iters (bool, optional): If true, the functin prints the number of iterations. Defaults to False.
 
-    Returns
-    -------
-    theta : numpy.ndarray, shape (n_features,)
-        Estimated regression coefficients after gradient descent optimization.
+    Returns:
+        theta (numpy.ndarray): Model parameters
+        t (int): Number of iterations
     """
 
     n_samples, n_features = X.shape
@@ -41,30 +33,22 @@ def gradient_descent_OLS(X, y, eta=0.01, num_iters=1000, print_num_iters = False
     return theta, t+1
 
 def gradient_descent_Ridge(X, y, eta=0.01, lam=1, num_iters=1000, print_num_iters = False):
-    """
-    Perform gradient descent to estimate coefficients for Ridge regression.
+    """Perform gradient descent for OLS regression (fixed learning rate)
 
-    Parameters
-    ----------
-    X : numpy.ndarray, shape (n_samples, n_features)
-        The input feature matrix.
-    y : numpy.ndarray, shape (n_samples,)
-        The target values.
-    eta : float, default=0.01
-        Learning rate that controls the step size in the gradient descent updates.
-    lam : float, default=1
-        Regularization strength (λ). Larger values shrink coefficients more strongly.
-    num_iters : int, default=1000
-        Maximum number of iterations for gradient descent.
-    print_num_iters : bool, default=False
-        If True, prints the actual number of iterations taken before convergence.
+    Args:
+        X (numpy.ndarray): Feature matrix
+        y (numpy.ndarray): Target values
+        lam (float, optional): Regularization parameter. Defaults to 1. 
+        eta (float, optional): Learning rate. Defaults to 0.01.
+        num_iters (int, optional): Number of iterations. Defaults to 1000.
+        print_num_iters (bool, optional): If true, the functin prints the number of iterations. Defaults to False.
 
-    Returns
-    -------
-    theta : numpy.ndarray, shape (n_features,)
-        Estimated regression coefficients after Ridge regularized gradient descent.
+    Returns:
+        theta (numpy.ndarray): Model parameters
+        t (int): Number of iterations
     """
     n_samples, n_features = X.shape
+    eta = eta/n_samples
     #Initialize theta
     theta = np.zeros(n_features)
     for t in range(num_iters):
@@ -76,11 +60,11 @@ def gradient_descent_Ridge(X, y, eta=0.01, lam=1, num_iters=1000, print_num_iter
         if np.allclose(theta, theta_new, rtol=1e-8, atol=1e-8):
             if print_num_iters:
                 print("Number of iterations: ", t+1)
-            return theta_new
+            return theta_new, t+1
         else: theta = theta_new
     if print_num_iters:
         print("Number of iterations: ", t+1)
-    return theta
+    return theta, t+1
 
 
 
