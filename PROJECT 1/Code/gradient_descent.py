@@ -178,4 +178,47 @@ def momentum_gradient_descent_Ridge(X, y, eta=0.01, lam=1, momentum = 0.3, num_i
     if print_num_iters:
         print("Number of iterations: ", t+1)
     return theta
+
+def ADAGrad_gradient_descent_OLS(X, y, eta=0.01 ,num_iters=1000, print_num_iters = False):
+    n_samples, n_features = X.shape
+    theta = np.zeros(n_features)
+    r = np.zeros(n_features)
+    eps = 1e-8
     
+    for t in range(num_iters):
+        grad = 2/n_samples * X.T @ (X @ theta - y)
+        r += grad**2
+        
+        adjusted_grad = eta/(np.sqrt(r)+eps)*grad 
+        
+        theta_new = theta - adjusted_grad
+        if np.allclose(theta, theta_new, rtol=1e-8, atol=1e-8):
+            if print_num_iters:
+                print("Number of iterations: ", t+1)
+            return theta_new
+        else: theta = theta_new
+    if print_num_iters:
+        print("Number of iterations: ", t+1)
+    return theta
+
+def ADAGrad_gradient_descent_Ridge(X, y, eta=0.01, lam=1 ,num_iters=1000, print_num_iters = False):
+    n_samples, n_features = X.shape
+    theta = np.zeros(n_features)
+    r = np.zeros(n_features)
+    eps = 1e-8
+    
+    for t in range(num_iters):
+        grad = 2 * (X.T @ (X @ theta - y) + lam * theta)
+        r += grad**2
+        
+        adjusted_grad = eta/(np.sqrt(r)+eps)*grad 
+        
+        theta_new = theta - adjusted_grad
+        if np.allclose(theta, theta_new, rtol=1e-8, atol=1e-8):
+            if print_num_iters:
+                print("Number of iterations: ", t+1)
+            return theta_new
+        else: theta = theta_new
+    if print_num_iters:
+        print("Number of iterations: ", t+1)
+    return theta
