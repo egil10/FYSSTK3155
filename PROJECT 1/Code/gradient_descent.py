@@ -59,28 +59,20 @@ def gradient_descent_Ridge(X, y, eta=0.01, lam=1, num_iters=1000, print_num_iter
 
     Returns
     -------
-    theta_gdRidge : numpy.ndarray, shape (n_features,)
+    theta : numpy.ndarray, shape (n_features,)
         Estimated regression coefficients after Ridge regularized gradient descent.
-
-    Notes
-    -----
-    - This implementation minimizes the Ridge loss function:
-          L(θ) = (1/n) * ||Xθ - y||² + λ||θ||²
-    - Gradient update rule:
-          θ <- θ - η * 2 * ( (1/n) * X.T @ (Xθ - y) + λθ )
-    - Uses an early stopping criterion: convergence is declared if successive
-      coefficient updates are smaller than `rtol=1e-12` and `atol=1e-12`.
-    - Does not include an intercept term by default. If an intercept is desired,
-      add a column of ones to `X` before calling this function.
     """
     n_samples, n_features = X.shape
-    theta_gdRidge = np.zeros(n_features)
+    #Initialize theta
+    theta = np.zeros(n_features)
     for t in range(num_iters):
-        grad_Ridge = 2 * (1/n_samples * X.T @ (X @ theta_gdRidge - y) + lam*theta_gdRidge)
-        theta_gdRidge_new = theta_gdRidge - eta * grad_Ridge
+        grad = 2 * (1/n_samples * X.T @ (X @ theta - y) + lam*theta)
+        theta_new = theta - eta * grad
         # Stopping criterion:
-        if np.allclose(theta_gdRidge, theta_gdRidge_new, rtol=1e-12, atol=1e-12):
+        if np.allclose(theta, theta_new, rtol=1e-12, atol=1e-12):
             if print_num_iters:
                 print("Number of iterations: ", t+1)
-            return theta_gdRidge_new
-        else: theta_gdRidge = theta_gdRidge_new
+            return theta_new
+        else: theta = theta_new
+    return theta
+        
