@@ -271,4 +271,4 @@ def RMSProp_gradient_descent_Ridge(X, y, lam=1, eta=0.01, rho=0.9 ,num_iters=100
     return theta
 
 def ADAM_gradient_descent_OLS(X, y, eta=0.01, beta_1 = 0.9, beta_2 = 0.999 ,num_iters=1000, print_num_iters = False):
-    
+    pass
