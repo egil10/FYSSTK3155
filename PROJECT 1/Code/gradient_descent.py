@@ -48,7 +48,7 @@ def gradient_descent_Ridge(X, y, eta=0.01, lam=1, num_iters=1000, print_num_iter
         t (int): Number of iterations
     """
     n_samples, n_features = X.shape
-    eta = eta/n_samples
+    #eta = eta/n_samples
     #Initialize theta
     theta = np.zeros(n_features)
     for t in range(num_iters):
