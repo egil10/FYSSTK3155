@@ -146,6 +146,19 @@ def momentum_gradient_descent_Ridge(X, y, eta=0.01, lam=1, momentum = 0.3, num_i
     return theta, t+1
 
 def ADAGrad_gradient_descent_OLS(X, y, eta=0.01 ,num_iters=1000, print_num_iters = False):
+    """Gradient descent with ADAGrad, OLS
+
+    Args:
+        X (numpy.ndarray): Feature matrix
+        y (numpy.ndarray): Target data
+        eta (float, optional): Learning rate. Defaults to 0.01.
+        num_iters (int, optional): Number of iterations. Defaults to 1000.
+        print_num_iters (bool, optional): If true, prints the number of iterations before convergence. Defaults to False.
+
+    Returns:
+        theta (numpy.ndarray): OLS parameters
+        t (int): number of iterations 
+    """
     n_samples, n_features = X.shape
     theta = np.zeros(n_features)
     r = np.zeros(n_features)
@@ -171,8 +184,22 @@ def ADAGrad_gradient_descent_OLS(X, y, eta=0.01 ,num_iters=1000, print_num_iters
 
 def ADAGrad_gradient_descent_Ridge(
     X, y, eta=0.01, lam=1.0, num_iters=1000, print_num_iters=False,
-    tol_theta=1e-8
-):
+    tol_theta=1e-8):
+    """ADAGrad gradient descent, ridge
+
+    Args:
+        X (numpy.ndarray): Feature matrix
+        y (numpy.ndarray): Target values
+        eta (float, optional): Learning rate.  Defaults to 0.01.
+        lam (float, optional): Regularization parameter. Defaults to 1.0.
+        num_iters (int, optional): Number of iterations. Defaults to 1000.
+        print_num_iters (bool, optional): If true, the function prints the number of iterations before convergence. Defaults to False.
+        tol_theta (float, optional): tolerance for checking convergence. Defaults to 1e-8.
+
+    Returns:
+        theta (numpy.ndarray): Ridge parameters
+        t (int): number of iterations
+    """
     n_samples, n_features = X.shape
     theta = np.zeros(n_features, dtype=float)
     r = np.zeros(n_features, dtype=float)
@@ -196,21 +223,33 @@ def ADAGrad_gradient_descent_Ridge(
         print("Number of iterations:", t+1)
     return theta, t+1
 
-import numpy as np
-
 def RMSProp_gradient_descent_OLS(
     X, y,
     eta=1e-3, rho=0.99, num_iters=50000,
     eps=1e-8,
-    tol_grad=1e-5,            # 1) ||grad||_inf <= tol_grad
-    tol_step=1e-8,            # 2) ||step||_2 <= tol_step * (1 + ||theta||_2)
-    tol_rel_loss=1e-9,        # 3) |J_t - J_{t-1}| / J_{t-1} <= tol_rel_loss
-    print_num_iters=False
-):
+    tol_grad=1e-5,            
+    tol_step=1e-8,            
+    tol_rel_loss=1e-9,        
+    print_num_iters=False):
+    """RMSProp gradient descent, OLS
+
+    Args:
+        X (numpy.ndarray): Feature matrix
+        y (numpy.ndarray): Target values
+        eta (float, optional): Learning rate. Defaults to 1e-3.
+        rho (float, optional): Defaults to 0.99.
+        num_iters (int, optional): Number of iterations. Defaults to 50000.
+        eps (_type_, optional): term to avoid division by zero. Defaults to 1e-8.
+        tol_grad (_type_, optional): Tolerance for checking convergence, gradient. Defaults to 1e-5.
+        tol_step (_type_, optional): Tolerance. Defaults to 1e-8.
+        tol_rel_loss (_type_, optional): Tolerance. Defaults to 1e-9.
+        print_num_iters (bool, optional): If true, the function prints the number of iterations before convergence. Defaults to False.
+
+    Returns:
+        theta (numpy.ndarray): OLS parameters
+        t (int): Number of iterations
     """
-    RMSProp for OLS: min (1/n)||y - Xθ||^2
-    Gradient: (2/n) X^T (Xθ - y)
-    """
+    
     n, p = X.shape
     theta = np.zeros(p, dtype=float)
     v = np.zeros(p, dtype=float)
@@ -226,84 +265,202 @@ def RMSProp_gradient_descent_OLS(
         r = X @ theta - y
         grad = (2.0 / n) * (X.T @ r)
 
-        # 1) liten gradient
+        # 1) Small gradient
         if np.linalg.norm(grad, ord=np.inf) <= tol_grad:
-            if print_num_iters: print("Stopper ved liten gradient etter", t, "iterasjoner")
+            if print_num_iters: print("Number of iterations: ", t)
             return theta, t
 
-        # RMSProp-oppdatering
+        # RMSProp-update
         v = rho * v + (1.0 - rho) * (grad * grad)
         step = eta * grad / (np.sqrt(v) + eps)
         theta_new = theta - step
 
-        if not np.all(np.isfinite(theta_new)):
-            raise FloatingPointError(f"Divergens (NaN/Inf) ved iterasjon {t}. Reduser eta/rho eller skaler X.")
 
         # 2) lite steg
         if np.linalg.norm(step) <= tol_step * (1.0 + np.linalg.norm(theta)):
-            if print_num_iters: print("Stopper ved lite steg etter", t, "iterasjoner")
+            if print_num_iters: print("Number of iterations: ", t)
             return theta_new, t
 
+        
         # 3) liten relativ tap-endring
         J = obj(theta_new)
         if abs(J - J_prev) / (J_prev + 1e-12) <= tol_rel_loss:
-            if print_num_iters: print("Stopper ved liten relativ tap-endring etter", t, "iterasjoner")
+            if print_num_iters: print("Number of iterations: ", t)
             return theta_new, t
-
         theta, J_prev = theta_new, J
 
     if print_num_iters:
-        print("Nådde max iterasjoner:", num_iters)
+        print("Reached maximum iterations:", num_iters)
+    return theta, num_iters
+
+def RMSProp_gradient_descent_Ridge(
+    X, y, lam=1.0,
+    eta=1e-3, rho=0.99, num_iters=50000,
+    eps=1e-8,
+    tol_grad=1e-5,            
+    tol_step=1e-8,            
+    tol_rel_loss=1e-9,        
+    print_num_iters=False
+):
+    """RMSProp gradient descent, Ridge
+
+    Args:
+        X (numpy.ndarray): Feature matrix
+        y (numpy.ndarray): Target values
+        lam (float, optional): Regularization parameter. Defaults to 1.
+        eta (float, optional): Learning rate. Defaults to 1e-3.
+        rho (float, optional): Defaults to 0.99.
+        num_iters (int, optional): Number of iterations. Defaults to 50000.
+        eps (_type_, optional): term to avoid division by zero. Defaults to 1e-8.
+        tol_grad (_type_, optional): Tolerance for checking convergence, gradient. Defaults to 1e-5.
+        tol_step (_type_, optional): Tolerance. Defaults to 1e-8.
+        tol_rel_loss (_type_, optional): Tolerance. Defaults to 1e-9.
+        print_num_iters (bool, optional): If true, the function prints the number of iterations before convergence. Defaults to False.
+
+    Returns:
+        theta (numpy.ndarray): OLS parameters
+        t (int): Number of iterations
+    """
+    n, p = X.shape
+    theta = np.zeros(p, dtype=float)
+    v = np.zeros(p, dtype=float)
+
+    def obj(th):
+        r = X @ th - y
+        return (r @ r) / n
+
+    J_prev = obj(theta)
+
+    for t in range(1, num_iters + 1):
+        # grad
+        grad = 2.0 * (X.T @ (X @ theta - y) + lam * theta)
+
+        # 1) Small gradient
+        if np.linalg.norm(grad, ord=np.inf) <= tol_grad:
+            if print_num_iters: print("Number of iterations: ", t)
+            return theta, t
+
+        # RMSProp-update
+        v = rho * v + (1.0 - rho) * (grad * grad)
+        step = eta * grad / (np.sqrt(v) + eps)
+        theta_new = theta - step
+
+
+        # 2) lite steg
+        if np.linalg.norm(step) <= tol_step * (1.0 + np.linalg.norm(theta)):
+            if print_num_iters: print("Number of iterations: ", t)
+            return theta_new, t
+
+        
+        # 3) liten relativ tap-endring
+        J = obj(theta_new)
+        if abs(J - J_prev) / (J_prev + 1e-12) <= tol_rel_loss:
+            if print_num_iters: print("Number of iterations: ", t)
+            return theta_new, t
+        theta, J_prev = theta_new, J
+
+    if print_num_iters:
+        print("Reached maximum iterations:", num_iters)
     return theta, num_iters
 
 
-"""
-def RMSProp_gradient_descent_OLS(X, y, eta=0.01, rho=0.99 ,num_iters=1000, print_num_iters = False):
-    n_samples, n_features = X.shape
-    theta = np.zeros(n_features)
-    v = np.zeros(n_features)
-    eps = 1e-8
-    tol = 1e-4
-    
-    for t in range(num_iters):
-        grad = 2/n_samples * X.T @ (X @ theta - y)
-        v = rho*v + (1-rho)*grad**2
-        
-        adjusted_grad = eta/(np.sqrt(v)+eps)*grad 
+def ADAM_gradient_descent_OLS(X, y, eta=0.01, rho_1 = 0.9, rho_2 = 0.999, num_iters=1000, print_num_iters = False):
+    """_summary_
 
-        theta_new = theta - adjusted_grad
-        if np.linalg.norm(theta_new - theta, ord=np.inf) < tol:
+    Args:
+        X (numpy.ndarray): Feature matrix
+        y (numpy.ndarray): Target values
+        eta (float, optional): Learning rate. Defaults to 0.01.
+        rho1 (float, optional): Decay parameter 1. Defaults to 0.9.
+        rho_2 (float, optional): Decay parameter 2. Defaults to 0.999.
+        num_iters (int, optional): Number of iterations. Defaults to 1000.
+        print_num_iters (bool, optional): If true, the function prints the number of iterations before convergence. Defaults to False.
+    """
+    eps = 1e-8 # Small constant for numerical stability
+    n, p = X.shape
+    
+    s = np.zeros(p)
+    r = np.zeros(p)
+    theta = np.zeros(p, dtype=float)
+    tol_grad = 1e-6
+    tol_step = 1e-8
+    
+    for t in range (1, num_iters+1):
+        grad = 2/n * X.T @ (X @ theta - y)
+        
+        if np.linalg.norm(grad, ord=np.inf) <= tol_grad:
             if print_num_iters:
-               print("Number of iterations: ", t+1)
-            return theta_new, t+1
-            
+                print("Stop: small gradient at", t)
+            return theta, t
+        
+        s = rho_1*s + (1-rho_1)*grad
+        r = rho_2*r + (1-rho_2)*grad**2
+        
+        s_unbiased = s/(1-rho_1**t)
+        r_unbiased = r/(1-rho_2**t)
+        
+        update = eta * (s_unbiased/(np.sqrt(r_unbiased)+eps))
+        
+        theta_new = theta - update
+        
+        if np.linalg.norm(update) <= tol_step * (1.0 + np.linalg.norm(theta)):
+            if print_num_iters:
+                print("Stop: small step at", t)
+            return theta_new, t
         theta = theta_new
-    if print_num_iters:
-        print("Number of iterations: ", t+1)
-    return theta, t+1
-"""
-
-def RMSProp_gradient_descent_Ridge(X, y, lam=1, eta=0.01, rho=0.9 ,num_iters=1000, print_num_iters = False):
-    n_samples, n_features = X.shape
-    theta = np.zeros(n_features)
-    v = np.zeros(n_features)
-    eps = 1e-8
     
-    for t in range(num_iters):
-        grad = 2 * (X.T @ (X @ theta - y) + lam * theta)
-        v = rho*v + (1-rho)*grad**2
-        
-        adjusted_grad = eta/(np.sqrt(v)+eps)*grad 
-        
-        theta_new = theta - adjusted_grad
-        if np.linalg.norm(theta_new - theta, ord=np.inf) < 1e-4:
-            if print_num_iters:
-                print("Number of iterations: ", t+1)
-            return theta_new
-        else: theta = theta_new
     if print_num_iters:
-        print("Number of iterations: ", t+1)
-    return theta
+        print("Reached maximum iterations: ", t)
+    
+    return theta, num_iters
 
-def ADAM_gradient_descent_OLS(X, y, eta=0.01, beta_1 = 0.9, beta_2 = 0.999 ,num_iters=1000, print_num_iters = False):
-    pass
+def ADAM_gradient_descent_Ridge(X, y, eta=0.01, lam = 1.0, rho_1 = 0.9, rho_2 = 0.999, num_iters=1000, print_num_iters = False):
+    """_summary_
+
+    Args:
+        X (numpy.ndarray): Feature matrix
+        y (numpy.ndarray): Target values
+        eta (float, optional): Learning rate. Defaults to 0.01.
+        lam (float, optional): Regularization parameter. Defaults to 1.0
+        rho1 (float, optional): Decay parameter 1. Defaults to 0.9.
+        rho_2 (float, optional): Decay parameter 2. Defaults to 0.999.
+        num_iters (int, optional): Number of iterations. Defaults to 1000.
+        print_num_iters (bool, optional): If true, the function prints the number of iterations before convergence. Defaults to False.
+    """
+    eps = 1e-8 # Small constant for numerical stability
+    n, p = X.shape
+    
+    s = np.zeros(p)
+    r = np.zeros(p)
+    theta = np.zeros(p, dtype=float)
+    tol_grad = 1e-6
+    tol_step = 1e-8
+    
+    for t in range (1, num_iters+1):
+        grad = 2 * (X.T @ (X @ theta - y) + lam * theta)
+        
+        if np.linalg.norm(grad, ord=np.inf) <= tol_grad:
+            if print_num_iters:
+                print("Stop: small gradient at", t)
+            return theta, t
+        
+        s = rho_1*s + (1-rho_1)*grad
+        r = rho_2*r + (1-rho_2)*grad**2
+        
+        s_unbiased = s/(1-rho_1**t)
+        r_unbiased = r/(1-rho_2**t)
+        
+        update = eta * (s_unbiased/(np.sqrt(r_unbiased)+eps))
+        
+        theta_new = theta - update
+        
+        if np.linalg.norm(update) <= tol_step * (1.0 + np.linalg.norm(theta)):
+            if print_num_iters:
+                print("Stop: small step at", t)
+            return theta_new, t
+        theta = theta_new
+    
+    if print_num_iters:
+        print("Reached maximum iterations: ", t)
+    
+    return theta, num_iters
