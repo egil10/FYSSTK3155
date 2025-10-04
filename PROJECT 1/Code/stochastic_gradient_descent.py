@@ -32,8 +32,7 @@ def sgd_ols(X, y, eta=0.01, n_epochs=10, M=5, seed=6114):
     for epoch in range(1, n_epochs + 1):
         for i in range(m):
             # trekk tilfeldig minibatch-indeks
-            k = rng.integers(m)
-            idx = np.arange(k * M, (k + 1) * M)  # "den k-te minibatchen"
+            idx = rng.choice(n_samples, size=M, replace=False)
 
             Xb, yb = X[idx], y[idx]
 
@@ -79,9 +78,7 @@ def sgd_momentum_ols(X, y, eta=0.01, momentum=0.3, n_epochs=10, M=5, seed=6114):
     steps = 0
     for epoch in range(1, n_epochs + 1):
         for _ in range(m):
-            # pick one random minibatch index
-            k = rng.integers(m)
-            idx = np.arange(k * M, (k + 1) * M)
+            idx = rng.choice(n_samples, size=M, replace=False)
 
             Xb, yb = X[idx], y[idx]
             # compute minibatch gradient for OLS
@@ -133,9 +130,7 @@ def sgd_ADAGrad_ols(X, y, eta=0.01, n_epochs=10, M=5, seed=6114, eps=1e-7):
     steps = 0
     for epoch in range(1, n_epochs + 1):
         for _ in range(m):
-            # pick one random minibatch index among the fixed partitions
-            k = rng.integers(m)
-            idx = np.arange(k * M, (k + 1) * M)
+            idx = rng.choice(n_samples, size=M, replace=False)
 
             Xb, yb = X[idx], y[idx]
 
@@ -191,8 +186,7 @@ def sgd_RMSProp_ols(X, y, eta=1e-3, rho=0.99, n_epochs=10, M=5, seed=6114, eps=1
     for epoch in range(1, n_epochs + 1):
         for _ in range(m):
             # pick one random minibatch index
-            k = rng.integers(m)
-            idx = np.arange(k * M, (k + 1) * M)
+            idx = rng.choice(n_samples, size=M, replace=False)
 
             Xb, yb = X[idx], y[idx]
 
@@ -254,9 +248,7 @@ def sgd_ADAM_ols(X, y, eta=1e-3, rho_1=0.9, rho_2=0.999,
 
     for _ in range(n_epochs):
         for _ in range(m):
-            # pick one random minibatch index among the fixed partitions
-            k = rng.integers(m)
-            idx = np.arange(k * M, (k + 1) * M)
+            idx = rng.choice(n_samples, size=M, replace=False)
             Xb, yb = X[idx], y[idx]
 
             # minibatch gradient for OLS
