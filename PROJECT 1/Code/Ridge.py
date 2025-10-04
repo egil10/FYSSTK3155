@@ -29,4 +29,4 @@ def Ridge_parameters(X, y,lambda_=1):
     
     """
     
-    return np.linalg.inv(X.T @ X+np.identity(X.shape[1])*lambda_) @ X.T @ y
+    return np.linalg.pinv(X.T @ X+np.identity(X.shape[1])*lambda_) @ X.T @ y
