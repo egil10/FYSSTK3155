@@ -5,41 +5,39 @@ import numpy as np
 
 def sgd_ols(X, y, eta=0.01, n_epochs=10, M=5, seed=6114):
     """
-    Stochastic gradient descent for OLS med fast læringsrate.
-    Bruker malen: i hver epoke gjøres m = n/M oppdateringer,
-    hver gang med en tilfeldig valgt minibatch.
+    Stochastic gradient descent with fixed learning rate, OLS
 
     Args:
-        X (ndarray): Feature-matrise (n_samples, n_features)
+        X (ndarray): Feature-matrix (n_samples, n_features)
         y (ndarray): Target (n_samples,)
-        eta (float): Læringsrate
-        n_epochs (int): Antall epoker
-        M (int): Minibatch-størrelse
+        eta (float): Learning rate
+        n_epochs (int): Number of epochs
+        M (int): Size of minibatches
         seed (int|None): RNG-seed
 
     Returns:
-        theta (ndarray): Estimerte parametre
-        steps (int): Totalt antall oppdateringer (n_epochs * m)
+        theta (ndarray): Estimated parameters
+        steps (int): Total number of steps
     """
     n_samples, n_features = X.shape
     theta = np.zeros(n_features)
     rng = np.random.default_rng(seed)
 
-    # antall minibatcher per epoke (avrund ned hvis ikke delelig)
+    # Number of minibaches per epoch
     m = n_samples // M  
 
     steps = 0
     for epoch in range(1, n_epochs + 1):
         for i in range(m):
-            # trekk tilfeldig minibatch-indeks
+            # Draw random 
             idx = rng.choice(n_samples, size=M, replace=False)
 
             Xb, yb = X[idx], y[idx]
 
-            # gradient på minibatch
+            # gradient on minibatch
             grad = (2.0 / M) * Xb.T @ (Xb @ theta - yb)
 
-            # oppdater parametre
+            # Update parameters
             theta -= eta * grad
             steps += 1
 
@@ -47,9 +45,8 @@ def sgd_ols(X, y, eta=0.01, n_epochs=10, M=5, seed=6114):
 
 def sgd_momentum_ols(X, y, eta=0.01, momentum=0.3, n_epochs=10, M=5, seed=6114):
     """
-    Stochastic gradient descent with momentum for OLS (fixed learning rate).
-    Follows the same structure as sgd_ols: m = n//M updates per epoch,
-    each update uses one randomly chosen minibatch out of the m fixed minibatches.
+    Stochastic gradient descent with momentum for OLS.
+
 
     Args:
         X (ndarray): Feature matrix (n_samples, n_features)
@@ -66,7 +63,7 @@ def sgd_momentum_ols(X, y, eta=0.01, momentum=0.3, n_epochs=10, M=5, seed=6114):
     """
     n_samples, n_features = X.shape
     theta = np.zeros(n_features)
-    change = np.zeros(n_features)          # velocity vector for momentum
+    change = np.zeros(n_features)
     rng = np.random.default_rng(seed)
 
     # number of minibatches per epoch (rounded down if not divisible)
@@ -97,8 +94,6 @@ def sgd_momentum_ols(X, y, eta=0.01, momentum=0.3, n_epochs=10, M=5, seed=6114):
 def sgd_ADAGrad_ols(X, y, eta=0.01, n_epochs=10, M=5, seed=6114, eps=1e-7):
     """
     Stochastic ADAGrad for OLS (fixed learning rate).
-    Follows the same template as sgd_ols: m = n//M updates per epoch;
-    each update uses one randomly chosen minibatch among the m fixed minibatches.
 
     Args:
         X (ndarray): Feature matrix (n_samples, n_features)
@@ -154,8 +149,6 @@ def sgd_ADAGrad_ols(X, y, eta=0.01, n_epochs=10, M=5, seed=6114, eps=1e-7):
 def sgd_RMSProp_ols(X, y, eta=1e-3, rho=0.99, n_epochs=10, M=5, seed=6114, eps=1e-8):
     """
     Stochastic RMSProp for OLS (fixed learning rate).
-    Follows the same template as sgd_ols: m = n//M updates per epoch,
-    each update uses one randomly chosen minibatch among the m fixed minibatches.
 
     Args:
         X (ndarray): Feature matrix (n_samples, n_features)
@@ -173,7 +166,7 @@ def sgd_RMSProp_ols(X, y, eta=1e-3, rho=0.99, n_epochs=10, M=5, seed=6114, eps=1
     """
     n_samples, n_features = X.shape
     theta = np.zeros(n_features)
-    v = np.zeros(n_features)          # running average of squared gradients
+    v = np.zeros(n_features)         
     rng = np.random.default_rng(seed)
 
     # number of minibatches per epoch (rounded down if not divisible)
@@ -185,7 +178,7 @@ def sgd_RMSProp_ols(X, y, eta=1e-3, rho=0.99, n_epochs=10, M=5, seed=6114, eps=1
     steps = 0
     for epoch in range(1, n_epochs + 1):
         for _ in range(m):
-            # pick one random minibatch index
+            
             idx = rng.choice(n_samples, size=M, replace=False)
 
             Xb, yb = X[idx], y[idx]
@@ -211,8 +204,6 @@ def sgd_ADAM_ols(X, y, eta=1e-3, rho_1=0.9, rho_2=0.999,
                  n_epochs=10, M=5, seed=6114, eps=1e-8):
     """
     Stochastic ADAM for OLS (fixed learning rate).
-    Uses the same template as your sgd_ols: m = n//M updates per epoch,
-    each update picks one random minibatch among the m fixed minibatches.
 
     Args:
         X (ndarray): Feature matrix (n_samples, n_features)
@@ -272,54 +263,48 @@ def sgd_ADAM_ols(X, y, eta=1e-3, rho_1=0.9, rho_2=0.999,
     return theta, steps
 
 ### Ridge ###
-def sgd_Ridge(X, y, lam=1e-2, eta=0.01, n_epochs=10, M=5, seed=6114, intercept_idx=None):
+def sgd_Ridge(X, y, lam=1e-2, eta=0.01, n_epochs=10, M=5, seed=6114):
     """
-    Stokastisk gradient descent for Ridge (OLS + L2).
-    Samme mal som sgd_ols: m = n//M oppdateringer per epoke,
-    hver oppdatering bruker én tilfeldig valgt av de m faste minibatchene.
+    Stochastic gradient descent, fixed learning rate, Ridge
 
     Args:
-        X (ndarray): (n_samples, n_features)
-        y (ndarray): (n_samples,)
-        lam (float): Ridge-parameter (lambda)
-        eta (float): Læringsrate
-        n_epochs (int): Antall epoker
-        M (int): Minibatch-størrelse
+        X (ndarray): Feature matrix (n_samples, n_features)
+        y (ndarray): Target values. (n_samples,)
+        lam (float): Regularization parameter (lambda)
+        eta (float): Learning rate
+        n_epochs (int): Number of epochs
+        M (int): Minibatch-size
         seed (int): RNG-seed
-        intercept_idx (int|None): Indeks til evt. intercept-kolonne som ikke skal regulariseres
-                                  (sett f.eks. 0 hvis X har ledende 1-kolonne)
 
     Returns:
-        theta (ndarray): Estimerte parametre
-        steps (int): Totalt antall oppdateringer (= n_epochs * m)
+        theta (ndarray): Estimated parameters
+        steps (int): Total number of updates
     """
     n_samples, n_features = X.shape
     theta = np.zeros(n_features)
     rng = np.random.default_rng(seed)
 
     m = n_samples // M
-    if m == 0:                # håndter M > n
+    if m == 0:                
         M = n_samples
         m = 1
 
     steps = 0
     for _ in range(n_epochs):
         for _ in range(m):
-            # velg tilfeldig én av de m faste minibatchene
-            k = rng.integers(m)
-            idx = np.arange(k * M, (k + 1) * M)
+            idx = rng.choice(n_samples, size=M, replace=False)
 
             Xb, yb = X[idx], y[idx]
 
-            # data-del av gradienten (samme skalering som i sgd_ols)
+            # Gradient
+            # data-gradient
             grad_data = (2.0 / M) * Xb.T @ (Xb @ theta - yb)
+            # ridge-term
+            lam_eff   = lam / n_samples
+            # total
+            grad = grad_data + 2.0 * lam_eff * theta
 
-            # L2-ledd: 2 * lam * theta  (ikke skaler med M)
-            grad = grad_data + 2.0 * lam * theta
 
-            # valgfritt: ikke regulariser intercept
-            if intercept_idx is not None:
-                grad[intercept_idx] -= 2.0 * lam * theta[intercept_idx]
 
             # oppdater
             theta -= eta * grad
@@ -329,11 +314,9 @@ def sgd_Ridge(X, y, lam=1e-2, eta=0.01, n_epochs=10, M=5, seed=6114, intercept_i
 
 
 def sgd_momentum_Ridge(X, y, lam=1e-2, eta=0.01, momentum=0.3, 
-                       n_epochs=10, M=5, seed=6114, intercept_idx=None):
+                       n_epochs=10, M=5, seed=6114):
     """
     Stochastic gradient descent with momentum for Ridge regression (fixed learning rate).
-    Same structure as sgd_momentum_ols: m = n//M updates per epoch,
-    each update uses one randomly chosen minibatch among the m fixed minibatches.
 
     Args:
         X (ndarray): Feature matrix (n_samples, n_features)
@@ -344,8 +327,6 @@ def sgd_momentum_Ridge(X, y, lam=1e-2, eta=0.01, momentum=0.3,
         n_epochs (int): Number of epochs
         M (int): Minibatch size
         seed (int): RNG seed for reproducibility
-        intercept_idx (int|None): If not None, skips regularization on that index 
-                                  (e.g. 0 if X has explicit intercept column)
 
     Returns:
         theta (ndarray): Estimated parameters
@@ -364,17 +345,17 @@ def sgd_momentum_Ridge(X, y, lam=1e-2, eta=0.01, momentum=0.3,
     steps = 0
     for _ in range(n_epochs):
         for _ in range(m):
-            # pick random minibatch index
-            k = rng.integers(m)
-            idx = np.arange(k * M, (k + 1) * M)
+            # Draw random minibatch
+            idx = rng.choice(n_samples, size=M, replace=False)
             Xb, yb = X[idx], y[idx]
 
-            # data gradient
+            # gradient
+            # data-gradient
             grad_data = (2.0 / M) * Xb.T @ (Xb @ theta - yb)
-            # ridge penalty
-            grad = grad_data + 2.0 * lam * theta
-            if intercept_idx is not None:
-                grad[intercept_idx] -= 2.0 * lam * theta[intercept_idx]
+            # ridge-term
+            lam_eff   = lam / n_samples
+            # total
+            grad = grad_data + 2.0 * lam_eff * theta
 
             # momentum update
             new_change = eta * grad + momentum * change
@@ -387,11 +368,10 @@ def sgd_momentum_Ridge(X, y, lam=1e-2, eta=0.01, momentum=0.3,
 
 
 def sgd_ADAGrad_Ridge(X, y, lam=1e-2, eta=0.01, n_epochs=10, M=5,
-                      seed=6114, eps=1e-7, intercept_idx=None):
+                      seed=6114, eps=1e-7):
     """
     Stochastic AdaGrad for Ridge (OLS + L2) with fixed learning rate.
-    Same template as sgd_ADAGrad_ols: m = n//M updates per epoch,
-    each update uses one randomly chosen minibatch among the m fixed partitions.
+
 
     Args:
         X (ndarray): Feature matrix (n_samples, n_features)
@@ -402,8 +382,6 @@ def sgd_ADAGrad_Ridge(X, y, lam=1e-2, eta=0.01, n_epochs=10, M=5,
         M (int): Minibatch size
         seed (int): RNG seed for reproducibility
         eps (float): Small constant to avoid division by zero
-        intercept_idx (int|None): If not None, skip L2 regularization on this index
-                                  (e.g., 0 if X has an explicit intercept column)
 
     Returns:
         theta (ndarray): Estimated parameters
@@ -426,21 +404,19 @@ def sgd_ADAGrad_Ridge(X, y, lam=1e-2, eta=0.01, n_epochs=10, M=5,
     steps = 0
     for _ in range(n_epochs):
         for _ in range(m):
-            # pick one random minibatch index among the fixed partitions
-            k = rng.integers(m)
-            idx = np.arange(k * M, (k + 1) * M)
+            # Draw random minibatch
+            idx = rng.choice(n_samples, size=M, replace=False)
 
             Xb, yb = X[idx], y[idx]
+            
+            # Gradient
 
-            # data gradient (average over minibatch)
+            # data-gradient
             grad_data = (2.0 / M) * Xb.T @ (Xb @ theta - yb)
-
-            # ridge penalty: 2 * lam * theta  (do not scale by M)
-            grad = grad_data + 2.0 * lam * theta
-
-            # optionally exclude intercept from regularization
-            if intercept_idx is not None:
-                grad[intercept_idx] = grad_data[intercept_idx]
+            # ridge-term
+            lam_eff   = lam / n_samples
+            # total
+            grad = grad_data + 2.0 * lam_eff * theta
 
             # AdaGrad accumulator and parameter update
             r += grad ** 2
@@ -455,10 +431,23 @@ def sgd_ADAGrad_Ridge(X, y, lam=1e-2, eta=0.01, n_epochs=10, M=5,
 def sgd_RMSProp_Ridge(X, y, lam=1.0, eta=1e-4, rho=0.99,
                               n_epochs=1000, M=5, seed=6114, eps=1e-8):
     """
-    RMSProp for Ridge der tapsfunksjonen er SUM-tapet:
-        J(θ) = ||y - Xθ||^2 + lam * ||θ||^2  (ingen 1/n)
-    Da er fullbatch-gradienten: 2 X^T(Xθ - y) + 2 lam θ.
-    Minibatch-estimator for data-gradienten skaleres med (n/M).
+    Stochastic RMSProp for Ridge (OLS + L2).
+
+
+    Args:
+        X (ndarray): Feature matrix (n_samples, n_features)
+        y (ndarray): Target vector (n_samples,)
+        lam (float): Ridge regularization strength (lambda)
+        eta (float): Base learning rate (per-parameter scaled by AdaGrad)
+        rho (float): Decay parameter for RMSProp moving average
+        n_epochs (int): Number of epochs
+        M (int): Minibatch size
+        seed (int): RNG seed for reproducibility
+        eps (float): Small constant to avoid division by zero
+
+    Returns:
+        theta (ndarray): Estimated parameters
+        steps (int): Total number of updates (= n_epochs * m)
     """
     n, p = X.shape
     theta = np.zeros(p)
@@ -470,15 +459,19 @@ def sgd_RMSProp_Ridge(X, y, lam=1.0, eta=1e-4, rho=0.99,
     steps = 0
     for _ in range(n_epochs):
         for _ in range(m):
-            k = rng.integers(m)
-            idx = np.arange(k * M, min((k + 1) * M, n))
+            # Draw random minibatch
+            idx = rng.choice(n, size=M, replace=False)
             Xb, yb = X[idx], y[idx]
-            Mb = Xb.shape[0]
+            
 
-            # data-gradient for SUM-tap: (n/M)*2*X_b^T(X_b θ - y_b)
-            grad_data = (n / Mb) * (2.0 * (Xb.T @ (Xb @ theta - yb)))
-            # ridge-term: 2*lam*θ (ikke skaler med M)
-            grad = grad_data + 2.0 * lam * theta
+            # Gradient
+            
+            # data-gradient
+            grad_data = (2.0 / M) * Xb.T @ (Xb @ theta - yb)
+            # ridge-term
+            lam_eff   = lam / n
+            # total
+            grad = grad_data + 2.0 * lam_eff * theta
 
             # RMSProp
             v = rho * v + (1.0 - rho) * (grad * grad)
@@ -491,7 +484,7 @@ def sgd_RMSProp_Ridge(X, y, lam=1.0, eta=1e-4, rho=0.99,
 
 
 def sgd_ADAM_Ridge(X, y, lam=1.0, eta=1e-3, rho_1=0.9, rho_2=0.999,
-                   n_epochs=10, M=5, seed=6114, eps=1e-8, intercept_idx=None):
+                   n_epochs=10, M=5, seed=6114, eps=1e-8):
     """
     Stochastic Adam for Ridge regression (sum-loss version).
 
@@ -509,8 +502,6 @@ def sgd_ADAM_Ridge(X, y, lam=1.0, eta=1e-3, rho_1=0.9, rho_2=0.999,
         M (int): Minibatch size
         seed (int): RNG seed
         eps (float): Small constant for numerical stability
-        intercept_idx (int|None): If not None, skip regularization on this index
-                                  (e.g. 0 if X has explicit intercept column)
 
     Returns:
         theta (ndarray): Estimated parameters
@@ -534,19 +525,19 @@ def sgd_ADAM_Ridge(X, y, lam=1.0, eta=1e-3, rho_1=0.9, rho_2=0.999,
 
     for _ in range(n_epochs):
         for _ in range(m):
-            # pick one random minibatch index
-            k = rng.integers(m)
-            idx = np.arange(k * M, min((k + 1) * M, n))
+            # Draw random minibatch
+            idx = rng.choice(n, size=M, replace=False)
             Xb, yb = X[idx], y[idx]
-            Mb = Xb.shape[0]
 
-            # --- Gradient ---
-            # data gradient (scaled for sum-loss): (n/M)*2*Xb^T(Xbθ - yb)
-            grad_data = (n / Mb) * (2.0 * (Xb.T @ (Xb @ theta - yb)))
-            grad = grad_data + 2.0 * lam * theta
 
-            if intercept_idx is not None:
-                grad[intercept_idx] = grad_data[intercept_idx]
+            # Gradient
+            # data-gradient
+            grad_data = (2.0 / M) * Xb.T @ (Xb @ theta - yb)
+            # ridge-term
+            lam_eff   = lam / n
+            # total
+            grad = grad_data + 2.0 * lam_eff * theta
+
 
             # --- Adam updates ---
             m1 = rho_1 * m1 + (1.0 - rho_1) * grad
@@ -562,3 +553,7 @@ def sgd_ADAM_Ridge(X, y, lam=1.0, eta=1e-3, rho_1=0.9, rho_2=0.999,
             steps += 1
 
     return theta, steps
+
+
+
+
