@@ -555,5 +555,40 @@ def sgd_ADAM_Ridge(X, y, lam=1.0, eta=1e-3, rho_1=0.9, rho_2=0.999,
     return theta, steps
 
 
+### LASSO ###
+
+def soft_threshold(z, alpha):
+    """Soft-thresholding operator"""
+    return np.sign(z) * np.maximum(np.abs(z) - alpha, 0.0)
+
+
+def sgd_LASSO(X, y, lam=1.0, eta=1e-2, n_epochs=100, M=32, seed=0):
+    """
+    Minimerer (1/(2n))||y - Xθ||^2 + lam * ||θ||_1
+    Oppdatering per minibatch:
+        grad = (1/Mb) Xb^T (Xb θ - yb)
+        θ <- S_{eta*lam}( θ - eta * grad )
+    """
+    X = np.asarray(X, float); y = np.asarray(y, float).ravel()
+    n, p = X.shape
+    M = min(M, n)
+    rng = np.random.default_rng(seed)
+
+    theta = np.zeros(p)
+
+    for _ in range(n_epochs):
+        perm = rng.permutation(n)
+        for s in range(0, n, M):
+            idx = perm[s:s+M]
+            Xb, yb = X[idx], y[idx]
+            Mb = len(idx)
+
+            grad = (1.0 / Mb) * (Xb.T @ (Xb @ theta - yb))   # OLS-del
+            theta = soft_threshold(theta - eta * grad, eta * lam)  # prox L1
+
+    return theta
+
+
+
 
 
