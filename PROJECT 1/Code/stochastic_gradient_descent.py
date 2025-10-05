@@ -562,7 +562,7 @@ def soft_threshold(z, alpha):
     return np.sign(z) * np.maximum(np.abs(z) - alpha, 0.0)
 
 
-def sgd_LASSO(X, y, lam=1.0, eta=1e-2, n_epochs=100, M=32, seed=0):
+def sgd_LASSO(X, y, lam=1.0, eta=1e-2, n_epochs=100, M=32, seed=6114):
     """
     Minimerer (1/(2n))||y - Xθ||^2 + lam * ||θ||_1
     Oppdatering per minibatch:
@@ -588,7 +588,217 @@ def sgd_LASSO(X, y, lam=1.0, eta=1e-2, n_epochs=100, M=32, seed=0):
 
     return theta
 
+def sgd_momentum_LASSO(X, y, lam=1.0, eta=1e-2, momentum=0.3,
+                       n_epochs=100, M=32, seed=6114):
+    """
+    Stokastisk (minibatch) gradient descent med momentum for LASSO (proximal variant)
+
+    Minimerer: (1/(2n))||y - Xθ||^2 + lam * ||θ||_1
+    Per minibatch:
+        grad = (1/Mb) Xb^T (Xb θ - yb)
+        Δ    = eta * grad + momentum * Δ
+        θ    <- S_{eta*lam}( θ - Δ )
+
+    Args:
+        X (np.ndarray): (n x p) designmatrise
+        y (np.ndarray): (n,) mål
+        lam (float): L1-regularisering (λ)
+        eta (float): læringsrate
+        momentum (float): momentumkoeffisient (typisk 0.3–0.9)
+        n_epochs (int): antall passeringer over datasettet
+        M (int): minibatch-størrelse
+        seed (int): RNG-seed for shuffling
+
+    Returns:
+        theta (np.ndarray): Estimert parametervektor (p,)
+    """
+    X = np.asarray(X, float)
+    y = np.asarray(y, float).ravel()
+    n, p = X.shape
+    M = min(M, n)
+
+    rng = np.random.default_rng(seed)
+    theta = np.zeros(p)
+    change = np.zeros(p)  # momentum-buffer (akkumulerer skalerte steg)
+
+    for _ in range(n_epochs):
+        perm = rng.permutation(n)
+        for s in range(0, n, M):
+            idx = perm[s:s+M]
+            Xb, yb = X[idx], y[idx]
+            Mb = len(idx)
+
+            # OLS-gradient på minibatch
+            grad = (1.0 / Mb) * (Xb.T @ (Xb @ theta - yb))
+
+            # Momentum + gradientsteg (beholder "change" som allerede skalert med eta)
+            new_change = eta * grad + momentum * change
+            z = theta - new_change
+
+            # Proximal-steg for L1
+            theta = soft_threshold(z, eta * lam)
+
+            # Oppdater momentum-buffer
+            change = new_change
+
+    return theta
+
+
+def sgd_ADAGrad_LASSO(X, y, lam=1.0, eta=1e-2, n_epochs=100, M=32, seed=6114, eps=1e-7):
+    """
+    Stokastisk (minibatch) ADAGrad for LASSO (proximal variant)
+
+    Minimerer: (1/(2n))||y - Xθ||^2 + lam * ||θ||_1
+    Per minibatch:
+        grad = (1/Mb) Xb^T (Xb θ - yb)
+        r   <- r + grad ⊙ grad
+        step = eta * grad / (sqrt(r) + eps)
+        θ    <- S_{ eta*lam/(sqrt(r)+eps) }( θ - step )
+    """
+    X = np.asarray(X, float); y = np.asarray(y, float).ravel()
+    n, p = X.shape
+    M = min(M, n)
+
+    rng = np.random.default_rng(seed)
+
+    theta = np.zeros(p, dtype=float)
+    r = np.zeros(p, dtype=float)  # ADAGrad-akkumulator (per-parameter)
+
+    for _ in range(n_epochs):
+        perm = rng.permutation(n)
+        for s in range(0, n, M):
+            idx = perm[s:s+M]
+            Xb, yb = X[idx], y[idx]
+            Mb = len(idx)
+
+            # OLS-gradient på minibatch
+            grad = (1.0 / Mb) * (Xb.T @ (Xb @ theta - yb))
+
+            # Oppdater akkumulert kvadratisk gradient
+            r += grad * grad
+
+            # Adaptivt steg (komponentvis)
+            denom = np.sqrt(r) + eps
+            step = eta * grad / denom
+            z = theta - step
+
+            # Proximal-steg (soft-thresholding) med komponentvise terskler
+            theta = soft_threshold(z, (eta * lam) / denom)
+
+    return theta
 
 
 
+def sgd_RMSProp_LASSO(X, y, lam=1.0, eta=1e-3, rho=0.99,
+                      n_epochs=100, M=32, seed=6114, eps=1e-8):
+    """
+    Stokastisk (minibatch) RMSProp for LASSO (proximal variant)
 
+    Minimerer: (1/(2n))||y - Xθ||^2 + lam * ||θ||_1
+    Per minibatch:
+        grad  = (1/Mb) Xb^T (Xb θ - yb)
+        v     = rho * v + (1-rho) * (grad ⊙ grad)
+        step  = eta * grad / (sqrt(v) + eps)
+        θ     <- S_{ eta*lam/(sqrt(v)+eps) }( θ - step )
+
+    Args:
+        X (np.ndarray): (n x p) designmatrise
+        y (np.ndarray): (n,) mål
+        lam (float): L1-regularisering (λ)
+        eta (float): læringsrate
+        rho (float): eksponentiell glatting av kvadrerte gradienter (0<rho<1)
+        n_epochs (int): antall passeringer over datasettet
+        M (int): minibatch-størrelse
+        seed (int): RNG-seed for shuffling
+        eps (float): liten konstant for numerisk stabilitet
+
+    Returns:
+        theta (np.ndarray): Estimert parametervektor (p,)
+    """
+    X = np.asarray(X, float); y = np.asarray(y, float).ravel()
+    n, p = X.shape
+    M = min(M, n)
+
+    rng = np.random.default_rng(seed)
+
+    theta = np.zeros(p, dtype=float)
+    v = np.zeros(p, dtype=float)  # RMSProp-akkumulator (per-parameter)
+
+    for _ in range(n_epochs):
+        perm = rng.permutation(n)
+        for s in range(0, n, M):
+            idx = perm[s:s+M]
+            Xb, yb = X[idx], y[idx]
+            Mb = len(idx)
+
+            # OLS-gradient på minibatch
+            grad = (1.0 / Mb) * (Xb.T @ (Xb @ theta - yb))
+
+            # RMSProp-oppdatering av akkumulert kvadratisk gradient
+            v = rho * v + (1.0 - rho) * (grad * grad)
+
+            # Adaptivt steg (komponentvis)
+            denom = np.sqrt(v) + eps
+            step = eta * grad / denom
+            z = theta - step
+
+            # Proximal-steg (soft-thresholding) med komponentvise terskler
+            theta = soft_threshold(z, (eta * lam) / denom)
+
+    return theta
+
+
+def sgd_ADAM_LASSO(X, y, lam=1.0, eta=1e-2,
+                   rho_1=0.9, rho_2=0.999,
+                   n_epochs=100, M=32, seed=6114, eps=1e-8):
+    """
+    Stokastisk (minibatch) ADAM for LASSO (proximal variant)
+
+    Minimerer: (1/(2n))||y - Xθ||^2 + lam * ||θ||_1
+    Per minibatch:
+        grad = (1/Mb) Xb^T (Xb θ - yb)
+        s <- ρ1 s + (1-ρ1) grad
+        r <- ρ2 r + (1-ρ2) (grad ⊙ grad)
+        ŝ = s / (1-ρ1^t), r̂ = r / (1-ρ2^t)
+        step = eta * ŝ / (sqrt(r̂) + eps)
+        θ <- S_{ eta*lam/(sqrt(r̂)+eps) }( θ - step )
+    """
+    X = np.asarray(X, float); y = np.asarray(y, float).ravel()
+    n, p = X.shape
+    M = min(M, n)
+
+    rng = np.random.default_rng(seed)
+
+    theta = np.zeros(p, dtype=float)
+    s = np.zeros(p, dtype=float)  # 1. moment
+    r = np.zeros(p, dtype=float)  # 2. moment
+    t = 0  # globalt trinntall (per minibatch)
+
+    for _ in range(n_epochs):
+        perm = rng.permutation(n)
+        for start in range(0, n, M):
+            idx = perm[start:start+M]
+            Xb, yb = X[idx], y[idx]
+            Mb = len(idx)
+
+            # OLS-gradient på minibatch
+            grad = (1.0 / Mb) * (Xb.T @ (Xb @ theta - yb))
+
+            # Oppdater momenter
+            s = rho_1 * s + (1.0 - rho_1) * grad
+            r = rho_2 * r + (1.0 - rho_2) * (grad * grad)
+
+            # Bias-korrigering
+            t += 1
+            s_hat = s / (1.0 - rho_1**t)
+            r_hat = r / (1.0 - rho_2**t)
+
+            # ADAM-steg (komponentvis)
+            denom = np.sqrt(r_hat) + eps
+            step = eta * (s_hat / denom)
+            z = theta - step
+
+            # Proximal-steg (soft-thresholding) med komponentvis terskel
+            theta = soft_threshold(z, (eta * lam) / denom)
+
+    return theta
