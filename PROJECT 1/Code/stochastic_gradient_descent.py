@@ -10,10 +10,10 @@ def sgd_ols(X, y, eta=0.01, n_epochs=10, M=5, seed=6114):
     Args:
         X (ndarray): Feature-matrix (n_samples, n_features)
         y (ndarray): Target (n_samples,)
-        eta (float): Learning rate
-        n_epochs (int): Number of epochs
-        M (int): Size of minibatches
-        seed (int|None): RNG-seed
+        eta (float): Learning rate. Defaults to 0.01.
+        n_epochs (int): Number of epochs. Defaults to 10.
+        M (int): Size of minibatches. Defaults to 5.
+        seed (int|None): RNG-seed. Defaults to 6114
 
     Returns:
         theta (ndarray): Estimated parameters
@@ -51,11 +51,11 @@ def sgd_momentum_ols(X, y, eta=0.01, momentum=0.3, n_epochs=10, M=5, seed=6114):
     Args:
         X (ndarray): Feature matrix (n_samples, n_features)
         y (ndarray): Target vector (n_samples,)
-        eta (float): Learning rate
-        momentum (float): Momentum coefficient (beta)
-        n_epochs (int): Number of epochs
-        M (int): Minibatch size
-        seed (int): RNG seed for reproducibility
+        eta (float): Learning rate. Defaults to 0.01.
+        momentum (float): Momentum coefficient. Defaults to 0.3.
+        n_epochs (int): Number of epochs. Defaults to 10.
+        M (int): Minibatch size. Defaults to 5. 
+        seed (int): RNG seed for reproducibility. Defaults to 6114.
 
     Returns:
         theta (ndarray): Estimated parameters
@@ -98,10 +98,10 @@ def sgd_ADAGrad_ols(X, y, eta=0.01, n_epochs=10, M=5, seed=6114, eps=1e-7):
     Args:
         X (ndarray): Feature matrix (n_samples, n_features)
         y (ndarray): Target vector (n_samples,)
-        eta (float): Base learning rate (scaled per-parameter by ADAGrad)
-        n_epochs (int): Number of epochs
-        M (int): Minibatch size
-        seed (int): RNG seed for reproducibility
+        eta (float): Learning rate. Defaults to 0.01.
+        n_epochs (int): Number of epochs. Defaults to 10. 
+        M (int): Minibatch size. Defaults to 5. 
+        seed (int): RNG seed for reproducibility. Defaults t0 6114.
         eps (float): Small constant to avoid division by zero
 
     Returns:
@@ -153,11 +153,11 @@ def sgd_RMSProp_ols(X, y, eta=1e-3, rho=0.99, n_epochs=10, M=5, seed=6114, eps=1
     Args:
         X (ndarray): Feature matrix (n_samples, n_features)
         y (ndarray): Target vector (n_samples,)
-        eta (float): Learning rate
-        rho (float): Decay parameter for RMSProp moving average
-        n_epochs (int): Number of epochs
-        M (int): Minibatch size
-        seed (int): RNG seed for reproducibility
+        eta (float): Learning rate. Defaults to 0.001
+        rho (float): Decay parameter for RMSProp moving average. Defaults to 0.99.
+        n_epochs (int): Number of epochs. Defaults to 10.
+        M (int): Minibatch size. Defaults to 5. 
+        seed (int): RNG seed for reproducibility. Defaults to 6114.
         eps (float): Small constant to avoid division by zero
 
     Returns:
@@ -203,17 +203,17 @@ def sgd_RMSProp_ols(X, y, eta=1e-3, rho=0.99, n_epochs=10, M=5, seed=6114, eps=1
 def sgd_ADAM_ols(X, y, eta=1e-3, rho_1=0.9, rho_2=0.999,
                  n_epochs=10, M=5, seed=6114, eps=1e-8):
     """
-    Stochastic ADAM for OLS (fixed learning rate).
+    Stochastic gradient descent with ADAM for OLS.
 
     Args:
         X (ndarray): Feature matrix (n_samples, n_features)
         y (ndarray): Target vector (n_samples,)
-        eta (float): Base learning rate
-        rho_1 (float): Exponential decay for first moment (beta1)
-        rho_2 (float): Exponential decay for second moment (beta2)
-        n_epochs (int): Number of epochs
-        M (int): Minibatch size
-        seed (int): RNG seed for reproducibility
+        eta (float): Learning rate. Defaults to 0.001
+        rho_1 (float): Decay parameter 1. Defaults to 0.9.
+        rho_2 (float): Decay parameter 2. Defaults to 0.999.
+        n_epochs (int): Number of epochs. Defaults to 10.
+        M (int): Minibatch size. Defaults to 5. 
+        seed (int): RNG seed for reproducibility. Defaults to 6114.
         eps (float): Small constant for numerical stability
 
     Returns:
@@ -270,11 +270,11 @@ def sgd_Ridge(X, y, lam=1e-2, eta=0.01, n_epochs=10, M=5, seed=6114):
     Args:
         X (ndarray): Feature matrix (n_samples, n_features)
         y (ndarray): Target values. (n_samples,)
-        lam (float): Regularization parameter (lambda)
-        eta (float): Learning rate
-        n_epochs (int): Number of epochs
-        M (int): Minibatch-size
-        seed (int): RNG-seed
+        lam (float): Regularization parameter. Defaults to 0.01.
+        eta (float): Learning rate. Defaults to 0.01.
+        n_epochs (int): Number of epochs. Defaults to 10.
+        M (int): Minibatch-size. Defaults to 5.
+        seed (int): RNG-seed. Defaults to 6114.
 
     Returns:
         theta (ndarray): Estimated parameters
@@ -316,17 +316,17 @@ def sgd_Ridge(X, y, lam=1e-2, eta=0.01, n_epochs=10, M=5, seed=6114):
 def sgd_momentum_Ridge(X, y, lam=1e-2, eta=0.01, momentum=0.3, 
                        n_epochs=10, M=5, seed=6114):
     """
-    Stochastic gradient descent with momentum for Ridge regression (fixed learning rate).
+    Stochastic gradient descent with momentum for Ridge regression.
 
     Args:
         X (ndarray): Feature matrix (n_samples, n_features)
         y (ndarray): Target vector (n_samples,)
-        lam (float): Ridge regularization strength (lambda)
-        eta (float): Learning rate
-        momentum (float): Momentum coefficient (beta)
-        n_epochs (int): Number of epochs
-        M (int): Minibatch size
-        seed (int): RNG seed for reproducibility
+        lam (float): Ridge regularization strength defaults to 0.01.
+        eta (float): Learning rate. Defaults to 0.01. 
+        momentum (float): Momentum coefficient. Defaults to 0.3.
+        n_epochs (int): Number of epochs. Defaults to 10.
+        M (int): Minibatch size. Defaults to 5.
+        seed (int): RNG seed for reproducibility. Defaults to 6114.
 
     Returns:
         theta (ndarray): Estimated parameters
@@ -370,17 +370,17 @@ def sgd_momentum_Ridge(X, y, lam=1e-2, eta=0.01, momentum=0.3,
 def sgd_ADAGrad_Ridge(X, y, lam=1e-2, eta=0.01, n_epochs=10, M=5,
                       seed=6114, eps=1e-7):
     """
-    Stochastic AdaGrad for Ridge (OLS + L2) with fixed learning rate.
+    Stochastic gradient descent with AdaGrad for Ridge.
 
 
     Args:
         X (ndarray): Feature matrix (n_samples, n_features)
         y (ndarray): Target vector (n_samples,)
-        lam (float): Ridge regularization strength (lambda)
-        eta (float): Base learning rate (per-parameter scaled by AdaGrad)
-        n_epochs (int): Number of epochs
-        M (int): Minibatch size
-        seed (int): RNG seed for reproducibility
+        lam (float): Ridge regularization strength (lambda). Defaults to 0.01.
+        eta (float): Learning rate. Defaults to 0.01.
+        n_epochs (int): Number of epochs. Defaults to 10.
+        M (int): Minibatch size. Defaults to 5.
+        seed (int): RNG seed for reproducibility. Defaults to 6114.
         eps (float): Small constant to avoid division by zero
 
     Returns:
@@ -431,18 +431,18 @@ def sgd_ADAGrad_Ridge(X, y, lam=1e-2, eta=0.01, n_epochs=10, M=5,
 def sgd_RMSProp_Ridge(X, y, lam=1.0, eta=1e-4, rho=0.99,
                               n_epochs=1000, M=5, seed=6114, eps=1e-8):
     """
-    Stochastic RMSProp for Ridge (OLS + L2).
+    Stochastic gradient descent with RMSProp for Ridge.
 
 
     Args:
         X (ndarray): Feature matrix (n_samples, n_features)
         y (ndarray): Target vector (n_samples,)
-        lam (float): Ridge regularization strength (lambda)
-        eta (float): Base learning rate (per-parameter scaled by AdaGrad)
-        rho (float): Decay parameter for RMSProp moving average
-        n_epochs (int): Number of epochs
-        M (int): Minibatch size
-        seed (int): RNG seed for reproducibility
+        lam (float): Ridge regularization strength (lambda). Defaults to 0.01.
+        eta (float): Learning rate. Defaults to 0.0001.
+        rho (float): Decay parameter for RMSProp moving average. Defaults to 0.99.
+        n_epochs (int): Number of epochs. Defaults to 10.
+        M (int): Minibatch size. Defaults to 5.
+        seed (int): RNG seed for reproducibility. Defaults to 6114.
         eps (float): Small constant to avoid division by zero
 
     Returns:
@@ -486,21 +486,18 @@ def sgd_RMSProp_Ridge(X, y, lam=1.0, eta=1e-4, rho=0.99,
 def sgd_ADAM_Ridge(X, y, lam=1.0, eta=1e-3, rho_1=0.9, rho_2=0.999,
                    n_epochs=10, M=5, seed=6114, eps=1e-8):
     """
-    Stochastic Adam for Ridge regression (sum-loss version).
-
-    Loss: J(θ) = ||y - Xθ||^2 + lam * ||θ||^2
-    Gradient: ∇J = 2 X^T(Xθ - y) + 2 lam θ
+    Stochastic gradient descent with ADAM for Ridge regression.
 
     Args:
         X (ndarray): Feature matrix (n_samples, n_features)
         y (ndarray): Target vector (n_samples,)
-        lam (float): Ridge penalty parameter (lambda)
-        eta (float): Learning rate
-        rho_1 (float): Exponential decay for first moment (beta1)
-        rho_2 (float): Exponential decay for second moment (beta2)
-        n_epochs (int): Number of epochs
-        M (int): Minibatch size
-        seed (int): RNG seed
+        lam (float): Ridge penalty parameter (lambda). Defaults to 1.0
+        eta (float): Learning rate. Defaults to 0.001.
+        rho_1 (float): Decay parameter 1. Defaults to 0.9.
+        rho_2 (float): Decay parameter 2. Defaults to 0.99.
+        n_epochs (int): Number of epochs. Defaults to 10.
+        M (int): Minibatch size. Defaults to 5.
+        seed (int): RNG seed. Defaults to 6114.
         eps (float): Small constant for numerical stability
 
     Returns:
@@ -558,16 +555,26 @@ def sgd_ADAM_Ridge(X, y, lam=1.0, eta=1e-3, rho_1=0.9, rho_2=0.999,
 ### LASSO ###
 
 def soft_threshold(z, alpha):
-    """Soft-thresholding operator"""
+    """Soft-thresholding operator, used for proximal gradient descent with LASSO"""
     return np.sign(z) * np.maximum(np.abs(z) - alpha, 0.0)
 
 
 def sgd_LASSO(X, y, lam=1.0, eta=1e-2, n_epochs=100, M=32, seed=6114):
     """
-    Minimerer (1/(2n))||y - Xθ||^2 + lam * ||θ||_1
-    Oppdatering per minibatch:
-        grad = (1/Mb) Xb^T (Xb θ - yb)
-        θ <- S_{eta*lam}( θ - eta * grad )
+    Stochastic gradient descent, fixed learning rate, LASSO regression. 
+    Proximal version.
+
+    Args:
+        X (ndarray): Feature matrix (n_samples, n_features)
+        y (ndarray): Target values. (n_samples,)
+        lam (float): Regularization parameter for LASSO. Defaults to 1.0.
+        eta (float): Learning rate. Defaults to 0.01.
+        n_epochs (int): Number of epochs. Defaults to 100.
+        M (int): Minibatch-size. Defaults to 32.
+        seed (int): RNG-seed. Defaults to 6114.
+
+    Returns:
+        theta (ndarray): Estimated parameters
     """
     X = np.asarray(X, float); y = np.asarray(y, float).ravel()
     n, p = X.shape
@@ -591,26 +598,21 @@ def sgd_LASSO(X, y, lam=1.0, eta=1e-2, n_epochs=100, M=32, seed=6114):
 def sgd_momentum_LASSO(X, y, lam=1.0, eta=1e-2, momentum=0.3,
                        n_epochs=100, M=32, seed=6114):
     """
-    Stokastisk (minibatch) gradient descent med momentum for LASSO (proximal variant)
-
-    Minimerer: (1/(2n))||y - Xθ||^2 + lam * ||θ||_1
-    Per minibatch:
-        grad = (1/Mb) Xb^T (Xb θ - yb)
-        Δ    = eta * grad + momentum * Δ
-        θ    <- S_{eta*lam}( θ - Δ )
+    Stochastic gradient descent with momentum for LASSO regression.
+    Proximal version
 
     Args:
-        X (np.ndarray): (n x p) designmatrise
-        y (np.ndarray): (n,) mål
-        lam (float): L1-regularisering (λ)
-        eta (float): læringsrate
-        momentum (float): momentumkoeffisient (typisk 0.3–0.9)
-        n_epochs (int): antall passeringer over datasettet
-        M (int): minibatch-størrelse
-        seed (int): RNG-seed for shuffling
+        X (ndarray): Feature matrix (n_samples, n_features)
+        y (ndarray): Target vector (n_samples,)
+        lam (float): LASSO regularization strength defaults to 1.0.
+        eta (float): Learning rate. Defaults to 0.01. 
+        momentum (float): Momentum coefficient. Defaults to 0.3.
+        n_epochs (int): Number of epochs. Defaults to 100.
+        M (int): Minibatch size. Defaults to 32.
+        seed (int): RNG seed for reproducibility. Defaults to 6114.
 
     Returns:
-        theta (np.ndarray): Estimert parametervektor (p,)
+        theta (ndarray): Estimated parameters
     """
     X = np.asarray(X, float)
     y = np.asarray(y, float).ravel()
@@ -619,7 +621,7 @@ def sgd_momentum_LASSO(X, y, lam=1.0, eta=1e-2, momentum=0.3,
 
     rng = np.random.default_rng(seed)
     theta = np.zeros(p)
-    change = np.zeros(p)  # momentum-buffer (akkumulerer skalerte steg)
+    change = np.zeros(p) 
 
     for _ in range(n_epochs):
         perm = rng.permutation(n)
@@ -628,17 +630,17 @@ def sgd_momentum_LASSO(X, y, lam=1.0, eta=1e-2, momentum=0.3,
             Xb, yb = X[idx], y[idx]
             Mb = len(idx)
 
-            # OLS-gradient på minibatch
+            # OLS gradient on minibatch
             grad = (1.0 / Mb) * (Xb.T @ (Xb @ theta - yb))
 
-            # Momentum + gradientsteg (beholder "change" som allerede skalert med eta)
+
             new_change = eta * grad + momentum * change
             z = theta - new_change
 
-            # Proximal-steg for L1
+            # Proximal step
             theta = soft_threshold(z, eta * lam)
 
-            # Oppdater momentum-buffer
+            # Update momentum
             change = new_change
 
     return theta
@@ -646,14 +648,21 @@ def sgd_momentum_LASSO(X, y, lam=1.0, eta=1e-2, momentum=0.3,
 
 def sgd_ADAGrad_LASSO(X, y, lam=1.0, eta=1e-2, n_epochs=100, M=32, seed=6114, eps=1e-7):
     """
-    Stokastisk (minibatch) ADAGrad for LASSO (proximal variant)
+    Stochastic gradient descent with AdaGrad for LASSO.
+    Proximal version
 
-    Minimerer: (1/(2n))||y - Xθ||^2 + lam * ||θ||_1
-    Per minibatch:
-        grad = (1/Mb) Xb^T (Xb θ - yb)
-        r   <- r + grad ⊙ grad
-        step = eta * grad / (sqrt(r) + eps)
-        θ    <- S_{ eta*lam/(sqrt(r)+eps) }( θ - step )
+    Args:
+        X (ndarray): Feature matrix (n_samples, n_features)
+        y (ndarray): Target vector (n_samples,)
+        lam (float): LASSO regularization strength (lambda). Defaults to 1.0.
+        eta (float): Learning rate. Defaults to 0.01.
+        n_epochs (int): Number of epochs. Defaults to 100.
+        M (int): Minibatch size. Defaults to 32.
+        seed (int): RNG seed for reproducibility. Defaults to 6114.
+        eps (float): Small constant to avoid division by zero
+
+    Returns:
+        theta (ndarray): Estimated parameters
     """
     X = np.asarray(X, float); y = np.asarray(y, float).ravel()
     n, p = X.shape
@@ -662,7 +671,7 @@ def sgd_ADAGrad_LASSO(X, y, lam=1.0, eta=1e-2, n_epochs=100, M=32, seed=6114, ep
     rng = np.random.default_rng(seed)
 
     theta = np.zeros(p, dtype=float)
-    r = np.zeros(p, dtype=float)  # ADAGrad-akkumulator (per-parameter)
+    r = np.zeros(p, dtype=float)
 
     for _ in range(n_epochs):
         perm = rng.permutation(n)
@@ -671,18 +680,18 @@ def sgd_ADAGrad_LASSO(X, y, lam=1.0, eta=1e-2, n_epochs=100, M=32, seed=6114, ep
             Xb, yb = X[idx], y[idx]
             Mb = len(idx)
 
-            # OLS-gradient på minibatch
+            # OLS gradient on minibatch
             grad = (1.0 / Mb) * (Xb.T @ (Xb @ theta - yb))
 
-            # Oppdater akkumulert kvadratisk gradient
+            # Update r
             r += grad * grad
 
-            # Adaptivt steg (komponentvis)
+            # Adaptive step
             denom = np.sqrt(r) + eps
             step = eta * grad / denom
             z = theta - step
 
-            # Proximal-steg (soft-thresholding) med komponentvise terskler
+            # Proximal step
             theta = soft_threshold(z, (eta * lam) / denom)
 
     return theta
@@ -692,28 +701,22 @@ def sgd_ADAGrad_LASSO(X, y, lam=1.0, eta=1e-2, n_epochs=100, M=32, seed=6114, ep
 def sgd_RMSProp_LASSO(X, y, lam=1.0, eta=1e-3, rho=0.99,
                       n_epochs=100, M=32, seed=6114, eps=1e-8):
     """
-    Stokastisk (minibatch) RMSProp for LASSO (proximal variant)
-
-    Minimerer: (1/(2n))||y - Xθ||^2 + lam * ||θ||_1
-    Per minibatch:
-        grad  = (1/Mb) Xb^T (Xb θ - yb)
-        v     = rho * v + (1-rho) * (grad ⊙ grad)
-        step  = eta * grad / (sqrt(v) + eps)
-        θ     <- S_{ eta*lam/(sqrt(v)+eps) }( θ - step )
+    Stochastic gradient descent with RMSProp for LASSO.
+    Proximal version
 
     Args:
-        X (np.ndarray): (n x p) designmatrise
-        y (np.ndarray): (n,) mål
-        lam (float): L1-regularisering (λ)
-        eta (float): læringsrate
-        rho (float): eksponentiell glatting av kvadrerte gradienter (0<rho<1)
-        n_epochs (int): antall passeringer over datasettet
-        M (int): minibatch-størrelse
-        seed (int): RNG-seed for shuffling
-        eps (float): liten konstant for numerisk stabilitet
+        X (ndarray): Feature matrix (n_samples, n_features)
+        y (ndarray): Target vector (n_samples,)
+        lam (float): Ridge regularization strength (lambda). Defaults to 1.0.
+        eta (float): Learning rate. Defaults to 0.001.
+        rho (float): Decay parameter for RMSProp moving average. Defaults to 0.99.
+        n_epochs (int): Number of epochs. Defaults to 100.
+        M (int): Minibatch size. Defaults to 32.
+        seed (int): RNG seed for reproducibility. Defaults to 6114.
+        eps (float): Small constant to avoid division by zero
 
     Returns:
-        theta (np.ndarray): Estimert parametervektor (p,)
+        theta (ndarray): Estimated parameters
     """
     X = np.asarray(X, float); y = np.asarray(y, float).ravel()
     n, p = X.shape
@@ -722,7 +725,7 @@ def sgd_RMSProp_LASSO(X, y, lam=1.0, eta=1e-3, rho=0.99,
     rng = np.random.default_rng(seed)
 
     theta = np.zeros(p, dtype=float)
-    v = np.zeros(p, dtype=float)  # RMSProp-akkumulator (per-parameter)
+    v = np.zeros(p, dtype=float)  
 
     for _ in range(n_epochs):
         perm = rng.permutation(n)
@@ -731,18 +734,18 @@ def sgd_RMSProp_LASSO(X, y, lam=1.0, eta=1e-3, rho=0.99,
             Xb, yb = X[idx], y[idx]
             Mb = len(idx)
 
-            # OLS-gradient på minibatch
+            # OLS gradient on mini-batch
             grad = (1.0 / Mb) * (Xb.T @ (Xb @ theta - yb))
 
-            # RMSProp-oppdatering av akkumulert kvadratisk gradient
+            # Update v
             v = rho * v + (1.0 - rho) * (grad * grad)
 
-            # Adaptivt steg (komponentvis)
+            # Adaptive step
             denom = np.sqrt(v) + eps
             step = eta * grad / denom
             z = theta - step
 
-            # Proximal-steg (soft-thresholding) med komponentvise terskler
+            # Proximal step
             theta = soft_threshold(z, (eta * lam) / denom)
 
     return theta
@@ -752,16 +755,23 @@ def sgd_ADAM_LASSO(X, y, lam=1.0, eta=1e-2,
                    rho_1=0.9, rho_2=0.999,
                    n_epochs=100, M=32, seed=6114, eps=1e-8):
     """
-    Stokastisk (minibatch) ADAM for LASSO (proximal variant)
+    Stochastic gradient descent with ADAM for LASSO regression.
+    Proximal version. 
 
-    Minimerer: (1/(2n))||y - Xθ||^2 + lam * ||θ||_1
-    Per minibatch:
-        grad = (1/Mb) Xb^T (Xb θ - yb)
-        s <- ρ1 s + (1-ρ1) grad
-        r <- ρ2 r + (1-ρ2) (grad ⊙ grad)
-        ŝ = s / (1-ρ1^t), r̂ = r / (1-ρ2^t)
-        step = eta * ŝ / (sqrt(r̂) + eps)
-        θ <- S_{ eta*lam/(sqrt(r̂)+eps) }( θ - step )
+    Args:
+        X (ndarray): Feature matrix (n_samples, n_features)
+        y (ndarray): Target vector (n_samples,)
+        lam (float): Ridge penalty parameter (lambda). Defaults to 1.0
+        eta (float): Learning rate. Defaults to 0.01.
+        rho_1 (float): Decay parameter 1. Defaults to 0.9.
+        rho_2 (float): Decay parameter 2. Defaults to 0.99.
+        n_epochs (int): Number of epochs. Defaults to 100.
+        M (int): Minibatch size. Defaults to 32.
+        seed (int): RNG seed. Defaults to 6114.
+        eps (float): Small constant for numerical stability
+
+    Returns:
+        theta (ndarray): Estimated parameters
     """
     X = np.asarray(X, float); y = np.asarray(y, float).ravel()
     n, p = X.shape
@@ -770,9 +780,9 @@ def sgd_ADAM_LASSO(X, y, lam=1.0, eta=1e-2,
     rng = np.random.default_rng(seed)
 
     theta = np.zeros(p, dtype=float)
-    s = np.zeros(p, dtype=float)  # 1. moment
-    r = np.zeros(p, dtype=float)  # 2. moment
-    t = 0  # globalt trinntall (per minibatch)
+    s = np.zeros(p, dtype=float)  # 1st moment
+    r = np.zeros(p, dtype=float)  # 2nd moment
+    t = 0  
 
     for _ in range(n_epochs):
         perm = rng.permutation(n)
@@ -781,24 +791,24 @@ def sgd_ADAM_LASSO(X, y, lam=1.0, eta=1e-2,
             Xb, yb = X[idx], y[idx]
             Mb = len(idx)
 
-            # OLS-gradient på minibatch
+            # OLS gradient on minibatch
             grad = (1.0 / Mb) * (Xb.T @ (Xb @ theta - yb))
 
-            # Oppdater momenter
+            # Update moments
             s = rho_1 * s + (1.0 - rho_1) * grad
             r = rho_2 * r + (1.0 - rho_2) * (grad * grad)
 
-            # Bias-korrigering
+            # Bias-correction
             t += 1
             s_hat = s / (1.0 - rho_1**t)
             r_hat = r / (1.0 - rho_2**t)
 
-            # ADAM-steg (komponentvis)
+            # ADAM-step
             denom = np.sqrt(r_hat) + eps
             step = eta * (s_hat / denom)
             z = theta - step
 
-            # Proximal-steg (soft-thresholding) med komponentvis terskel
+            # Proximal step 
             theta = soft_threshold(z, (eta * lam) / denom)
 
     return theta

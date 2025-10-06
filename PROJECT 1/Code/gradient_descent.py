@@ -33,7 +33,7 @@ def gradient_descent_OLS(X, y, eta=0.01, num_iters=1000, print_num_iters = False
     return theta, t+1
 
 def gradient_descent_Ridge(X, y, eta=0.01, lam=1, num_iters=1000, print_num_iters = False):
-    """Perform gradient descent for OLS regression (fixed learning rate)
+    """Perform gradient descent for Ridge regression (fixed learning rate)
 
     Args:
         X (numpy.ndarray): Feature matrix
@@ -75,7 +75,7 @@ def momentum_gradient_descent_OLS(X, y, eta=0.01, momentum = 0.3 ,num_iters=1000
         X (numpy.ndarray): Feature matrix
         y (numpy.ndarray): Target values
         eta (float, optional): Learning rate. Defaults to 0.01.
-        momentum (float, optional): _description_. Defaults to 0.3.
+        momentum (float, optional): Momentum parameter. Defaults to 0.3.
         num_iters (int, optional): Number of iterations. Defaults to 1000.
         print_num_iters (bool, optional): If true, the functin prints the number of iterations. Defaults to False.
 
@@ -113,7 +113,7 @@ def momentum_gradient_descent_Ridge(X, y, eta=0.01, lam=1, momentum = 0.3, num_i
         y (numpy.ndarray): Target values
         eta (float, optional): Learning rate. Defaults to 0.01.
         lam (float, optional): Regularization parameter. Defaults to 1.
-        momentum (float, optional): _description_. Defaults to 0.3.
+        momentum (float, optional): Momentum parameter. Defaults to 0.3.
         num_iters (int, optional): Number of iterations. Defaults to 1000.
         print_num_iters (bool, optional): If true, the functin prints the number of iterations. Defaults to False.
 
@@ -185,7 +185,7 @@ def ADAGrad_gradient_descent_OLS(X, y, eta=0.01 ,num_iters=1000, print_num_iters
 def ADAGrad_gradient_descent_Ridge(
     X, y, eta=0.01, lam=1.0, num_iters=1000, print_num_iters=False,
     tol_theta=1e-8):
-    """ADAGrad gradient descent, ridge
+    """ADAGrad gradient descent for Ridge regression
 
     Args:
         X (numpy.ndarray): Feature matrix
@@ -231,7 +231,7 @@ def RMSProp_gradient_descent_OLS(
     tol_step=1e-8,            
     tol_rel_loss=1e-9,        
     print_num_iters=False):
-    """RMSProp gradient descent, OLS
+    """RMSProp gradient descent, for OLS regression
 
     Args:
         X (numpy.ndarray): Feature matrix
@@ -302,7 +302,7 @@ def RMSProp_gradient_descent_Ridge(
     tol_rel_loss=1e-9,        
     print_num_iters=False
 ):
-    """RMSProp gradient descent, Ridge
+    """RMSProp gradient descent, Ridge regression
 
     Args:
         X (numpy.ndarray): Feature matrix
@@ -468,7 +468,7 @@ def ADAM_gradient_descent_Ridge(X, y, eta=0.01, lam = 1.0, rho_1 = 0.9, rho_2 = 
 ### LASSO ###
 
 def soft_threshold(z, alpha):
-    """Soft-thresholding operator"""
+    """Soft-thresholding operator, used for gradient descent with LASSO"""
     return np.sign(z) * np.maximum(np.abs(z) - alpha, 0.0)
 
 

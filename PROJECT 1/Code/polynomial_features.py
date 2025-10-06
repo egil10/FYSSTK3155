@@ -3,21 +3,20 @@ def polynomial_features(x, p, intercept=False):
     """
     Generate a polynomial feature matrix from a 1D input array.
 
-    Parameters
-    ----------
-    x : numpy.ndarray, shape (n_samples,)
-        Input vector of samples.
-    p : int
-        Degree of the polynomial features to generate.
-    intercept : bool, default=False
-        If True, includes an intercept (bias) column of ones as the first feature.
-        If False, only powers of `x` from 1 to `p` are included.
+    Args:
+        x : numpy.ndarray, shape (n_samples,)
+            Input vector of samples.
+        p : int
+            Degree of the polynomial features to generate.
+        intercept : bool, default=False
+            If True, includes an intercept (bias) column of ones as the first feature.
+            If False, only powers of `x` from 1 to `p` are included.
 
-    Returns
-    -------
-    X : numpy.ndarray, shape (n_samples, p+1) if intercept=True, else (n_samples, p)
-        The polynomial feature matrix, where each column corresponds to 
-        increasing powers of `x`.
+    Returns:
+
+        X : numpy.ndarray, shape (n_samples, p+1) if intercept=True, else (n_samples, p)
+            The polynomial feature matrix, where each column corresponds to 
+            increasing powers of `x`.
     """
 
     n = len(x)
