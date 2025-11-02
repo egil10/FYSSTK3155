@@ -22,6 +22,7 @@ def prepare_data(n=100, noise_scale=0.01, if_noise=False):
         return 1/(1+25*x**2)
     rng = np.random.default_rng(seed=6114)
     x = np.linspace(-1,1,n)
+    x = x.reshape(-1,1)
     y = f(x)
 
   
