@@ -2,78 +2,31 @@ from typing import List, Tuple, Callable, Optional
 import numpy as np
 
 ### Define functions for backpropagation (batch) and create_layers (batch) ###
-# --- Initialiseringshjelpere ---
-def _he_init(fan_in: int, fan_out: int, rng=None):
-    if rng is None:
-        rng = np.random.default_rng()
-    W = rng.normal(0.0, np.sqrt(2.0 / fan_in), size=(fan_in, fan_out)).astype(float)
-    b = np.zeros((1, fan_out), dtype=float)
-    return W, b
 
-def _xavier_init(fan_in: int, fan_out: int, rng=None, gain: float = 1.0):
-    if rng is None:
-        rng = np.random.default_rng()
-    std = gain * np.sqrt(2.0 / (fan_in + fan_out))
-    W = rng.normal(0.0, std, size=(fan_in, fan_out)).astype(float)
-    b = np.zeros((1, fan_out), dtype=float)
-    return W, b
-
-def _is_relu_like(act):
-    # Tilpass gjerne med flere: leaky_relu, elu, gelu, etc.
-    name = getattr(act, "__name__", "").lower()
-    return "relu" in name  # fanger relu/leaky_relu
-
-def _is_tanh_or_sigmoid(act):
-    name = getattr(act, "__name__", "").lower()
-    return ("tanh" in name) or ("sigmoid" in name)
-
-def create_layers_batch(network_input_size, layer_output_sizes, activation_funcs=None, rng=None,
-                        output_gain=0.5, class_priors=None):
+def create_layers_batch(network_input_size, layer_output_sizes, activation_funcs=None, seed=6114):
     """
-    Allmenn create_layers som velger init per lag basert på aktiveringsfunksjon:
-      - ReLU-lignende: He-init
-      - tanh/sigmoid: Xavier-init
-      - Hvis ingen aktivering gjenkjennes: faller tilbake på Xavier
-    Output-laget får Xavier med liten gain (default 0.5) for små logits/lineærutgang.
-    Bias = 0 alltid, med unntak av klassifisering med skjeve klasser:
-      hvis class_priors (shape (C,)) gis, settes siste bias = log(prior).
+    Creates layers with simple initialization:
+      - Weights from  Normal distribution(mean=0, std=0.01)
+      - Biases = 0
+    Activation functions and class priors are ignored.
     
-    Bruk:
-      self.layers = create_layers_batch(input_dim, sizes, activation_funcs=self.activation_funcs)
+    Returns:
+      List of (W, b) tuples for each layer.
     """
-    if rng is None:
-        rng = np.random.default_rng()
+    rng = np.random.default_rng(seed)
+    
 
     layers = []
     fan_in = network_input_size
 
-    # Hvis vi vet aktiveringsfunksjoner, bruk dem til å velge init per lag
-    acts = list(activation_funcs) if activation_funcs is not None else [None] * len(layer_output_sizes)
-
-    # Skjulte lag
-    for fan_out, act in zip(layer_output_sizes[:-1], acts[:-1]):
-        if act is not None and _is_relu_like(act):
-            W, b = _he_init(fan_in, fan_out, rng=rng)
-        elif act is not None and _is_tanh_or_sigmoid(act):
-            W, b = _xavier_init(fan_in, fan_out, rng=rng, gain=1.0)
-        else:
-            # trygg default
-            W, b = _xavier_init(fan_in, fan_out, rng=rng, gain=1.0)
+    for fan_out in layer_output_sizes:
+        W = rng.normal(loc=0.0, scale=0.01, size=(fan_in, fan_out))
+        b = np.zeros((fan_out,))
         layers.append((W, b))
         fan_in = fan_out
 
-    # Output-lag (små vekter uansett om det er lineært eller logits)
-    out_dim = layer_output_sizes[-1]
-    W_out, b_out = _xavier_init(fan_in, out_dim, rng=rng, gain=output_gain)
-
-    # Hvis klassifisering med skjeve klasser: sett bias = log(prior)
-    if class_priors is not None:
-        pri = np.asarray(class_priors, dtype=float)
-        pri = pri / np.sum(pri)
-        b_out = np.log(pri)[None, :]
-
-    layers.append((W_out, b_out))
     return layers
+
 
 
 # Function used in backpropagation:
@@ -138,6 +91,7 @@ class NeuralNetwork:
         activation_ders: List[Callable[[Array], Array]],
         cost_fun: Callable,
         cost_der: Callable,
+        seed: int
     ):
         """Setting up neural network with given layers, activation functions
         and cost function.
@@ -165,10 +119,12 @@ class NeuralNetwork:
         self.activation_ders = activation_ders
         self.cost_fun = cost_fun
         self.cost_der = cost_der
+        self.seed = seed
         
         self.layers = create_layers_batch(network_input_size, 
                                           layer_output_sizes,
-                                          activation_funcs=self.activation_funcs)
+                                          activation_funcs=self.activation_funcs,
+                                          seed = self.seed)
 
     def predict(self, inputs):
         """Perform a forward pass through the neural network
