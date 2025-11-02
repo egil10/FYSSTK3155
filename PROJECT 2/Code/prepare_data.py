@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
-def prepare_data(n=100, noise_scale=0.01, noise = False):
+def prepare_data(n=100, noise_scale=0.01):
     """Function for preparing data
 
     Args:
@@ -26,11 +26,6 @@ def prepare_data(n=100, noise_scale=0.01, noise = False):
 
     noise = rng.normal(loc=0.0, scale=noise_scale, size=x.shape)
     y_noisy = y + noise
-
-    if noise: 
-        x_train, x_test, y_train, y_test = train_test_split(x, y_noisy, test_size=0.2, random_state=6114)
-        return x, y, x_train, x_test, y_train, y_test
-    
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=6114)
-
-    return x, y, x_train, x_test, y_train, y_test
+    
+    return x, y, x_train, x_test, y_train, y_test, y_noisy
