@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
-def prepare_data(n=100, noise_scale=0.01):
+def prepare_data(n=100, noise_scale=0.01, noise=False):
     """Function for preparing data
 
     Args:
