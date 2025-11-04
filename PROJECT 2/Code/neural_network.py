@@ -259,7 +259,7 @@ class NeuralNetwork:
             batch_size: int = 32,
             optimizer=None,
             shuffle: bool = True,
-            seed: int | None = None,
+            seed: int = 6114,
             log_every: int = 1,
             grad_tol: float | None = None,
         ):
