@@ -68,7 +68,7 @@ def backpropagation_batch(
         dC_dz = dC_da*activation_der(z)
         # Grads (average over batch)
         dC_dW = (layer_input.T @ dC_dz)
-        dC_db = np.sum(dC_dz, axis=0, keepdims=True)
+        dC_db = np.sum(dC_dz, axis=0)
 
         layer_grads[i] = (dC_dW, dC_db)
         

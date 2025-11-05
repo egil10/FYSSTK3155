@@ -15,15 +15,6 @@ def _zeros_like_layers(layers: List[Layer]) -> Tuple[List[Array], List[Array]]:
     return vW, vB
 
 
-def _apply_weight_decay(grads: Grads, layers: List[Layer], weight_decay: float) -> Grads:
-    """L2-weight decay (add λ * W and λ * b to gradients)."""
-    if weight_decay <= 0.0:
-        return grads
-    out: Grads = []
-    for (dW, db), (W, b) in zip(grads, layers):
-        out.append((dW + weight_decay * W, db + weight_decay * b))
-    return out
-
 
 def _clip_by_global_norm(grads: Grads, max_norm: float) -> Grads:
     """Global-norm gradient clipping."""
@@ -43,9 +34,8 @@ def _clip_by_global_norm(grads: Grads, max_norm: float) -> Grads:
 class Optimizer:
     """Base class (interface)."""
 
-    def __init__(self, lr: float = 1e-2, weight_decay: float = 0.0, clip_norm: float | None = None):
+    def __init__(self, lr: float = 1e-2, clip_norm: float | None = None):
         self.lr = lr
-        self.weight_decay = weight_decay
         self.clip_norm = clip_norm
 
     def step(self, layers: List[Layer], grads: Grads) -> Updates:
@@ -53,8 +43,7 @@ class Optimizer:
         Given current layers and raw grads (dW, db), return (ΔW, Δb) updates to ADD.
         Subclasses implement _step_impl.
         """
-        # Optional: apply L2 weight decay and gradient clipping
-        grads = _apply_weight_decay(grads, layers, self.weight_decay)
+        
         grads = _clip_by_global_norm(grads, self.clip_norm if self.clip_norm is not None else -1.0)
         return self._step_impl(layers, grads)
 
@@ -76,9 +65,8 @@ class SGD(Optimizer):
 class Momentum(Optimizer):
     """SGD with momentum (optional Nesterov). v = μ v - lr g; θ += v"""
 
-    def __init__(self, lr: float = 1e-2, momentum: float = 0.9, nesterov: bool = False,
-                 weight_decay: float = 0.0, clip_norm: float | None = None):
-        super().__init__(lr=lr, weight_decay=weight_decay, clip_norm=clip_norm)
+    def __init__(self, lr: float = 1e-2, momentum: float = 0.9, nesterov: bool = False, clip_norm: float | None = None):
+        super().__init__(lr=lr,  clip_norm=clip_norm)
         self.momentum = momentum
         self.nesterov = nesterov
         self.vW: List[Array] | None = None
@@ -110,8 +98,8 @@ class Adagrad(Optimizer):
     """Adagrad: per-parameter lr scaled by sqrt(sum(grad^2))."""
 
     def __init__(self, lr: float = 1e-2, eps: float = 1e-10,
-                 weight_decay: float = 0.0, clip_norm: float | None = None):
-        super().__init__(lr=lr, weight_decay=weight_decay, clip_norm=clip_norm)
+                  clip_norm: float | None = None):
+        super().__init__(lr=lr, clip_norm=clip_norm)
         self.eps = eps
         self.GW: List[Array] | None = None
         self.GB: List[Array] | None = None
@@ -138,8 +126,8 @@ class RMSprop(Optimizer):
     """RMSprop: EMA of squared grads; θ <- θ - lr * g / sqrt(E[g^2] + eps)"""
 
     def __init__(self, lr: float = 1e-3, rho: float = 0.9, eps: float = 1e-8,
-                 weight_decay: float = 0.0, clip_norm: float | None = None):
-        super().__init__(lr=lr, weight_decay=weight_decay, clip_norm=clip_norm)
+                 clip_norm: float | None = None):
+        super().__init__(lr=lr,  clip_norm=clip_norm)
         self.rho = rho
         self.eps = eps
         self.EW: List[Array] | None = None
@@ -167,8 +155,8 @@ class Adam(Optimizer):
     """Adam: momentum + RMSprop with bias correction."""
 
     def __init__(self, lr: float = 1e-3, beta1: float = 0.9, beta2: float = 0.999, eps: float = 1e-8,
-                 weight_decay: float = 0.0, clip_norm: float | None = None):
-        super().__init__(lr=lr, weight_decay=weight_decay, clip_norm=clip_norm)
+                 clip_norm: float | None = None):
+        super().__init__(lr=lr, clip_norm=clip_norm)
         self.beta1 = beta1
         self.beta2 = beta2
         self.eps = eps
