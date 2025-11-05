@@ -93,6 +93,9 @@ class NeuralNetwork:
         cost_der: Callable,
         seed: int, 
         initial_layers: Optional[List[Tuple[np.ndarray, np.ndarray]]] = None,
+        l2_lambda: float = 0.0, 
+        l1_lambda: float = 0.0,
+        reg_on_bias: bool = False,
     ):
         """Setting up neural network with given layers, activation functions
         and cost function.
@@ -125,6 +128,9 @@ class NeuralNetwork:
         self.cost_fun = cost_fun
         self.cost_der = cost_der
         self.seed = seed
+        self.l2_lambda = l2_lambda
+        self.l1_lambda = l1_lambda
+        self.reg_on_bias = reg_on_bias
         
         if initial_layers is not None:
             fan_in = network_input_size
@@ -176,7 +182,26 @@ class NeuralNetwork:
             The scalar loss value computed by `self.cost_fun`
         """
         preds = self.predict(inputs)
-        return self.cost_fun(preds, targets)
+        base_loss = self.cost_fun(preds, targets)
+        # Regularization terms:
+        B = inputs.shape[0]
+        l2_term = 0.0
+        l1_term = 0.0
+        if self.l2_lambda > 0.0:
+            for (W, b) in self.layers:
+                l2_term += np.sum(W ** 2)
+                if self.reg_on_bias:
+                    l2_term += np.sum(b ** 2)
+            l2_term = (self.l2_lambda / B) * l2_term
+            
+        if self.l1_lambda > 0.0:
+            for (W, b) in self.layers:
+                l1_term += np.sum(np.abs(W))
+                if self.reg_on_bias:
+                    l1_term += np.sum(np.abs(b))
+            l1_term = (self.l1_lambda / B) * l1_term
+        
+        return base_loss + l2_term + l1_term
 
     def _feed_forward_saver(self, inputs):
         """Perform a forward pass while storing intermediate values
@@ -233,14 +258,31 @@ class NeuralNetwork:
         - For softmax + cross-entropy, ensure your last activation derivative is identity
           (so you don’t multiply by the softmax derivative again).
         """
-        return backpropagation_batch(
+        grads = backpropagation_batch(
             inputs=inputs,
-            layers=self.layers,
+            layers = self.layers,
             activation_funcs=self.activation_funcs,
             activation_ders=self.activation_ders,
             target=targets,
             cost_der=self.cost_der
-            ) 
+        )
+        # Regularization:
+        B = inputs.shape[0]
+        if self.l2_lambda > 0.0 or self.l1_lambda > 0.0:
+            new_grads = []
+            for (W, b), (dW, db) in zip(self.layers, grads):
+                if self.l2_lambda > 0.0:
+                    dW = dW + (2.0 * self.l2_lambda / B) * W
+                    if self.reg_on_bias:
+                        db = db + (2.0 * self.l2_lambda / B) * b
+                if self.l1_lambda > 0.0:
+                    dW = dW + (self.l1_lambda / B) * np.sign(W)
+                    if self.reg_on_bias:
+                        db = db + (self.l1_lambda / B) * np.sign(b)
+                new_grads.append((dW, db))
+            grads = new_grads
+        
+        return grads 
 
     def update_weights(self, layer_grads):
         """Apply parameter updates to the network layers.
