@@ -91,7 +91,8 @@ class NeuralNetwork:
         activation_ders: List[Callable[[Array], Array]],
         cost_fun: Callable,
         cost_der: Callable,
-        seed: int
+        seed: int, 
+        initial_layers: Optional[List[Tuple[np.ndarray, np.ndarray]]] = None,
     ):
         """Setting up neural network with given layers, activation functions
         and cost function.
@@ -109,6 +110,10 @@ class NeuralNetwork:
                 Cost function. 
             cost_der (Callable): 
                 Derivative of cost function
+            seed (int): seed for reproducibility
+            initial_layers: Optional way to initialize layers with chosen weights and biases. 
+                Used for comparing with network from Scikit-learn.
+                Defaults to None.
         """
         # Checking that the parameters line up (shapes):
         assert len(layer_output_sizes) == len(activation_funcs) == len(activation_ders), (
@@ -121,7 +126,18 @@ class NeuralNetwork:
         self.cost_der = cost_der
         self.seed = seed
         
-        self.layers = create_layers_batch(network_input_size, 
+        if initial_layers is not None:
+            fan_in = network_input_size
+            for (W, b), fan_out in zip(initial_layers, layer_output_sizes):
+                assert W.shape == (fan_in, fan_out), f"W has shape {W.shape}, expected {(fan_in, fan_out)}"
+                if b.ndim == 2 and b.shape[0] == 1:
+                    b = b.reshape(-1)
+                assert b.shape == (fan_out,), f"b has shape {b.shape}, expected {(fan_out,)}"
+                fan_in = fan_out
+            self.layers = [(W.astype(np.float64).copy(), b.astype(np.float64).copy())
+                           for (W, b) in initial_layers]
+        else:
+            self.layers = create_layers_batch(network_input_size, 
                                           layer_output_sizes,
                                           activation_funcs=self.activation_funcs,
                                           seed = self.seed)
