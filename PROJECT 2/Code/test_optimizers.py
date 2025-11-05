@@ -19,6 +19,7 @@ def make_model():
         activation_ders=[sigmoid_deriv, linear_deriv],
         cost_fun=mse,
         cost_der=mse_deriv,
+        seed=6114,
     )
 
 # Treningsfunksjon som bruker fit()

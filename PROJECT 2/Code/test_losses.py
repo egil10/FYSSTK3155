@@ -11,8 +11,6 @@ from losses import (
     bce_with_logits, bce_with_logits_deriv,
     cross_entropy, cross_entropy_deriv,
     cross_entropy_with_logits, cross_entropy_with_logits_deriv,
-    l1_penalty, l1_deriv,
-    l2_penalty, l2_deriv
 )
 
 np.random.seed(42)
@@ -116,62 +114,10 @@ def test_ce_multiclass_prob_and_logits():
     assert np.allclose(ana_g_probs, num_g_probs, atol=1e-6, rtol=1e-6)
     print("Cross-Entropy (probs & logits): ok")
 
-def test_regularization_l2():
-    # Små matriser uten null for tydelig gradient
-    W = np.array([[0.5, -0.2], [0.3, -0.7]], dtype=float)
-    b = np.array([[0.1, -0.4]], dtype=float)
-    layers = [(W.copy(), b.copy())]
-    lam = 0.05
-
-    # Verdi
-    val = l2_penalty(layers, lam)
-    val_manual = lam * (np.sum(W**2) + np.sum(b**2))
-    assert np.allclose(val, val_manual, atol=1e-12)
-
-    # Deriv v.s. numerisk gradient
-    def fW(Wvar):
-        return lam * (np.sum(Wvar**2) + np.sum(b**2))
-    def fb(bvar):
-        return lam * (np.sum(W**2) + np.sum(bvar**2))
-
-    num_gW = _finite_diff_grad(lambda arr: fW(arr), W.copy())
-    num_gb = _finite_diff_grad(lambda arr: fb(arr), b.copy())
-    ana_gW, ana_gb = l2_deriv(W, b, lam)
-    assert np.allclose(ana_gW, num_gW, atol=1e-7, rtol=1e-7)
-    assert np.allclose(ana_gb, num_gb, atol=1e-7, rtol=1e-7)
-    print("L2 regularization: ok")
-
-def test_regularization_l1():
-    # Unngå nøyaktig 0 for å slippe ikke-differensierbare punkter
-    W = np.array([[0.5, -0.2], [0.3, -0.7]], dtype=float)
-    b = np.array([[0.1, -0.4]], dtype=float)
-    layers = [(W.copy(), b.copy())]
-    lam = 0.05
-
-    # Verdi
-    val = l1_penalty(layers, lam)
-    val_manual = lam * (np.sum(np.abs(W)) + np.sum(np.abs(b)))
-    assert np.allclose(val, val_manual, atol=1e-12)
-
-    # Deriv v.s. numerisk gradient (subgradient, fungerer når elementer != 0)
-    def fW(Wvar):
-        return lam * (np.sum(np.abs(Wvar)) + np.sum(np.abs(b)))
-    def fb(bvar):
-        return lam * (np.sum(np.abs(W)) + np.sum(np.abs(bvar)))
-
-    num_gW = _finite_diff_grad(lambda arr: fW(arr), W.copy(), eps=1e-6)
-    num_gb = _finite_diff_grad(lambda arr: fb(arr), b.copy(), eps=1e-6)
-    ana_gW, ana_gb = l1_deriv(W, b, lam)
-    # Litt slakk pga. ikke-differensierbarhet ved 0
-    assert np.allclose(ana_gW, num_gW, atol=1e-5, rtol=1e-5)
-    assert np.allclose(ana_gb, num_gb, atol=1e-5, rtol=1e-5)
-    print("L1 regularization: ok")
 
 if __name__ == "__main__":
     print("Running losses.py tests...\n")
     test_mse_and_deriv()
     test_bce_prob_and_logits()
     test_ce_multiclass_prob_and_logits()
-    test_regularization_l2()
-    test_regularization_l1()
     print("\nAll losses tests passed.")

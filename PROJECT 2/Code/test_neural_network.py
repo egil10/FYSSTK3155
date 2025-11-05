@@ -20,6 +20,7 @@ nn_reg = NeuralNetwork(
     activation_ders=[relu_deriv, linear_deriv],
     cost_fun=mse,
     cost_der=mse_deriv,
+    seed=6114,
 )
 
 yhat = nn_reg.predict(X)
@@ -48,6 +49,7 @@ nn_bin = NeuralNetwork(
     activation_ders=[relu_deriv, linear_deriv],
     cost_fun=bce_with_logits,
     cost_der=bce_with_logits_deriv,
+    seed=6114,
 )
 
 logits = nn_bin.predict(Xb)                          # logits (ikke sigmoid her)
@@ -74,6 +76,7 @@ nn_mc = NeuralNetwork(
     activation_ders=[relu_deriv, linear_deriv],
     cost_fun=cross_entropy_with_logits,
     cost_der=cross_entropy_with_logits_deriv,
+    seed=6114,
 )
 
 logits_m = nn_mc.predict(Xm)
