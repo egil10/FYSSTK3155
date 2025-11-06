@@ -3,20 +3,26 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
 def prepare_data(n=100, noise_scale=0.01, if_noise=False):
-    """Function for preparing data
+    """Function for preparing data (Runge function)
 
     Args:
-        n (int, optional): Number of datapoints. Defaults to 100.
-        noise_scale (int, optional): Amplitude of random noise. Defaults to 0.01.
+        n (int, optional): 
+            Number of datapoints. Defaults to 100.
+        noise_scale (int, optional): 
+            Standard deviation of added Gaussian noise. Default is 0.01.
+        if_noise (bool, optional):
+            If True, adds noise to the output values before splitting. 
+            Defaults to False.
         
     Returns:
-        x (np.array): 1d array containing x values.
-        y (np.array): 1d array containing y values (Runges function).
-        x_train (np.array): 1d array containing x training values (from train/test split).
-        x_test (np.array): 1d array containing x testing values (from train/test split).
-        y_train (np.array): 1d array containing y training values (from train/test split).
-        y_test (np.array): 1d array containing y testing values (from train/test split).
-        y_noisy (np.array): 1d array containing y values (Runges function) with added noise.
+        x (np.ndarray):
+            Input values of shape (n, 1).
+        y (np.ndarray):
+            True Runge function values without noise.
+        x_train, x_test  (np.ndarray):
+            Training and test input values.
+        y_train, y_test (np.ndarray)
+            Corresponding target values (noisy if if_noise=True).
     """
     def f(x): 
         return 1/(1+25*x**2)
