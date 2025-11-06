@@ -3,11 +3,11 @@ import numpy as np
 from typing import List, Tuple
 
 Array = np.ndarray
-Layer = Tuple[Array, Array]          # (W, b)
-Grads = List[Tuple[Array, Array]]    # (dW, db)
-Updates = List[Tuple[Array, Array]]  # (ΔW, Δb) to be ADDED to parameters
+Layer = Tuple[Array, Array]          
+Grads = List[Tuple[Array, Array]]    
+Updates = List[Tuple[Array, Array]]  
 
-
+### Helper functions
 def _zeros_like_layers(layers: List[Layer]) -> Tuple[List[Array], List[Array]]:
     """Utility: allocate zeros with same shapes as layers' W and b."""
     vW = [np.zeros_like(W) for (W, _) in layers]
@@ -35,19 +35,22 @@ class Optimizer:
     """Base class (interface)."""
 
     def __init__(self, lr: float = 1e-2, clip_norm: float | None = None):
+        """Initialize optimizer with learning rate and optional gradient clipping.
+        """
         self.lr = lr
         self.clip_norm = clip_norm
 
     def step(self, layers: List[Layer], grads: Grads) -> Updates:
         """
-        Given current layers and raw grads (dW, db), return (ΔW, Δb) updates to ADD.
-        Subclasses implement _step_impl.
+        Compute parameter updates based on current gradients.
+        Applies global gradient clipping if enabled.
         """
         
         grads = _clip_by_global_norm(grads, self.clip_norm if self.clip_norm is not None else -1.0)
         return self._step_impl(layers, grads)
 
     def _step_impl(self, layers: List[Layer], grads: Grads) -> Updates:
+        """Subclasses must implement this to define update rule"""
         raise NotImplementedError
 
     def reset_state(self):
@@ -56,41 +59,39 @@ class Optimizer:
 
 
 class SGD(Optimizer):
-    """Plain SGD: θ <- θ - lr * g"""
+    """Stochastic Gradient Descent optimizer"""
 
     def _step_impl(self, layers: List[Layer], grads: Grads) -> Updates:
+        """Apply standard update rule: param = param - lr * grad"""
         return [(-self.lr * dW, -self.lr * db) for (dW, db) in grads]
 
 
 class Momentum(Optimizer):
-    """SGD with momentum (optional Nesterov). v = μ v - lr g; θ += v"""
+    """SGD with momentum"""
 
-    def __init__(self, lr: float = 1e-2, momentum: float = 0.9, nesterov: bool = False, clip_norm: float | None = None):
+    def __init__(self, lr: float = 1e-2, momentum: float = 0.9, clip_norm: float | None = None):
         super().__init__(lr=lr,  clip_norm=clip_norm)
         self.momentum = momentum
-        self.nesterov = nesterov
         self.vW: List[Array] | None = None
         self.vB: List[Array] | None = None
 
     def reset_state(self):
+        """Reset stored momentum"""
         self.vW, self.vB = None, None
 
     def _step_impl(self, layers: List[Layer], grads: Grads) -> Updates:
+        """Apply update rule:
+        velocity = momentum * velocity - lr * grad
+        param = param + velocity"""
         if self.vW is None:
             self.vW, self.vB = _zeros_like_layers(layers)
 
         updates: Updates = []
-        for i, ((dW, db), (W, b)) in enumerate(zip(grads, layers)):
+        for i, (dW, db) in enumerate(grads):
             self.vW[i] = self.momentum * self.vW[i] - self.lr * dW
             self.vB[i] = self.momentum * self.vB[i] - self.lr * db
 
-            if self.nesterov:
-                # Nesterov: use lookahead velocity
-                updW = self.momentum * self.vW[i] - self.lr * dW
-                updB = self.momentum * self.vB[i] - self.lr * db
-                updates.append((updW, updB))
-            else:
-                updates.append((self.vW[i], self.vB[i]))
+            updates.append((self.vW[i], self.vB[i]))
         return updates
 
 
@@ -105,9 +106,15 @@ class Adagrad(Optimizer):
         self.GB: List[Array] | None = None
 
     def reset_state(self):
+        """Reset accumulated gradient squares."""
         self.GW, self.GB = None, None
 
     def _step_impl(self, layers: List[Layer], grads: Grads) -> Updates:
+        """
+        Apply the Adagrad update rule:
+        adaptive_lr = lr / sqrt(sum(grad^2) + eps)
+        param = param - adaptive_lr * grad
+        """
         if self.GW is None:
             self.GW, self.GB = _zeros_like_layers(layers)
 
@@ -123,7 +130,7 @@ class Adagrad(Optimizer):
 
 
 class RMSprop(Optimizer):
-    """RMSprop: EMA of squared grads; θ <- θ - lr * g / sqrt(E[g^2] + eps)"""
+    """RMSprop optimizer using an exponential moving average of squared gradients."""
 
     def __init__(self, lr: float = 1e-3, rho: float = 0.9, eps: float = 1e-8,
                  clip_norm: float | None = None):
@@ -134,9 +141,15 @@ class RMSprop(Optimizer):
         self.EB: List[Array] | None = None
 
     def reset_state(self):
+        """Reset moving averages of squared gradients."""
         self.EW, self.EB = None, None
 
     def _step_impl(self, layers: List[Layer], grads: Grads) -> Updates:
+        """
+        Apply the RMSprop update rule:
+        moving_avg = rho * moving_avg + (1 - rho) * grad^2
+        param = param - lr * grad / sqrt(moving_avg + eps)
+        """
         if self.EW is None:
             self.EW, self.EB = _zeros_like_layers(layers)
 
@@ -167,10 +180,19 @@ class Adam(Optimizer):
         self.t = 0  # time step
 
     def reset_state(self):
+        """Reset first and second moment buffers and time step."""
         self.mW = self.mB = self.vW = self.vB = None
         self.t = 0
 
     def _step_impl(self, layers: List[Layer], grads: Grads) -> Updates:
+        """
+        Apply the Adam update rule:
+        m = beta1 * m + (1 - beta1) * grad
+        v = beta2 * v + (1 - beta2) * grad^2
+        m_hat = m / (1 - beta1**t)
+        v_hat = v / (1 - beta2**t)
+        param = param - lr * m_hat / (sqrt(v_hat) + eps)
+        """
         if self.mW is None:
             self.mW, self.mB = _zeros_like_layers(layers)
             self.vW, self.vB = _zeros_like_layers(layers)
