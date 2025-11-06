@@ -11,7 +11,7 @@ def mse(y_hat: np.ndarray, y: np.ndarray) -> float:
 
 def mse_deriv(y_hat: np.ndarray, y: np.ndarray) -> np.ndarray:
     """
-    dL/d(y_hat) for MSE with mean over *all* elements (batch and features).
+    dL/d(y_hat) for MSE with mean over all elements (batch and features).
     """
     denom = y_hat.size  # B * D (evt. flere dimensjoner)
     return (2.0 / denom) * (y_hat - y)
@@ -26,7 +26,6 @@ def bce(p: np.ndarray, y: np.ndarray, eps: float = 1e-12) -> float:
     Returns mean over batch.
     """
     p = np.clip(p, eps, 1.0 - eps)
-    # Hvis y er (B,1) eller (B,), funker dette generelt
     return -np.mean(y * np.log(p) + (1.0 - y) * np.log(1.0 - p))
 
 
@@ -71,8 +70,8 @@ def cross_entropy(p: np.ndarray, y: np.ndarray, eps: float = 1e-12) -> float:
     y is one-hot: shape (B, K).
     Returns mean over batch.
     """
-    p = np.clip(p, eps, 1.0)  # klipp nedre kant
-    # -sum_k y_k log p_k, der y er one-hot → plukker riktig klasse
+    p = np.clip(p, eps, 1.0)  
+
     return -np.mean(np.sum(y * np.log(p), axis=1))
 
 

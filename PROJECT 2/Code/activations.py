@@ -53,12 +53,3 @@ def softmax(z: np.ndarray, axis: int = -1) -> np.ndarray:
     sum_e = np.sum(e, axis=axis, keepdims=True)
     return e / sum_e
 
-## Skal kanskje fjernes
-# (valgfritt) Oppslagstabell for enkel wiring i nettverket
-ACTIVATIONS = {
-    "relu": (relu, relu_deriv),
-    "leaky_relu": (leaky_relu, leaky_relu_deriv),
-    "sigmoid": (sigmoid, sigmoid_deriv),
-    "linear": (linear, linear_deriv),
-    # "softmax": (softmax, None)  # typisk bare i eval/predict_proba
-}

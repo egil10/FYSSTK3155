@@ -4,15 +4,32 @@ import numpy as np
 ### Define functions for backpropagation (batch) and create_layers (batch) ###
 
 def create_layers_batch(network_input_size, layer_output_sizes, activation_funcs=None, seed=6114):
-    """
-    Creates layers with simple initialization:
-      - Weights from  Normal distribution(mean=0, std=0.01)
-      - Biases = 0
-    Activation functions and class priors are ignored.
-    
+    """Initialize a list of layers for a neural network.
+    Each layer consists of a weight matrix W and a bias vector b.  
+    The weights are initialized from a normal distribution with mean 0 and 
+    standard deviation 0.01, and all biases are set to zero.  
+    The initialization does not depend on the activation function.
+
+    Args:
+        network_input_size (int): 
+            Number of input features to the network.
+        layer_output_sizes (list[int]): 
+            A list specifying the number of neurons in each layer,
+            including the output layer.
+        activation_funcs (list[Callable], optional): 
+            Placeholder for activation functions 
+            (ignored in this simple initializer). Included only for interface compatibility 
+            Defaults to None.
+        seed (int, optional): 
+            Random seed for reproducible layers. Defaults to 6114.
+
     Returns:
-      List of (W, b) tuples for each layer.
+        list[tuple[np.ndarray, np.ndarray]]: 
+            A list of tuples (W, b) for each layer, where:
+            - W has shape (fan_in, fan_out)
+            - b has shape (fan_out,)
     """
+
     rng = np.random.default_rng(seed)
     
 
@@ -31,6 +48,25 @@ def create_layers_batch(network_input_size, layer_output_sizes, activation_funcs
 
 # Function used in backpropagation:
 def feed_forward_saver_batch(inputs, layers, activation_funcs):
+    """Forward pass through all the layers (batch).
+    Used in backpropagation
+
+    Args:
+        inputs (np.ndarray): 
+            input data of shape (n_samples, n_features)
+        layers (list[tuple[np.ndarray, np.ndarray]]): 
+            (W, b) pair for each layer
+        activation_funcs (list[Callable]): 
+            Activation functions for each layer
+
+    Returns:
+        layer_inputs (list[np.ndarray]): 
+            Activations entering each layer
+        zs (list[np.ndarray]): 
+            Pre-activation values for each layer
+        a (np.ndarray): 
+            Final network output
+    """
     layer_inputs = []
     zs = []
     a = inputs
@@ -46,6 +82,25 @@ def feed_forward_saver_batch(inputs, layers, activation_funcs):
 def backpropagation_batch(
     inputs, layers, activation_funcs, target, activation_ders, cost_der):
     layer_inputs, zs, predict = feed_forward_saver_batch(inputs, layers, activation_funcs)
+    """Compute gradients for all layers using backpropagation.
+    Args:
+        inputs (np.ndarray): 
+            input data of shape (batch_size, n_features)
+        layers (list[tuple[np.ndarray, np.ndarray]]): 
+            (W, b) pairs for each layer
+        activation_funcs (list[Callable]): 
+            Activation functions for each layer
+        target (np.ndarray): 
+            Target values, shape (batch_size, n_outputs)
+        activation_ders (list[Callable]): 
+            Derivatives of the activation functions
+        cost_der (Callable): 
+            Derivative of the cost function w.r.t. predictions
+
+    Returns:
+        layer_grads (list[tuple[np.ndarray, np.ndarray]]):  
+            Gradients (dC/dW, dC/db) for each layer
+    """
 
     layer_grads = [() for layer in layers]
     
@@ -66,7 +121,6 @@ def backpropagation_batch(
             dC_da = dC_dz_next @ W_next.T
 
         dC_dz = dC_da*activation_der(z)
-        # Grads (average over batch)
         dC_dW = (layer_input.T @ dC_dz)
         dC_db = np.sum(dC_dz, axis=0)
 
@@ -97,26 +151,35 @@ class NeuralNetwork:
         l1_lambda: float = 0.0,
         reg_on_bias: bool = False,
     ):
-        """Setting up neural network with given layers, activation functions
-        and cost function.
+        """Initialize fully connected Neural Network
 
         Args:
             network_input_size (int): 
-                Number of input neurons
+                Number of input features to the network.
             layer_output_sizes (List[int]): 
-                List containing number of nodes in each layer
+                Number of neurons in each layer, including the output layer.
             activation_funcs (List[Callable[[Array], Array]]):
-                List of activation functions (one for each layer)
-            activation_ders (List[Callable[[Array], Array]]):
-                List of derivatives of activation functions
+                Activation functions for each layer
+            activation_ders (List[Callable[[Array], Array]]): 
+                Derivatives of the activation functions, used in backpropagation.
             cost_fun (Callable): 
-                Cost function. 
+                Cost function used in training
             cost_der (Callable): 
-                Derivative of cost function
-            seed (int): seed for reproducibility
-            initial_layers: Optional way to initialize layers with chosen weights and biases. 
-                Used for comparing with network from Scikit-learn.
+                Derivative of cost function w.r.t. predictions
+            seed (int): 
+                Random seed for reproducible weight initialization.
+            initial_layers ([List[Tuple[np.ndarray, np.ndarray]]], optional): 
+                Custom initialization for weights and biases.
+                Each tuple should contain (W, b) for one layer.
+                If not provided, layers are initialized with small random values. 
                 Defaults to None.
+            l2_lambda (float, optional): 
+                Strength of L2 regularization. Defaults to 0.0.
+            l1_lambda (float, optional): 
+                Strength of L1 regularization. Defaults to 0.0.
+            reg_on_bias (bool, optional): 
+                If True, applies regularization terms to biases as well. 
+                Defaults to False.
         """
         # Checking that the parameters line up (shapes):
         assert len(layer_output_sizes) == len(activation_funcs) == len(activation_ders), (
@@ -149,17 +212,17 @@ class NeuralNetwork:
                                           seed = self.seed)
 
     def predict(self, inputs):
-        """Perform a forward pass through the neural network
+        """Perform a forward pass through the network to produce predictions.
 
         Args:
-            inputs (Array): 
-                Input data of shape (B, in_dim), where B is the batch size
-        
-        Returns: 
-        np.ndarray:
-            The network output after the final activation function. Typically 
-            represents probabilities if the last activation is a softmax layer. 
+            inputs (np.ndarray): 
+                Input data of shape (batch_size, n_features).
+
+        Returns:
+            np.ndarray: 
+                Network output after the final activation function.
         """
+
         a = inputs
         for (W, b), act in zip(self.layers, self.activation_funcs):
             a = act(a @ W + b)
@@ -167,20 +230,21 @@ class NeuralNetwork:
         return a
 
     def cost(self, inputs, targets):
-        """ Compute the loss for a given batch using the network's configured
-        loss function.
+        """Compute the total loss for a given batch, including regularization.
 
         Args:
             inputs (np.ndarray): 
-                Input data of shape (B, in_dim), where B is the batch size
-            targets (np.ndarray):
-                Target labels in one-hot (or appropriate) format matching the 
-                output shape of the network, typically (B, out_dim).
+                Input data of shape (batch_size, n_features).
+            targets (np.ndarray): 
+                Target values or labels matching the output shape of the network,
+                typically (batch_size, n_outputs).
 
         Returns:
-        float: 
-            The scalar loss value computed by `self.cost_fun`
+            float: 
+                The scalar loss value computed from the cost function,
+                optionally including L1 and L2 regularization penalties.
         """
+
         preds = self.predict(inputs)
         base_loss = self.cost_fun(preds, targets)
         # Regularization terms:
@@ -203,61 +267,32 @@ class NeuralNetwork:
         
         return base_loss + l2_term + l1_term
 
-    def _feed_forward_saver(self, inputs):
-        """Perform a forward pass while storing intermediate values
-        needed for backpropagation.
 
-        Args:
-            inputs (np.ndarray): 
-                Input data of shape (B, in_dim), where B is the batch size.
-
-        Returns:
-        tuple:
-            (layer_inputs, zs, a)
-            - layer_inputs: list of activations before each layer (a_l)
-            - zs: list of pre-activation values (z_l)
-            - a: final output after the last activation
-        """
-        layer_inputs = []
-        zs = []
-        a = inputs
-        
-        for (W, b), act in zip(self.layers, self.activation_funcs):
-            layer_inputs.append(a)
-            
-            z = a @ W + b
-            zs.append(z)
-            
-            a = act(z)
-        
-        return layer_inputs, zs, a
 
     def compute_gradient(self, inputs, targets):
-        """Compute parameter gradients for a given batch using the configured 
-        cost derivative.
-
-        This method is a thin wrapper around the existing `backpropagation_batch`
-        implementation. It does not perform any optimization step; it only returns
-        gradients so that an external optimizer can produce weight updates.
+        """Compute the gradients of the cost function w.r.t. all network parameters.
+        
+        This performs a full backpropagation pass for the given batch and returns
+        weight and bias gradients without applying any updates.
 
         Args:
             inputs (np.ndarray): 
-                Input batch of shape (B, in_dim).
+                Input data of shape (batch_size, n_features).
             targets (np.ndarray): 
-                Target batch of shape (B, out_dim), typically one-hot for classification.
+                Target values or labels of shape (batch_size, n_outputs).
 
         Returns:
-        list[tuple[np.ndarray, np.ndarray]]:
-            A list of (dW, db) tuples, one per layer, matching `self.layers` order.
-            Shapes:
-              - dW: (in_dim_l, out_dim_l)
-              - db: (1, out_dim_l)
-              
+            list[tuple[np.ndarray, np.ndarray]]:
+                Gradients (dW, db) for each layer in self.layers.
+                    - dW : same shape as corresponding weight matrix
+                    - db : same shape as corresponding bias vector
         Notes:
-        - Uses `self.cost_der` provided at construction time (e.g., softmax CE derivative).
-        - For softmax + cross-entropy, ensure your last activation derivative is identity
-          (so you don’t multiply by the softmax derivative again).
+            - Uses the cost derivative `self.cost_der` defined at initialization.
+            - L1 and L2 regularization terms are added to the gradients if enabled.
+            - Does not modify the model parameters. Use within an optimizer or training loop.
+    
         """
+
         grads = backpropagation_batch(
             inputs=inputs,
             layers = self.layers,
@@ -285,22 +320,17 @@ class NeuralNetwork:
         return grads 
 
     def update_weights(self, layer_grads):
-        """Apply parameter updates to the network layers.
+        """Apply weight and bias updates to all layers.
 
         Args:
-            layer_grads : list[tuple[np.ndarray, np.ndarray]]
-                A list of (dW, db) tuples, one per layer, matching the ordering of `self.layers`.
-                IMPORTANT: These should be *updates* (deltas), not raw gradients.
-                For example:
-                - Plain SGD:           (dW, db) = (-lr * gradW, -lr * gradb)
-                - SGD with momentum:   (dW, db) = (vW, vB) where v = beta*v - lr*grad
-
+            layer_grads (list[tuple[np.ndarray, np.ndarray]]):
+                List of (dW, db) tuples matching the order of `self.layers`.
+                These should represent *update steps* (e.g., from an optimizer),
+                not raw gradients.
         Notes:
-        - This method does not implement any optimization logic (no lr, no momentum).
-          It simply adds the provided updates to the current weights and biases.
-        - Shapes must match each layer:
-              W: (in_dim_l, out_dim_l),  b: (1, out_dim_l)
-             dW: (in_dim_l, out_dim_l), db: (1, out_dim_l)
+            - This method performs only the parameter update step (`W += dW`, `b += db`).
+                Learning rate and optimizer logic must be handled externally.
+            - The shapes of all updates must exactly match their corresponding parameters.
         """
         new_layers = []
         for (W, b), (dW, db) in zip(self.layers, layer_grads):
@@ -321,8 +351,49 @@ class NeuralNetwork:
             log_every: int = 1,
             grad_tol: float | None = None,
         ):
+        """Train the neural network using minibatch gradient descent.
+
+        Args:
+            X (np.ndarray): 
+                Training inputs of shape (n_samples, n_features).
+            Y (np.ndarray): 
+                Training targets of shape (n_samples, n_outputs).
+            epochs (int, optional): 
+                Number of training epochs. Defaults to 50.
+            batch_size (int, optional): 
+                Number of samples per mini-batch. Defaults to 32.
+            optimizer (object): 
+                Optimizer instance implementing a .step(layers, grads) method.
+                Examples include SGD, Adam, or RMSProp.
+            shuffle (bool, optional): 
+                Whether to shuffle the data at the start of each epoch. 
+                Defaults to True.
+            seed (int, optional): 
+                Random seed for reproducible shuffling. Defaults to 6114.
+            log_every (int, optional): 
+                Print training loss every `log_every` epochs. 
+                Set to None to disable logging.
+                Defaults to 1.
+            grad_tol (float, optional): 
+                Optional stopping criterion based on gradient norm. 
+                Training stops early if the total gradient magnitude falls below this value.
+                Defaults to None.
+
+        Raises:
+            ValueError: 
+                If no optimizer is given
+
+        Returns:
+            dict:
+                Training history containing:
+                - "train_loss" : list of loss values per epoch.
+        Notes:
+            - Setting the batch size to the full dataset size and setting 
+                shuffle=False yields deterministic (non-stochastic) full-batch
+                gradient descent.
+        """
         if optimizer is None:
-            raise ValueError("Du må sende inn et optimizer-objekt (f.eks. SGD(lr=1e-3)).")
+            raise ValueError("You must provide an optimizer object (e.g., SGD(lr=1e-3)).")
 
         rng = np.random.default_rng(seed)
         n = X.shape[0]
@@ -336,7 +407,7 @@ class NeuralNetwork:
                 sl = idx[start:start + bs]
                 yield Xa[sl], Ya[sl]
 
-        # Full-batch hvis bs >= n og ingen stokastikk
+        # Full-batch if bs >= n and no shuffling
         is_full_batch = (batch_size == n) and (shuffle is False)
 
         for epoch in range(1, epochs + 1):
