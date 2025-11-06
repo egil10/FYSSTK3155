@@ -1,7 +1,12 @@
 import numpy as np
+import sys
+import os
+
+# Legg Code-mappen på import-stien
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Importer funksjonene fra activations.py
-from activations import (
+from Implementations.activations import (
     relu, relu_deriv,
     sigmoid, sigmoid_deriv,
     leaky_relu, leaky_relu_deriv,

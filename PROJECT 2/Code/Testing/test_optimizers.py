@@ -1,8 +1,13 @@
 import numpy as np
-from neural_network import NeuralNetwork
-from activations import sigmoid, sigmoid_deriv, linear, linear_deriv
-from losses import mse, mse_deriv
-from optimizers import SGD, RMSprop, Adam
+import sys
+import os
+
+# Legg Code-mappen på import-stien
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from Implementations.neural_network import NeuralNetwork
+from Implementations.activations import sigmoid, sigmoid_deriv, linear, linear_deriv
+from Implementations.losses import mse, mse_deriv
+from Implementations.optimizers import SGD, RMSprop, Adam
 
 # Enkel treningsfunksjon y = x^2
 seed = 6114

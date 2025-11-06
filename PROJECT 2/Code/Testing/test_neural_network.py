@@ -1,8 +1,13 @@
 import numpy as np
-from neural_network import NeuralNetwork
-from activations import relu, relu_deriv, sigmoid, sigmoid_deriv, leaky_relu, \
+import sys
+import os
+
+# Legg Code-mappen på import-stien
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from Implementations.neural_network import NeuralNetwork
+from Implementations.activations import relu, relu_deriv, sigmoid, sigmoid_deriv, leaky_relu, \
     leaky_relu_deriv, linear, linear_deriv, softmax  
-from losses import mse, mse_deriv, bce_with_logits, bce_with_logits_deriv,  \
+from Implementations.losses import mse, mse_deriv, bce_with_logits, bce_with_logits_deriv,  \
     cross_entropy, cross_entropy_deriv, cross_entropy_with_logits, cross_entropy_with_logits_deriv
 
 rng = np.random.default_rng(0)

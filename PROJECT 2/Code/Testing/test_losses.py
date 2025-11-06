@@ -1,11 +1,15 @@
 # test_losses.py
 import numpy as np
 import importlib
+import sys
+import os
 
-import losses
-importlib.reload(losses)
+# Legg Code-mappen på import-stien
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import Implementations.losses
+importlib.reload(Implementations.losses)
 
-from losses import (
+from Implementations.losses import (
     mse, mse_deriv,
     bce, bce_deriv,
     bce_with_logits, bce_with_logits_deriv,

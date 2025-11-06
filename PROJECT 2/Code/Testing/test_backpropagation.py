@@ -3,20 +3,24 @@
 
 
 import numpy as np
+import sys
+import os
 
-from neural_network import NeuralNetwork
-from activations import (
+# Legg Code-mappen på import-stien
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from Implementations.neural_network import NeuralNetwork
+from Implementations.activations import (
     relu, relu_deriv,
     sigmoid, sigmoid_deriv,
     linear, linear_deriv,
     softmax
 )
-from losses import (
+from Implementations.losses import (
     mse, mse_deriv,
     bce_with_logits, bce_with_logits_deriv,
     cross_entropy_with_logits, cross_entropy_with_logits_deriv
 )
-from optimizers import SGD, Adam
+from Implementations.optimizers import SGD, Adam
 
 np.set_printoptions(precision=6, suppress=True)
 np.random.seed(6114)
