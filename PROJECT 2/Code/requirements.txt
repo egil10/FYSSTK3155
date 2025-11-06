@@ -1,3 +1,17 @@
+# Core numerical & ML
 numpy
 matplotlib
 scikit-learn
+
+# Autograd and testing
+autograd
+pytest
+
+# Plot styling and figures
+seaborn
+
+# Data handling
+pandas
+
+# Optional: for notebooks
+jupyter
