@@ -1,252 +1,230 @@
-# Project 2: Neural Networks for Classification and Regression
+# Project 2 — Neural Networks for Classification and Regression
 
 **Course:** Data Analysis and Machine Learning (FYS-STK3155/FYS4155)  
-**Institution:** University of Oslo  
-**Project Type:** Implementation and Analysis of Feed-Forward Neural Networks
+**Institution:** University of Oslo, Norway  
+**Project window:** October 14, 2025 – November 10, 2025 (deadline at midnight)  
+**Group members:** Bror Johannes Tidemand Ruud (640394), Egil Furnes (693784), & Ådne Rolstad (693783).
 
-## Project Overview
+---
 
-This project implements a complete feed-forward neural network (FFNN) framework from scratch, including the backpropagation algorithm, various activation functions, loss functions, and optimization methods. The implementation is applied to both regression and classification problems, with comprehensive comparisons against established machine learning methods from Project 1 and standard libraries.
+## 1. Contents
 
-The project addresses two primary tasks:
-1. **Regression:** Fitting the one-dimensional Runge function using neural networks and comparing results with Ordinary Least Squares (OLS), Ridge, and Lasso regression from Project 1.
-2. **Classification:** Multiclass classification on the MNIST dataset using softmax cross-entropy loss.
+1. Deliverables  
+2. Project brief  
+3. Methods to implement and analyse  
+4. Background literature  
+5. Reporting guidelines for numerical projects  
+6. Electronic delivery format
 
-## Repository Structure
+---
+
+## 2. Deliverables
+
+Please form a group (2–3 students recommended) on Canvas before you start. When submitting Project 2 on Canvas, upload the following as a group:
+
+- `Project2_Report.pdf`: approximately 5 000 words (≈10–12 pages) excluding references and appendices, with 10–15 figures in the main text. Additional figures/tables may go in appendices or the repository.
+- A Canvas comment linking to the GitHub repository (or subfolder) that mirrors the submission. The repository must include a printable version of the report (PDF) and the complete code base.
+- `Code/`: folder containing all Python modules and Jupyter notebooks needed to reproduce results. Make runs deterministic by setting seeds for random initialisation and train/test splits.
+- `README.md`: this file. Include group member names, installation instructions, notebook descriptions, and usage guidance.
+- Any supplemental material (figures, tables, logs) referenced in the report.
+
+Always cite external material (lecture notes, textbooks, libraries, web resources, AI-generated code or text). If you rely on tools such as ChatGPT, include citations and, when possible, append the prompts and responses as supplemental material.
+
+Feel free to propose alternative data sets, provided you justify your choice and compare your findings to published results. The UCI ML Repository and Kaggle are good starting points.
+
+---
+
+## 3. Project Brief
+
+The goal is to implement, from scratch, a feed-forward neural network (FFNN) capable of solving both regression and multiclass classification problems. The project mirrors the week 41–42 lecture material and extends Project 1 by reusing gradient descent components.
+
+### 3.1 Core tasks
+
+| Part | Focus | Key requirements |
+|------|-------|------------------|
+| a | Analytical warm-up | Derive MSE, binary cross-entropy, and multiclass cross-entropy losses (with/without L1/L2) and the gradients of Sigmoid, ReLU, Leaky ReLU |
+| b | FFNN regression | Implement FFNN with flexible architecture, initialise weights/biases, use Sigmoid hidden layers and appropriate output activation. Compare to OLS results from Project 1 on the 1D Runge function. Explore architectures (1–2 hidden layers, 50/100 neurons). |
+| c | Library comparison | Benchmark against `scikit-learn`, TensorFlow/Keras, or PyTorch implementations. Validate gradients with Autograd or JAX (optional but recommended). |
+| d | Activation & depth study | Compare Sigmoid, ReLU, Leaky ReLU; vary layer depth/width; discuss overfitting/bias-variance effects. |
+| e | Regularisation | Add L1/L2 penalties (λ hyperparameters). Compare with Ridge and Lasso from Project 1 using the same data splits. |
+| f | Classification | Adapt network for MNIST classification using Softmax cross-entropy. Report accuracy, explore scaling, hyperparameters, architectures, and compare with logistic regression or library baselines. |
+| g | Critical evaluation | Summarise strengths/weaknesses of each algorithm for regression vs classification, including optimisation strategies. |
+
+### 3.2 Suggested datasets
+
+- Regression: 1D Runge function `f(x) = 1 / (1 + 25x²)` (baseline), optional 2D Runge or more complex surfaces.
+- Classification: MNIST (full dataset via `fetch_openml('mnist_784')`), optional Fashion-MNIST or other public datasets.
+
+Scaling inputs (e.g., dividing MNIST pixel values by 255) is recommended. Use consistent train/test splits (e.g., `train_test_split` with fixed `random_state`).
+
+---
+
+## 4. Methods to Implement and Analyse
+
+### 4.1 Required implementation
+
+1. Reuse Project 1 regression code (OLS, Ridge, Lasso) as regression benchmarks.  
+2. Implement an FFNN with:
+   - Configurable layers, neurons per layer, and activation per layer (Sigmoid, ReLU, Leaky ReLU, Linear, Softmax).
+   - Switchable loss functions (MSE for regression, cross-entropy for classification).
+   - Optional L1/L2 regularisation on weights/biases (for gradient computation).  
+3. Implement backpropagation to compute gradients.  
+4. Reuse and adapt gradient descent optimisers from Project 1: plain GD, SGD, SGD+Momentum, RMSprop, Adam.  
+5. Integrate data scaling and train/test splitting utilities (preferably via `scikit-learn`).  
+6. Track performance metrics: MSE for regression, accuracy (and optional confusion matrices) for classification.
+
+### 4.2 Required analysis
+
+- Discuss pros/cons of Project 1 methods vs neural networks on the provided regression task.  
+- Examine hyperparameter effects (layers, neurons, activations, L1/L2) and highlight the most insightful results (heatmaps recommended).  
+- Evaluate neural network strengths/limitations for regression and classification.  
+- Compare optimisation strategies and learning rates.  
+
+### 4.3 Optional extensions (choose at least two)
+
+- Logistic regression baseline (equivalent to FFNN with no hidden layers).  
+- Automatic differentiation check (Autograd/JAX) for gradients.  
+- Comparison with PyTorch or similar ML frameworks.  
+- Alternate datasets (Fashion-MNIST, 2D Runge, etc.).  
+- Confusion matrix analysis of the best classifier.  
+- Any other well-justified extension agreed upon with course staff.
+
+---
+
+## 5. Repository Structure
 
 ```
 PROJECT 2/
 ├── Code/
-│   ├── Implementations/          # Core neural network implementation
-│   │   ├── neural_network.py     # Main FFNN class and backpropagation
-│   │   ├── activations.py        # Activation functions (Sigmoid, ReLU, LeakyReLU, Softmax, Linear)
-│   │   ├── losses.py             # Loss functions (MSE, Cross-Entropy, BCE)
-│   │   ├── optimizers.py         # Optimization algorithms (SGD, RMSprop, Adam, Momentum, Adagrad)
-│   │   ├── prepare_data.py       # Data preparation utilities
-│   │   └── plot_style.py         # Plotting utilities and style configuration
-│   ├── Code_Project1/            # Reused code from Project 1
-│   │   ├── OLS.py                # Ordinary Least Squares regression
-│   │   ├── Ridge.py              # Ridge regression
-│   │   └── polynomial_features.py # Polynomial feature generation
-│   ├── Notebooks/                # Jupyter notebooks for analysis
-│   │   ├── Exa.ipynb             # Part a: Analytical warm-up (cost functions, activations)
-│   │   ├── Exb.ipynb             # Part b: Basic FFNN implementation for regression
-│   │   ├── Exb_with_noise.ipynb  # Part b: Regression with noise analysis
-│   │   ├── Exc.ipynb             # Part c: Comparison with Scikit-Learn/TensorFlow
-│   │   ├── Exd.ipynb             # Part d: Testing different activation functions and network depths
-│   │   ├── Exe.ipynb             # Part e: Testing L1 and L2 regularization
-│   │   └── Exf.ipynb             # Part f: Classification on MNIST dataset
-│   ├── Plots/                    # Generated figures and visualizations
-│   ├── Tables/                   # Generated tables and results
-│   ├── Testing/                  # Unit tests for implementations
-│   │   ├── test_activations.py
-│   │   ├── test_backpropagation.py
-│   │   ├── test_losses.py
-│   │   ├── test_neural_network.py
-│   │   └── test_optimizers.py
-│   └── requirements.txt          # Python package dependencies
-├── project2.ipynb                # Project assignment document
-└── README.md                      # This file
+│   ├── Implementations/
+│   │   ├── neural_network.py      # FFNN definition, backpropagation, training loops
+│   │   ├── activations.py         # Sigmoid, ReLU, LeakyReLU, Linear, Softmax + derivatives
+│   │   ├── losses.py              # MSE, BCE, Cross-Entropy + gradients, L1/L2 penalties
+│   │   ├── optimizers.py          # Plain GD, SGD, Momentum, RMSprop, Adam
+│   │   ├── prepare_data.py        # Scaling, train/test splitting, polynomial features
+│   │   └── plot_style.py          # Shared matplotlib styling utilities
+│   ├── Code_Project1/             # Benchmarks from Project 1 (OLS, Ridge, Lasso)
+│   ├── Notebooks/                 # Results and analysis notebooks (see below)
+│   ├── Plots/                     # Exported figures used in the report
+│   ├── Tables/                    # Generated tables/metrics
+│   ├── Testing/                   # Unit tests validating each module
+│   └── requirements.txt           # Python dependencies
+├── project2.ipynb                 # Assignment text
+└── README.md                      # This document
 ```
 
-## Installation
+### Notebook overview
 
-### Prerequisites
+- `Notebooks/Exa.ipynb`: Analytical derivations for loss functions and activations.  
+- `Notebooks/Exb.ipynb`: Baseline FFNN regression on Runge function.  
+- `Notebooks/Exb_with_noise.ipynb`: Regression robustness with injected noise.  
+- `Notebooks/Exc.ipynb`: Comparison with `scikit-learn`, TensorFlow/Keras, or PyTorch baselines.  
+- `Notebooks/Exd.ipynb`: Activation and depth experiments, heatmaps, overfitting discussion.  
+- `Notebooks/Exe.ipynb`: L1/L2 regularisation sweeps, comparison with Ridge/Lasso.  
+- `Notebooks/Exf.ipynb`: MNIST classification, accuracy metrics, optional confusion matrices.  
 
-- Python 3.8 or higher
-- pip package manager
+Adapt notebook paths/imports if you restructure directories.
 
-### Setup Instructions
+---
 
-1. Clone or navigate to the project directory:
-   ```bash
-   cd "PROJECT 2/Code"
-   ```
+## 6. Installation and Execution
 
-2. Install required packages:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 6.1 Prerequisites
 
-   The core dependencies are:
-   - `numpy`: Numerical computations and array operations
-   - `matplotlib`: Plotting and visualization
-   - `scikit-learn`: Data preprocessing, train-test splitting, and comparison models
+- Python ≥ 3.8  
+- `pip` (or `conda`)  
+- (Optional) GPU-enabled environment for faster MNIST training
 
-3. For running Jupyter notebooks, install Jupyter:
-   ```bash
-   pip install jupyter
-   ```
+### 6.2 Setup
 
-## Implementation Details
+```powershell
+cd "PROJECT 2/Code"
+python -m venv .venv
+.venv\Scripts\Activate.ps1          # PowerShell on Windows
+pip install --upgrade pip
+pip install -r requirements.txt
+```
 
-### Core Components
+Install Jupyter if needed:
 
-#### Neural Network Architecture (`neural_network.py`)
-- Flexible feed-forward architecture supporting arbitrary numbers of layers and neurons
-- Batch processing with efficient matrix operations
-- Backpropagation algorithm for gradient computation
-- Support for multiple activation functions per layer
-- Configurable loss functions (MSE for regression, Cross-Entropy for classification)
-- Optional L1 and L2 regularization
+```powershell
+pip install jupyter
+```
 
-#### Activation Functions (`activations.py`)
-- **Sigmoid**: Stable implementation with overflow protection
-- **ReLU**: Rectified Linear Unit
-- **Leaky ReLU**: Variant with small negative slope
-- **Linear/Identity**: For output layers in regression
-- **Softmax**: For multiclass classification output layers
+### 6.3 Running notebooks
 
-All activation functions include corresponding derivative implementations for backpropagation.
+```powershell
+cd "PROJECT 2/Code"
+jupyter notebook
+```
 
-#### Loss Functions (`losses.py`)
-- **Mean Squared Error (MSE)**: For regression problems
-- **Binary Cross-Entropy**: For binary classification (with stable logits variant)
-- **Multiclass Cross-Entropy**: For classification with softmax (with stable logits variant)
+Ensure the notebooks can import modules from `Implementations/`. Most notebooks prepend the project root to `sys.path`; adjust if you change the folder layout.
 
-All loss functions include gradient computations for backpropagation.
+### 6.4 Running experiments via CLI
 
-#### Optimization Algorithms (`optimizers.py`)
-- **SGD**: Plain stochastic gradient descent
-- **Momentum**: SGD with momentum
-- **Adagrad**: Adaptive gradient algorithm
-- **RMSprop**: Root Mean Square Propagation
-- **Adam**: Adaptive Moment Estimation
+Example usage (replace with actual script entry points if provided):
 
-All optimizers support gradient clipping and configurable learning rates.
+```powershell
+python Implementations/prepare_data.py --dataset mnist --scale
+python Implementations/neural_network.py --config configs/run_regression.yaml
+```
 
-### Key Features
+Scripts should accept seeds via command-line flags or configuration files to preserve reproducibility.
 
-- **Modular Design**: Separate modules for activations, losses, and optimizers enable easy experimentation
-- **Reproducibility**: Random seed control for weight initialization and data splitting
-- **Efficiency**: Vectorized operations using NumPy for batch processing
-- **Extensibility**: Clean interfaces allow easy addition of new activation functions, losses, or optimizers
-- **Validation**: Unit tests verify correctness of gradient computations and network behavior
+### 6.5 Running tests
 
-## Notebook Descriptions
-
-### Exa.ipynb: Analytical Warm-up
-Derives and documents the mathematical expressions for:
-- Cost functions: MSE, Binary Cross-Entropy, Multiclass Cross-Entropy (with and without L1/L2 regularization)
-- Activation functions: Sigmoid, ReLU, Leaky ReLU (expressions and derivatives)
-- Gradient computations for all components
-
-### Exb.ipynb: Basic Neural Network for Regression
-- Implements and trains FFNN on the one-dimensional Runge function
-- Compares neural network performance with OLS regression from Project 1
-- Analyzes learning curves for different optimizers (SGD, RMSprop, Adam)
-- Explores optimal learning rates and network architectures (1-2 hidden layers, 50-100 neurons)
-
-### Exb_with_noise.ipynb: Regression with Noise Analysis
-- Extends Exb.ipynb with noise analysis
-- Studies neural network robustness to noisy data
-- Compares performance degradation with OLS under noise
-
-### Exc.ipynb: Comparison with Standard Libraries
-- Validates implementation against Scikit-Learn's MLPRegressor/MLPClassifier
-- Optional comparison with TensorFlow/Keras or PyTorch
-- Uses automatic differentiation (Autograd/JAX) to verify gradient computations
-
-### Exd.ipynb: Activation Functions and Network Depth
-- Systematic comparison of Sigmoid, ReLU, and Leaky ReLU activation functions
-- Analysis of network depth (number of layers) and width (neurons per layer)
-- Overfitting analysis and bias-variance trade-off considerations
-- Hyperparameter heatmaps for learning rate and network architecture
-
-### Exe.ipynb: Regularization Analysis
-- Implements L1 and L2 regularization in the neural network
-- Compares L2-regularized networks with Ridge regression from Project 1
-- Compares L1-regularized networks with Lasso regression from Project 1
-- Hyperparameter optimization for regularization strength (λ) and learning rate
-
-### Exf.ipynb: MNIST Classification
-- Applies the neural network to multiclass classification on the full MNIST dataset
-- Uses softmax cross-entropy loss for 10-class classification
-- Analyzes classification accuracy as a function of:
-  - Network architecture (depth and width)
-  - Activation functions
-  - Learning rates and optimization algorithms
-  - Regularization parameters
-- Optional comparisons with Logistic Regression and standard ML libraries
-- Optional confusion matrix analysis for best-performing model
-
-## Results and Outputs
-
-### Generated Artifacts
-
-- **Plots/**: Contains PDF figures including:
-  - Learning curves for different optimizers
-  - Comparison plots between neural networks and OLS/Ridge/Lasso
-  - Hyperparameter heatmaps
-  - Network performance visualizations
-
-- **Tables/**: Contains tabulated results and performance metrics
-
-### Key Findings
-
-The notebooks systematically explore:
-1. Neural network performance relative to linear regression methods
-2. Impact of activation function choice on training dynamics and final performance
-3. Optimal network architectures for given problem complexity
-4. Effectiveness of different optimization algorithms
-5. Regularization effects and comparison with traditional methods
-6. Classification performance on high-dimensional image data
-
-## Usage
-
-### Running Individual Notebooks
-
-1. Navigate to the Code directory:
-   ```bash
-   cd "PROJECT 2/Code"
-   ```
-
-2. Start Jupyter:
-   ```bash
-   jupyter notebook
-   ```
-
-3. Open the desired notebook from the `Notebooks/` folder
-
-4. Ensure the notebook kernel can access the `Implementations/` module (notebooks include path setup)
-
-### Running Tests
-
-Execute unit tests to verify implementation correctness:
-```bash
+```powershell
 cd "PROJECT 2/Code"
 python -m pytest Testing/
 ```
 
-### Reproducing Results
+---
 
-All notebooks use fixed random seeds for reproducibility. To reproduce exact results:
-- Ensure NumPy random seed is set (default: 6114 for network initialization)
-- Use the same train-test split random state (typically 42)
-- Follow the exact hyperparameter values specified in the notebooks
+## 7. Results Management
 
-## Project Requirements
+- Figures stored in `Plots/` should be referenced in the report (10–15 in main text). Provide captions, axis labels, and consistent styling.  
+- Tables in `Tables/` summarise hyperparameter sweeps, benchmark comparisons, and evaluation metrics.  
+- Maintain a changelog or experimental log (e.g., `Logs/` or appendix) documenting key runs, learning rates, seeds, and remarks on convergence behaviour.
 
-This project fulfills the requirements for Project 2 of FYS-STK3155/FYS4155:
+---
 
-- ✅ Custom FFNN implementation with backpropagation
-- ✅ Support for regression (MSE) and classification (Cross-Entropy)
-- ✅ Multiple activation functions (Sigmoid, ReLU, LeakyReLU)
-- ✅ Multiple optimization algorithms (SGD, RMSprop, Adam)
-- ✅ L1 and L2 regularization
-- ✅ Comparison with Project 1 methods (OLS, Ridge, Lasso)
-- ✅ Comparison with standard ML libraries
-- ✅ Comprehensive analysis and visualization
+## 8. Background Literature
 
-## References
+- Nielsen, M. **Neural Networks and Deep Learning**. http://neuralnetworksanddeeplearning.com/  
+- Goodfellow, I., Bengio, Y., Courville, A. **Deep Learning** (Ch. 6–8). https://www.deeplearningbook.org/  
+- Raschka, S. et al. **Machine Learning with PyTorch and Scikit-Learn** (Ch. 11–13). https://sebastianraschka.com/blog/2022/ml-pytorch-book.html  
+- UiO course compendium and lecture notes Weeks 41–42: https://compphysics.github.io/MachineLearning/  
+- Optimisation reference: Goodfellow et al., *Deep Learning*, Chapter 8.  
+- Optional comparative study: https://medium.com/ai-in-plain-english/comparison-between-logistic-regression-and-neural-networks-in-classifying-digits-dc5e85cd93c3
 
-- Nielsen, M. *Neural Networks and Deep Learning*. http://neuralnetworksanddeeplearning.com/
-- Goodfellow, I., Bengio, Y., & Courville, A. *Deep Learning*. https://www.deeplearningbook.org/
-- Raschka, S., et al. *Machine Learning with PyTorch and Scikit-Learn*. https://sebastianraschka.com/blog/2022/ml-pytorch-book.html
-- Scikit-Learn Documentation: https://scikit-learn.org/
-- Course Lecture Notes: https://compphysics.github.io/MachineLearning/
+---
 
-## License
+## 9. Writing and Referencing Guidelines
 
-This project is part of coursework for FYS-STK3155/FYS4155 at the University of Oslo.
+- Follow scientific/technical report conventions: abstract, introduction, methods, results, discussion, conclusion, references, appendices.  
+- Include pseudocode or algorithm summaries for major implementations.  
+- Provide well-commented source code (in notebooks or `.py` files).  
+- Validate against analytical solutions or known baselines where possible.  
+- Assess numerical stability and discuss uncertainty (e.g., variance across seeds).  
+- Reflect on lessons learned, potential improvements, and open questions.  
+- Keep a lab log of experiments, parameter choices, and runtime observations.
+
+When citing software or datasets, follow the recommended citation style (e.g., `scikit-learn` guidelines, Kaggle dataset citations). Cite AI tools (ChatGPT or others) if used, and retain interaction records as supplemental material when feasible.
+
+---
+
+## 10. Electronic Delivery Format
+
+- Submit via Canvas: https://www.uio.no/english/services/it/education/canvas/  
+- Upload only the report PDF or a link to the GitHub repository if permitted.  
+- Source code lives in GitHub/GitLab (or equivalent); include instructions for reproducing key results. Avoid uploading third-party library files unless modified.  
+- In the repository, maintain a folder of selected outputs (plots, tables, logs) referenced in the report.
+
+Collaboration is encouraged; ensure all contributions are acknowledged in the report and repository.
+
+---
+
+## 11. Contact
+
+For clarifications, use course discussion forums, lab sessions, or contact the teaching team. Please notify us early if you plan major deviations (alternative datasets, architectures, tooling) so we can agree on evaluation criteria.
 
