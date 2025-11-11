@@ -2,6 +2,8 @@
 numpy
 matplotlib
 scikit-learn
+torch
+torchvision
 
 # Autograd and testing
 autograd
