@@ -11,6 +11,8 @@ pytest
 
 # Plot styling and figures
 seaborn
+cycler
+
 
 # Data handling
 pandas
