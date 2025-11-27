@@ -1,0 +1,12 @@
+## Transfermarkt raw exports
+Code/Data/*
+!Code/Data/.gitkeep
+!Code/Data/pl_team_features.csv
+!Code/Data/pl_team_features.parquet
+
+## Notebook junk
+*.ipynb_checkpoints
+
+## Python cache
+__pycache__/
+

@@ -1,0 +1,21 @@
+# Core numerical & ML
+numpy
+matplotlib
+scikit-learn
+torch
+torchvision
+
+# Autograd and testing
+autograd
+pytest
+
+# Plot styling and figures
+seaborn
+cycler
+
+# Data handling and IO
+pandas
+pyarrow      # parquet support for aggregated datasets
+
+# Optional: for notebooks
+jupyter
