@@ -1,6 +1,6 @@
-# FYS-STK3155/FYS4155: Data Analysis and Machine Learning
+# FYS-STK3155/FYS-STK4155: Applied Data Analysis and Machine Learning
 
-**Course:** Data Analysis and Machine Learning (FYS-STK3155/FYS4155)  
+**Course:** Applied Data Analysis and Machine Learning (FYS-STK3155 / FYS-STK4155)  
 **Institution:** University of Oslo  
 **Academic Year:** 2024-2025
 
@@ -238,13 +238,13 @@ Through these projects, students gain:
 
 ## Course Information
 
-**Course Code:** FYS-STK3155 / FYS4155  
-**Course Name:** Data Analysis and Machine Learning  
+**Course Code:** FYS-STK3155 / FYS-STK4155  
+**Course Name:** Applied Data Analysis and Machine Learning  
 **Institution:** University of Oslo  
 **Department:** Physics
 
 **Course Resources:**
-- Course website: [Machine Learning Course](http://www.uio.no/studier/emner/matnat/fys/FYS3155/index-eng.html)
+- Course website: [Applied Data Analysis and Machine Learning](https://www.uio.no/studier/emner/matnat/fys/FYS-STK3155/index-eng.html)
 - Lecture notes: [CompPhysics Machine Learning](https://compphysics.github.io/MachineLearning/)
 - Textbook references: See individual project README files
 
