@@ -3,6 +3,7 @@ Code/Data/*
 !Code/Data/.gitkeep
 !Code/Data/pl_team_features.csv
 !Code/Data/pl_team_features.parquet
+!Code/Data/README.md
 
 ## Notebook junk
 *.ipynb_checkpoints
