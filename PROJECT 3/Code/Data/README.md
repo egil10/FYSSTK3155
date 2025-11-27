@@ -37,52 +37,47 @@ Each row is a club-game entry designed to mirror the tidyverse pipeline we used
 in R. Below is a full column reference so you know exactly what is persisted and
 why it exists.
 
-#### Match metadata
+#### Match metadata & momentum
 | Column | Description / motivation |
 | ------ | ----------------------- |
-| `game_id` | Unique Transfermarkt match id; key for merges with other datasets. |
-| `competition_id`, `competition_type` | Competition code (`GB1`) and league vs cup indicator; handy if you extend to other leagues later. |
-| `season`, `round`, `date` | Temporal context for aggregations, plotting trends, or filtering season windows. |
-| `home_club_id`, `away_club_id`, `home_club_name`, `away_club_name` | Club identifiers straight from Transfermarkt; allow lookups, joins, or quick labeling. |
-| `home_club_goals`, `away_club_goals`, `aggregate` | Ground-truth scoreline (plus aggregate text) for model targets or sanity checks. |
-| `home_club_position`, `away_club_position` | League-table rank at kickoff; helps compare squads with different form. |
-| `home_club_manager_name`, `away_club_manager_name` | Manager context for narrative or future manager-based analysis. |
-| `stadium`, `attendance`, `referee`, `url` | Venue metadata, crowd size, officiating crew, and canonical Transfermarkt link for reproducibility. |
-| `home_club_formation`, `away_club_formation` | Formation strings for quick tactical summaries. |
-| `club_id` | The specific club for this row (matches either `home_club_id` or `away_club_id`). |
-| `own_goals`, `opponent_goals` | Score from the perspective of `club_id`; simplifies home/away toggling. |
-| `own_position`, `opponent_position` | Table rank of club vs opponent in the same format. |
-| `own_manager_name`, `opponent_manager_name` | Mirrors manager info but aligned with `club_id`. |
-| `opponent_id` | Explicit key to the opposing club (useful for graph/network work). |
-| `hosting` | Textual value (“Home”/“Away”) from Transfermarkt for human-readable output. |
-| `is_home`, `is_win` | Boolean flags for modelling classification targets (home advantage, match outcome). |
+| `game_id`, `competition_id`, `competition_type` | Canonical identifiers for merges and for filtering across competitions. |
+| `season`, `round`, `date` | Temporal context for slicing seasons or evaluating trends. |
+| `home_*`, `away_*` info (`*_club_id`, `*_club_name`, `*_goals`, `*_position`, `*_manager_name`, `*_formation`) | Everything needed to reconstruct the match narrative and target variables. |
+| `stadium`, `attendance`, `referee`, `url` | Venue + reference metadata. |
+| `club_id`, `opponent_id`, `own_goals`, `opponent_goals`, `hosting`, `is_home`, `is_win` | Viewpoint-normalised fields for per-club modelling. |
+| `goal_difference`, `points` | Base metrics for result-based tasks (3/1/0 points plus margin). |
+| `prev_points`, `prev_goal_difference`, `prev_goals_scored`, `prev_goals_conceded` | Previous-match form indicators (shifted lag-1 values for each club; `NaN` if no prior match).
 
 #### Appearance aggregates
 | Column | Description / motivation |
 | ------ | ----------------------- |
-| `goals_mean`, `goals_max`, `goals_min` | Average/best/worst individual scoring contribution across appearances for the club in that match; captures distribution rather than just total goals. |
-| `assists_mean`, `assists_max`, `assists_min` | Same idea for assists—useful for creative output metrics. |
-| `minutes_mean`, `minutes_max`, `minutes_min` | Captures how minutes were shared across the squad (e.g., rotated XI vs full-strength). |
-| `yellow_cards_sum`, `red_cards_sum` | Total disciplinary actions drawn from the appearance table (complements event-level fouls). |
+| `goals_mean`, `goals_max`, `goals_min` | Distribution of individual scoring output within the squad that match. |
+| `assists_mean`, `assists_max`, `assists_min` | Same idea for creativity. |
+| `minutes_mean`, `minutes_max`, `minutes_min` | Captures rotation level and workload spread. |
+| `yellow_cards_sum`, `red_cards_sum` | Discipline summary from appearance logs.
 
-#### Lineup structure
+#### Lineup structure & squad economics
 | Column | Description / motivation |
 | ------ | ----------------------- |
-| `n_players` | Number of player entries in the lineup (should be >=11, includes bench). |
-| `n_captains` | Count of captaincy flags—indicates leadership continuity or anomalies. |
-| `avg_height`, `min_height`, `max_height` | Squad physical profile for aerial/physical matchup studies. |
-| `defenders`, `midfielders`, `forwards`, `others` | Counts of players in each positional bucket based on Transfermarkt positions, revealing tactical leanings (e.g., back three vs back four). |
+| `n_players`, `n_starters`, `starters_percentage`, `n_captains` | Squad size, starting XI count, rotation intensity, leadership continuity. |
+| `avg_height`, `min_height`, `max_height`, `height_spread` | Physical profile and diversity for aerial/fitness analyses. |
+| `defenders`, `midfielders`, `forwards`, `others` | Positional mix for tactical shape inference. |
+| `avg_age`, `median_age` | Experience vs youth balance. |
+| `squad_value_mean`, `squad_value_max`, `squad_value_min`, `squad_value_total` | Financial strength snapshots using latest Transfermarkt valuations. |
+| `avg_market_value_starting_xi` | Quality of the eleven actually deployed. |
+| `new_signings_played` | Count of players signed that season who appeared—proxy for integration and churn. |
+| `continuity_index` | Fraction of starters retained from the previous match (intersection / 11). |
+| `missing_key_players` | Number of top-5 market-value players absent from the starting XI (injuries, rotation).
 
-#### Event counts
+#### Event counts & tactical proxies
 | Column | Description / motivation |
 | ------ | ----------------------- |
-| `n_events` | Total events recorded for the club in play-by-play (proxy for involvement). |
-| `shots`, `fouls`, `subs`, `goals_event` | Counts of specific event types to gauge attacking volume, discipline, rotation, and goals. |
-
-#### Squad market value
-| Column | Description / motivation |
-| ------ | ----------------------- |
-| `squad_value_mean`, `squad_value_max`, `squad_value_min` | Aggregate market values (Transfermarkt) of players tied to the club, letting you relate financial muscle to performance. |
+| `n_events` | Total play-by-play entries for involvement. |
+| `shots`, `goals_event` | Direct attacking volume and conversions. |
+| `fouls` | Defensive/aggression indicator. |
+| `subs`, `n_subs_used` | Substitution opportunities vs actual usage (fitness/strategy). |
+| `passes`, `touches` | Possession-oriented actions (when present in the feed). |
+| `possession_proxy_events` | `(shots + passes + touches) / n_events` as a crude possession stand-in.
 
 Feel free to inspect the CSV directly or convert to Parquet for smaller file
 size and typed columns. The 2021–2025 Premier League slice is ~1.5 MB as CSV and
