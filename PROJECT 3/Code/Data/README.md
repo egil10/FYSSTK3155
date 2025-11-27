@@ -17,6 +17,11 @@ transfers.csv
 
 These files can total several hundred megabytes, so keep them local.
 
+You can also enrich the dataset with public player-rating data such as the
+[Player Performance Scores dataset on Kaggle](https://www.kaggle.com/datasets/davidcariboo/player-scores/),
+which provides per-match performance metrics that can be joined on player IDs
+for modelling work.
+
 ### Build the Premier League feature table
 From `PROJECT 3` run:
 
