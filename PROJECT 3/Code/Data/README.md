@@ -37,6 +37,10 @@ Key command-line options:
 - `--output` – `.csv` or `.parquet` path for the aggregated dataset.
 - `--competition-id` – Transfermarkt competition code (default `GB1` for EPL).
 
+The script now also produces leak-free modelling features via `prepare_features`. A
+list of columns safe to use for prediction is written to
+`Code/Data/predictive_features.txt`.
+
 ### What’s inside `pl_team_features.*`
 Each row is a club-game entry designed to mirror the tidyverse pipeline we used
 in R. Below is a full column reference so you know exactly what is persisted and

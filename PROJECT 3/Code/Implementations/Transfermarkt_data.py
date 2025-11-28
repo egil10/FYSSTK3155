@@ -7,6 +7,17 @@ from pathlib import Path
 
 import pandas as pd
 
+try:
+    from .feature_engineering import (
+        PREDICTIVE_METADATA_PATH,
+        prepare_features,
+    )
+except ImportError:
+    from feature_engineering import (
+        PREDICTIVE_METADATA_PATH,
+        prepare_features,
+    )
+
 DEFAULT_COMPETITION_ID = "GB1"
 DEF_POSITIONS = {"Centre-Back", "Left-Back", "Right-Back", "Defender", "Sweeper"}
 MID_POSITIONS = {
@@ -499,15 +510,18 @@ def main() -> None:
         if args.output is not None
         else Path(__file__).resolve().parents[1] / "Data" / "pl_team_features.csv"
     )
-    features = build_pl_datasets(
+    raw_features = build_pl_datasets(
         data_dir=data_dir,
         start_season=args.start_season,
         end_season=args.end_season,
         competition_id=args.competition_id,
     )
-    saved_path = save_features(features, output_path)
-    print(f"Built {len(features)} team-game rows.")
+    processed_features, predictive_cols = prepare_features(raw_features)
+    saved_path = save_features(processed_features, output_path)
+    PREDICTIVE_METADATA_PATH.write_text("\n".join(predictive_cols))
+    print(f"Built {len(processed_features)} team-game rows.")
     print(f"Saved dataset to {saved_path}")
+    print(f"Predictive feature count: {len(predictive_cols)}")
 
 
 if __name__ == "__main__":
