@@ -46,7 +46,7 @@ why it exists.
 | Column | Description / motivation |
 | ------ | ----------------------- |
 | `game_id`, `competition_id`, `competition_type` | Canonical identifiers for merges and for filtering across competitions. |
-| `season`, `round`, `date` | Temporal context for slicing seasons or evaluating trends. |
+| `season`, `round`, `round_number`, `date` | Temporal context for slicing seasons or evaluating trends (round number is parsed to an integer so matchdays can be sorted reliably). |
 | `home_*`, `away_*` info (`*_club_id`, `*_club_name`, `*_goals`, `*_position`, `*_manager_name`, `*_formation`) | Everything needed to reconstruct the match narrative and target variables. |
 | `stadium`, `attendance`, `referee`, `url` | Venue + reference metadata. |
 | `club_id`, `opponent_id`, `own_goals`, `opponent_goals`, `hosting`, `is_home`, `is_win` | Viewpoint-normalised fields for per-club modelling. |
@@ -68,7 +68,7 @@ why it exists.
 | `avg_height`, `min_height`, `max_height`, `height_spread` | Physical profile and diversity for aerial/fitness analyses. |
 | `defenders`, `midfielders`, `forwards`, `others` | Positional mix for tactical shape inference. |
 | `avg_age`, `median_age` | Experience vs youth balance. |
-| `squad_value_mean`, `squad_value_max`, `squad_value_min`, `squad_value_total` | Financial strength snapshots using latest Transfermarkt valuations. |
+| `squad_value_mean`, `squad_value_max`, `squad_value_min`, `squad_value_total` | Financial strength using player valuations as of each match date (latest known valuation before kickoff). |
 | `avg_market_value_starting_xi` | Quality of the eleven actually deployed. |
 | `new_signings_played` | Count of players signed that season who appeared—proxy for integration and churn. |
 | `continuity_index` | Fraction of starters retained from the previous match (intersection / 11). |

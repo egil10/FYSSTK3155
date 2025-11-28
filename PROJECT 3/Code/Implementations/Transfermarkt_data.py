@@ -73,6 +73,12 @@ def build_pl_datasets(
     games = resources["games"].copy()
     games["season"] = pd.to_numeric(games["season"], errors="coerce")
     games["date"] = pd.to_datetime(games["date"], errors="coerce")
+    games["round_number"] = (
+        games["round"]
+        .astype(str)
+        .str.extract(r"(\d+)")
+        .astype(float)
+    )
     pl_games = games[
         (games["competition_id"] == competition_id)
         & (games["season"] >= start_season)
@@ -127,9 +133,16 @@ def build_pl_datasets(
         .rename(columns={"player_club_id": "club_id"})
     )
 
+    player_valuations = resources["player_valuations"].copy()
+    player_valuations["date"] = pd.to_datetime(
+        player_valuations.get("date"), errors="coerce"
+    )
+    player_valuations["player_id"] = pd.to_numeric(
+        player_valuations["player_id"], errors="coerce"
+    )
+    player_valuations = player_valuations.dropna(subset=["player_id"])
     latest_valuations = (
-        resources["player_valuations"]
-        .sort_values("date")
+        player_valuations.sort_values("date")
         .groupby("player_id")
         .last()
         .reset_index()
@@ -181,15 +194,53 @@ def build_pl_datasets(
         )
     )
     lineups["match_date"] = pd.to_datetime(lineups["match_date"], errors="coerce")
+    lineups["player_id"] = pd.to_numeric(lineups["player_id"], errors="coerce")
+    valuations_time = (
+        player_valuations[["player_id", "date", "market_value_in_eur"]]
+        .dropna(subset=["date"])
+        .rename(
+            columns={
+                "date": "valuation_date",
+                "market_value_in_eur": "market_value_snapshot",
+            }
+        )
+        .dropna(subset=["player_id"])
+        .sort_values(["player_id", "valuation_date"])
+    )
+    if not valuations_time.empty:
+        valuations_time["valuation_month"] = valuations_time["valuation_date"].dt.to_period(
+            "M"
+        )
+        lineups["valuation_month"] = lineups["match_date"].dt.to_period("M")
+        valuations_monthly = (
+            valuations_time.sort_values(["player_id", "valuation_date"])
+            .drop_duplicates(subset=["player_id", "valuation_month"], keep="last")
+            .rename(columns={"market_value_snapshot": "market_value_month"})
+            .drop(columns=["valuation_date"])
+        )
+        lineups = lineups.merge(
+            valuations_monthly,
+            on=["player_id", "valuation_month"],
+            how="left",
+        )
+        lineups["valuation_date"] = pd.NaT
+        lineups["market_value_snapshot"] = lineups["market_value_month"]
+        lineups = lineups.drop(columns=["valuation_month", "market_value_month"])
+    else:
+        lineups["valuation_date"] = pd.NaT
+        lineups["market_value_snapshot"] = pd.NA
+    lineups = lineups.sort_values(["player_id", "match_date"])
     lineups["date_of_birth"] = pd.to_datetime(lineups["date_of_birth"], errors="coerce")
     lineups["age"] = (
         (lineups["match_date"] - lineups["date_of_birth"]).dt.days / 365.25
+    )
+    lineups["player_market_value"] = lineups["market_value_snapshot"].combine_first(
+        lineups["market_value_latest"]
     )
     lineups["team_captain"] = pd.to_numeric(
         lineups.get("team_captain"), errors="coerce"
     ).fillna(0)
     lineups["height_in_cm"] = pd.to_numeric(lineups["height_in_cm"], errors="coerce")
-    lineups["player_market_value"] = lineups["market_value_latest"]
     lineups["is_starter"] = lineups["type"].str.lower() == "starting_lineup"
     lineups["starter_market_value"] = lineups["player_market_value"].where(
         lineups["is_starter"]
