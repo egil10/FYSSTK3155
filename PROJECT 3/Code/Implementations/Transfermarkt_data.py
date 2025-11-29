@@ -116,6 +116,14 @@ def build_game_datasets(
         .astype(float)
     )
     
+    # CRITICAL: Apply season cutoff (2014+) for data quality
+    # Data before 2014 has catastrophic NAs in lineup/valuation features
+    SEASON_CUTOFF = 2014
+    games_before = len(games)
+    games = games[games["season"] >= SEASON_CUTOFF].copy()
+    games_filtered = len(games)
+    print(f"  Applied season cutoff (>= {SEASON_CUTOFF}): {games_before:,} → {games_filtered:,} games")
+    
     # Get all game IDs as set for faster membership testing
     all_game_ids_set = set(games["game_id"].unique())
     all_game_ids = games["game_id"].unique()
@@ -437,11 +445,11 @@ def build_game_datasets(
     except ImportError:
         from lag_feature_engineering import compute_comprehensive_lagged_features
     
-    # Optimized lag windows:
-    # - Fast features (goals, assists, etc.): L3, L10, L20
-    # - Slow features (height, age, squad_value, etc.): L5, L20
-    lag_windows_fast = [3, 10, 20]
-    lag_windows_slow = [5, 20]
+    # Extended lag windows for comprehensive feature engineering:
+    # - Fast features (goals, points, events): L1, L2, L3, L5, L10, L20
+    # - Slow features (height, age, squad_value, etc.): L5, L10, L20
+    lag_windows_fast = [1, 2, 3, 5, 10, 20]
+    lag_windows_slow = [5, 10, 20]
     games_features = compute_comprehensive_lagged_features(
         club_features=club_features,
         games_df=games,

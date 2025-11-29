@@ -1,172 +1,283 @@
-  [1] "ID_GAME"                                   
-  [2] "ID_COMPETITION"                            
-  [3] "ID_SEASON"                                 
-  [4] "ID_ROUND"                                  
-  [5] "ID_DATE"                                   
-  [6] "ID_HOME_CLUB"                              
-  [7] "ID_AWAY_CLUB"                              
-  [8] "ID_HOME_TEAM"                              
-  [9] "ID_AWAY_TEAM"                              
- [10] "ID_HOME_MANAGER"                           
- [11] "ID_AWAY_MANAGER"                           
- [12] "ID_STADIUM"                                
- [13] "ID_ATTENDANCE"                             
- [14] "ID_REFIREE"                                
- [15] "ID_URL"                                    
- [16] "ID_ROUND_NUMBER"                           
- [17] "ID_HOME_GOALS"                             
- [18] "ID_AWAY_GOALS"                             
- [19] "ID_AGGREGATE"                              
- [20] "ID_COMPETITION_TYPE"                       
- [21] "ID_HOME_FORMATION"                         
- [22] "ID_AWAY_FORMATION"                         
- [23] "RESULT"                                    
- [24] "home_club_position"                        
- [25] "away_club_position"                        
- [26] "home_points_sum_L3"                        
- [27] "home_goal_difference_mean_L3"              
- [28] "home_goals_scored_mean_L3"                 
- [29] "home_goals_conceded_mean_L3"               
- [30] "home_goals_mean_L3"                        
- [31] "home_goals_max_L3"                         
- [32] "home_goals_min_L3"                         
- [33] "home_assists_mean_L3"                      
- [34] "home_minutes_played_mean_L3"               
- [35] "home_yellow_cards_sum_L3"                  
- [36] "home_red_cards_sum_L3"                     
- [37] "home_goals_event_sum_L3"                   
- [38] "home_points_sum_L10"                       
- [39] "home_goal_difference_mean_L10"             
- [40] "home_goals_scored_mean_L10"                
- [41] "home_goals_conceded_mean_L10"              
- [42] "home_goals_mean_L10"                       
- [43] "home_goals_max_L10"                        
- [44] "home_goals_min_L10"                        
- [45] "home_assists_mean_L10"                     
- [46] "home_minutes_played_mean_L10"              
- [47] "home_yellow_cards_sum_L10"                 
- [48] "home_red_cards_sum_L10"                    
- [49] "home_goals_event_sum_L10"                  
- [50] "home_points_sum_L20"                       
- [51] "home_goal_difference_mean_L20"             
- [52] "home_goals_scored_mean_L20"                
- [53] "home_goals_conceded_mean_L20"              
- [54] "home_goals_mean_L20"                       
- [55] "home_goals_max_L20"                        
- [56] "home_goals_min_L20"                        
- [57] "home_assists_mean_L20"                     
- [58] "home_minutes_played_mean_L20"              
- [59] "home_yellow_cards_sum_L20"                 
- [60] "home_red_cards_sum_L20"                    
- [61] "home_goals_event_sum_L20"                  
- [62] "home_n_starters_mean_L5"                   
- [63] "home_avg_height_mean_L5"                   
- [64] "home_min_height_mean_L5"                   
- [65] "home_max_height_mean_L5"                   
- [66] "home_height_spread_mean_L5"                
- [67] "home_defenders_mean_L5"                    
- [68] "home_midfielders_mean_L5"                  
- [69] "home_forwards_mean_L5"                     
- [70] "home_avg_age_mean_L5"                      
- [71] "home_median_age_mean_L5"                   
- [72] "home_squad_value_total_mean_L5"            
- [73] "home_avg_market_value_starting_xi_mean_L5" 
- [74] "home_continuity_index_mean_L5"             
- [75] "home_new_signings_played_mean_L5"          
- [76] "home_starters_percentage_mean_L5"          
- [77] "home_n_starters_mean_L20"                  
- [78] "home_avg_height_mean_L20"                  
- [79] "home_min_height_mean_L20"                  
- [80] "home_max_height_mean_L20"                  
- [81] "home_height_spread_mean_L20"               
- [82] "home_defenders_mean_L20"                   
- [83] "home_midfielders_mean_L20"                 
- [84] "home_forwards_mean_L20"                    
- [85] "home_avg_age_mean_L20"                     
- [86] "home_median_age_mean_L20"                  
- [87] "home_squad_value_total_mean_L20"           
- [88] "home_avg_market_value_starting_xi_mean_L20"
- [89] "home_continuity_index_mean_L20"            
- [90] "home_new_signings_played_mean_L20"         
- [91] "home_starters_percentage_mean_L20"         
- [92] "away_points_sum_L3"                        
- [93] "away_goal_difference_mean_L3"              
- [94] "away_goals_scored_mean_L3"                 
- [95] "away_goals_conceded_mean_L3"               
- [96] "away_goals_mean_L3"                        
- [97] "away_goals_max_L3"                         
- [98] "away_goals_min_L3"                         
- [99] "away_assists_mean_L3"                      
-[100] "away_minutes_played_mean_L3"               
-[101] "away_yellow_cards_sum_L3"                  
-[102] "away_red_cards_sum_L3"                     
-[103] "away_goals_event_sum_L3"                   
-[104] "away_points_sum_L10"                       
-[105] "away_goal_difference_mean_L10"             
-[106] "away_goals_scored_mean_L10"                
-[107] "away_goals_conceded_mean_L10"              
-[108] "away_goals_mean_L10"                       
-[109] "away_goals_max_L10"                        
-[110] "away_goals_min_L10"                        
-[111] "away_assists_mean_L10"                     
-[112] "away_minutes_played_mean_L10"              
-[113] "away_yellow_cards_sum_L10"                 
-[114] "away_red_cards_sum_L10"                    
-[115] "away_goals_event_sum_L10"                  
-[116] "away_points_sum_L20"                       
-[117] "away_goal_difference_mean_L20"             
-[118] "away_goals_scored_mean_L20"                
-[119] "away_goals_conceded_mean_L20"              
-[120] "away_goals_mean_L20"                       
-[121] "away_goals_max_L20"                        
-[122] "away_goals_min_L20"                        
-[123] "away_assists_mean_L20"                     
-[124] "away_minutes_played_mean_L20"              
-[125] "away_yellow_cards_sum_L20"                 
-[126] "away_red_cards_sum_L20"                    
-[127] "away_goals_event_sum_L20"                  
-[128] "away_n_starters_mean_L5"                   
-[129] "away_avg_height_mean_L5"                   
-[130] "away_min_height_mean_L5"                   
-[131] "away_max_height_mean_L5"                   
-[132] "away_height_spread_mean_L5"                
-[133] "away_defenders_mean_L5"                    
-[134] "away_midfielders_mean_L5"                  
-[135] "away_forwards_mean_L5"                     
-[136] "away_avg_age_mean_L5"                      
-[137] "away_median_age_mean_L5"                   
-[138] "away_squad_value_total_mean_L5"            
-[139] "away_avg_market_value_starting_xi_mean_L5" 
-[140] "away_continuity_index_mean_L5"             
-[141] "away_new_signings_played_mean_L5"          
-[142] "away_starters_percentage_mean_L5"          
-[143] "away_n_starters_mean_L20"                  
-[144] "away_avg_height_mean_L20"                  
-[145] "away_min_height_mean_L20"                  
-[146] "away_max_height_mean_L20"                  
-[147] "away_height_spread_mean_L20"               
-[148] "away_defenders_mean_L20"                   
-[149] "away_midfielders_mean_L20"                 
-[150] "away_forwards_mean_L20"                    
-[151] "away_avg_age_mean_L20"                     
-[152] "away_median_age_mean_L20"                  
-[153] "away_squad_value_total_mean_L20"           
-[154] "away_avg_market_value_starting_xi_mean_L20"
-[155] "away_continuity_index_mean_L20"            
-[156] "away_new_signings_played_mean_L20"         
-[157] "away_starters_percentage_mean_L20"         
-[158] "diff_points_L3"                            
-[159] "diff_goal_difference_L3"                   
-[160] "diff_goals_scored_L3"                      
-[161] "diff_points_L10"                           
-[162] "diff_goal_difference_L10"                  
-[163] "diff_goals_scored_L10"                     
-[164] "diff_points_L20"                           
-[165] "diff_goal_difference_L20"                  
-[166] "diff_goals_scored_L20"                     
-[167] "diff_squad_value_total_L5"                 
-[168] "diff_avg_age_L5"                           
-[169] "diff_avg_height_L5"                        
-[170] "diff_squad_value_total_L20"                
-[171] "diff_avg_age_L20"                          
-[172] "diff_avg_height_L20"   
+game_id
+competition_id
+season
+round
+date
+home_club_id
+away_club_id
+home_club_position
+away_club_position
+home_club_manager_name
+away_club_manager_name
+stadium
+attendance
+referee
+url
+home_club_formation
+away_club_formation
+home_club_name
+away_club_name
+aggregate
+competition_type
+round_number
+home_points_sum_L1
+home_goal_difference_mean_L1
+home_goals_scored_mean_L1
+home_goals_conceded_mean_L1
+home_goals_mean_L1
+home_goals_max_L1
+home_goals_min_L1
+home_assists_mean_L1
+home_minutes_played_mean_L1
+home_yellow_cards_sum_L1
+home_red_cards_sum_L1
+home_goals_event_sum_L1
+home_points_sum_L2
+home_goal_difference_mean_L2
+home_goals_scored_mean_L2
+home_goals_conceded_mean_L2
+home_goals_mean_L2
+home_goals_max_L2
+home_goals_min_L2
+home_assists_mean_L2
+home_minutes_played_mean_L2
+home_yellow_cards_sum_L2
+home_red_cards_sum_L2
+home_goals_event_sum_L2
+home_points_sum_L3
+home_goal_difference_mean_L3
+home_goals_scored_mean_L3
+home_goals_conceded_mean_L3
+home_goals_mean_L3
+home_goals_max_L3
+home_goals_min_L3
+home_assists_mean_L3
+home_minutes_played_mean_L3
+home_yellow_cards_sum_L3
+home_red_cards_sum_L3
+home_goals_event_sum_L3
+home_points_sum_L5
+home_goal_difference_mean_L5
+home_goals_scored_mean_L5
+home_goals_conceded_mean_L5
+home_goals_mean_L5
+home_goals_max_L5
+home_goals_min_L5
+home_assists_mean_L5
+home_minutes_played_mean_L5
+home_yellow_cards_sum_L5
+home_red_cards_sum_L5
+home_goals_event_sum_L5
+home_points_sum_L10
+home_goal_difference_mean_L10
+home_goals_scored_mean_L10
+home_goals_conceded_mean_L10
+home_goals_mean_L10
+home_goals_max_L10
+home_goals_min_L10
+home_assists_mean_L10
+home_minutes_played_mean_L10
+home_yellow_cards_sum_L10
+home_red_cards_sum_L10
+home_goals_event_sum_L10
+home_points_sum_L20
+home_goal_difference_mean_L20
+home_goals_scored_mean_L20
+home_goals_conceded_mean_L20
+home_goals_mean_L20
+home_goals_max_L20
+home_goals_min_L20
+home_assists_mean_L20
+home_minutes_played_mean_L20
+home_yellow_cards_sum_L20
+home_red_cards_sum_L20
+home_goals_event_sum_L20
+home_n_starters_mean_L5
+home_avg_height_mean_L5
+home_min_height_mean_L5
+home_max_height_mean_L5
+home_height_spread_mean_L5
+home_defenders_mean_L5
+home_midfielders_mean_L5
+home_forwards_mean_L5
+home_avg_age_mean_L5
+home_median_age_mean_L5
+home_squad_value_total_mean_L5
+home_avg_market_value_starting_xi_mean_L5
+home_continuity_index_mean_L5
+home_new_signings_played_mean_L5
+home_starters_percentage_mean_L5
+home_n_starters_mean_L10
+home_avg_height_mean_L10
+home_min_height_mean_L10
+home_max_height_mean_L10
+home_height_spread_mean_L10
+home_defenders_mean_L10
+home_midfielders_mean_L10
+home_forwards_mean_L10
+home_avg_age_mean_L10
+home_median_age_mean_L10
+home_squad_value_total_mean_L10
+home_avg_market_value_starting_xi_mean_L10
+home_continuity_index_mean_L10
+home_new_signings_played_mean_L10
+home_starters_percentage_mean_L10
+home_n_starters_mean_L20
+home_avg_height_mean_L20
+home_min_height_mean_L20
+home_max_height_mean_L20
+home_height_spread_mean_L20
+home_defenders_mean_L20
+home_midfielders_mean_L20
+home_forwards_mean_L20
+home_avg_age_mean_L20
+home_median_age_mean_L20
+home_squad_value_total_mean_L20
+home_avg_market_value_starting_xi_mean_L20
+home_continuity_index_mean_L20
+home_new_signings_played_mean_L20
+home_starters_percentage_mean_L20
+away_points_sum_L1
+away_goal_difference_mean_L1
+away_goals_scored_mean_L1
+away_goals_conceded_mean_L1
+away_goals_mean_L1
+away_goals_max_L1
+away_goals_min_L1
+away_assists_mean_L1
+away_minutes_played_mean_L1
+away_yellow_cards_sum_L1
+away_red_cards_sum_L1
+away_goals_event_sum_L1
+away_points_sum_L2
+away_goal_difference_mean_L2
+away_goals_scored_mean_L2
+away_goals_conceded_mean_L2
+away_goals_mean_L2
+away_goals_max_L2
+away_goals_min_L2
+away_assists_mean_L2
+away_minutes_played_mean_L2
+away_yellow_cards_sum_L2
+away_red_cards_sum_L2
+away_goals_event_sum_L2
+away_points_sum_L3
+away_goal_difference_mean_L3
+away_goals_scored_mean_L3
+away_goals_conceded_mean_L3
+away_goals_mean_L3
+away_goals_max_L3
+away_goals_min_L3
+away_assists_mean_L3
+away_minutes_played_mean_L3
+away_yellow_cards_sum_L3
+away_red_cards_sum_L3
+away_goals_event_sum_L3
+away_points_sum_L5
+away_goal_difference_mean_L5
+away_goals_scored_mean_L5
+away_goals_conceded_mean_L5
+away_goals_mean_L5
+away_goals_max_L5
+away_goals_min_L5
+away_assists_mean_L5
+away_minutes_played_mean_L5
+away_yellow_cards_sum_L5
+away_red_cards_sum_L5
+away_goals_event_sum_L5
+away_points_sum_L10
+away_goal_difference_mean_L10
+away_goals_scored_mean_L10
+away_goals_conceded_mean_L10
+away_goals_mean_L10
+away_goals_max_L10
+away_goals_min_L10
+away_assists_mean_L10
+away_minutes_played_mean_L10
+away_yellow_cards_sum_L10
+away_red_cards_sum_L10
+away_goals_event_sum_L10
+away_points_sum_L20
+away_goal_difference_mean_L20
+away_goals_scored_mean_L20
+away_goals_conceded_mean_L20
+away_goals_mean_L20
+away_goals_max_L20
+away_goals_min_L20
+away_assists_mean_L20
+away_minutes_played_mean_L20
+away_yellow_cards_sum_L20
+away_red_cards_sum_L20
+away_goals_event_sum_L20
+away_n_starters_mean_L5
+away_avg_height_mean_L5
+away_min_height_mean_L5
+away_max_height_mean_L5
+away_height_spread_mean_L5
+away_defenders_mean_L5
+away_midfielders_mean_L5
+away_forwards_mean_L5
+away_avg_age_mean_L5
+away_median_age_mean_L5
+away_squad_value_total_mean_L5
+away_avg_market_value_starting_xi_mean_L5
+away_continuity_index_mean_L5
+away_new_signings_played_mean_L5
+away_starters_percentage_mean_L5
+away_n_starters_mean_L10
+away_avg_height_mean_L10
+away_min_height_mean_L10
+away_max_height_mean_L10
+away_height_spread_mean_L10
+away_defenders_mean_L10
+away_midfielders_mean_L10
+away_forwards_mean_L10
+away_avg_age_mean_L10
+away_median_age_mean_L10
+away_squad_value_total_mean_L10
+away_avg_market_value_starting_xi_mean_L10
+away_continuity_index_mean_L10
+away_new_signings_played_mean_L10
+away_starters_percentage_mean_L10
+away_n_starters_mean_L20
+away_avg_height_mean_L20
+away_min_height_mean_L20
+away_max_height_mean_L20
+away_height_spread_mean_L20
+away_defenders_mean_L20
+away_midfielders_mean_L20
+away_forwards_mean_L20
+away_avg_age_mean_L20
+away_median_age_mean_L20
+away_squad_value_total_mean_L20
+away_avg_market_value_starting_xi_mean_L20
+away_continuity_index_mean_L20
+away_new_signings_played_mean_L20
+away_starters_percentage_mean_L20
+diff_points_L1
+diff_goal_difference_L1
+diff_goals_scored_L1
+diff_points_L2
+diff_goal_difference_L2
+diff_goals_scored_L2
+diff_points_L3
+diff_goal_difference_L3
+diff_goals_scored_L3
+diff_points_L5
+diff_goal_difference_L5
+diff_goals_scored_L5
+diff_points_L10
+diff_goal_difference_L10
+diff_goals_scored_L10
+diff_points_L20
+diff_goal_difference_L20
+diff_goals_scored_L20
+diff_squad_value_total_L5
+diff_avg_age_L5
+diff_avg_height_L5
+diff_squad_value_total_L10
+diff_avg_age_L10
+diff_avg_height_L10
+diff_squad_value_total_L20
+diff_avg_age_L20
+diff_avg_height_L20
