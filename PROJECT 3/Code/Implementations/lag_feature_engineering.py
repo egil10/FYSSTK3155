@@ -56,26 +56,35 @@ def safe_rolling_agg(
 def compute_comprehensive_lagged_features(
     club_features: pd.DataFrame,
     games_df: pd.DataFrame,
-    lag_windows: List[int] = [1, 3, 5, 10, 20],
+    lag_windows_fast: List[int] = [3, 10, 20],
+    lag_windows_slow: List[int] = [5, 20],
 ) -> pd.DataFrame:
     """Compute comprehensive lagged features with strict temporal filtering.
     
-    This function replaces the current simple feature merging with a comprehensive
-    lag-based approach that computes rolling statistics across multiple windows.
+    Uses optimized lag windows:
+    - Fast features (goals, assists, etc.): L3, L10, L20
+    - Slow features (height, age, squad_value, etc.): L5, L20
+    
+    Removed features:
+    - missing_key_players (leaky + 100% NA)
+    - Event features that are constant (shots, fouls, passes, touches, possession_proxy)
+    - Redundant features (n_players, others, n_captains)
     
     Args:
         club_features: DataFrame with one row per club-game, must include:
             - game_id, club_id, is_home, date
             - All computed features (points, goals, appearances, lineups, events, etc.)
         games_df: DataFrame with game metadata
-        lag_windows: List of lag window sizes [1, 3, 5, 10, 20]
+        lag_windows_fast: Lag windows for fast-changing features [3, 10, 20]
+        lag_windows_slow: Lag windows for slow-changing features [5, 20]
     
     Returns:
         DataFrame with one row per game, with lagged features following naming convention
     """
     from datetime import datetime
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Computing comprehensive lagged features...")
-    print(f"  Windows: {lag_windows}")
+    print(f"  Fast feature windows: {lag_windows_fast}")
+    print(f"  Slow feature windows: {lag_windows_slow}")
     
     # Ensure proper sorting for lag calculations
     club_features = club_features.copy()
@@ -99,6 +108,8 @@ def compute_comprehensive_lagged_features(
     grouped = club_features.groupby("club_id", group_keys=False)
     
     # Prepare base features - ensure we have goals_scored and goals_conceded
+    # Note: goals_scored should be from current match (own_goals), not prev_goals_scored
+    # The lagging happens here via shift(1) inside the loop
     if "own_goals" in club_features.columns and "goals_scored" not in club_features.columns:
         club_features["goals_scored"] = club_features["own_goals"]
     if "opponent_goals" in club_features.columns and "goals_conceded" not in club_features.columns:
@@ -107,7 +118,7 @@ def compute_comprehensive_lagged_features(
     # Compute all lagged features
     lagged_cols = {}
     
-    # 4A. Club Previous-Match Performance
+    # 4A. Club Previous-Match Performance (FAST - use fast windows)
     performance_features = {
         "points": "sum",
         "goal_difference": "mean", 
@@ -115,7 +126,7 @@ def compute_comprehensive_lagged_features(
         "goals_conceded": "mean",
     }
     
-    # 4B. Appearance-Based Performance  
+    # 4B. Appearance-Based Performance (FAST - use fast windows)
     appearance_base_cols = {
         "goals": ["mean", "max", "min"],
         "assists": ["mean"],
@@ -133,11 +144,11 @@ def compute_comprehensive_lagged_features(
         "red_cards": ["red_cards_sum", "red_cards"],
     }
     
-    # 4C. Lineup/Squad Composition
-    lineup_features = {
-        "n_players": "mean",
-        "n_starters": "mean", 
-        "n_captains": "mean",
+    # 4C. Lineup/Squad Composition (SLOW - use slow windows)
+    # REMOVED: n_players, others, n_captains (redundant/low variance)
+    # REMOVED: missing_key_players (leaky + 100% NA)
+    lineup_features_slow = {
+        "n_starters": "mean",
         "avg_height": "mean",
         "min_height": "mean",
         "max_height": "mean",
@@ -145,30 +156,25 @@ def compute_comprehensive_lagged_features(
         "defenders": "mean",
         "midfielders": "mean",
         "forwards": "mean",
-        "others": "mean",
         "avg_age": "mean",
         "median_age": "mean",
         "squad_value_total": "mean",
         "avg_market_value_starting_xi": "mean",
         "continuity_index": "mean",
-        "missing_key_players": "mean",
         "new_signings_played": "mean",
         "starters_percentage": "mean",
     }
     
-    # 4D. Game Event Features
+    # 4D. Game Event Features (FAST - use fast windows)
+    # REMOVED: shots, fouls, passes, touches, possession_proxy_events (all constant at 0)
+    # KEEP: goals_event (has actual values)
     event_features = {
-        "shots": "mean",
-        "fouls": "mean",
         "goals_event": "sum",
-        "passes": "mean",
-        "touches": "mean",
-        "possession_proxy_events": "mean",
     }
     
-    # Compute lagged features for each window
-    for window in lag_windows:
-        print(f"    Computing L{window} features...", end=" ", flush=True)
+    # Compute lagged features for FAST features
+    for window in lag_windows_fast:
+        print(f"    Computing L{window} features (fast)...", end=" ", flush=True)
         
         # Club performance features
         for feat_name, stat in performance_features.items():
@@ -203,14 +209,6 @@ def compute_comprehensive_lagged_features(
                         rolled = shifted.rolling(window=window, min_periods=1).sum()
                     lagged_cols[f"{feat_name}_{stat}_L{window}"] = rolled.reset_index(level=0, drop=True)
         
-        # Lineup features
-        for feat_name, stat in lineup_features.items():
-            if feat_name in club_features.columns:
-                shifted = grouped[feat_name].shift(1)
-                if stat == "mean":
-                    rolled = shifted.rolling(window=window, min_periods=1).mean()
-                lagged_cols[f"{feat_name}_{stat}_L{window}"] = rolled.reset_index(level=0, drop=True)
-        
         # Event features
         for feat_name, stat in event_features.items():
             if feat_name in club_features.columns:
@@ -221,7 +219,21 @@ def compute_comprehensive_lagged_features(
                     rolled = shifted.rolling(window=window, min_periods=1).sum()
                 lagged_cols[f"{feat_name}_{stat}_L{window}"] = rolled.reset_index(level=0, drop=True)
         
-        print(f"✓")
+        print(f"[OK]")
+    
+    # Compute lagged features for SLOW features
+    for window in lag_windows_slow:
+        print(f"    Computing L{window} features (slow)...", end=" ", flush=True)
+        
+        # Lineup features (slow-changing structural features)
+        for feat_name, stat in lineup_features_slow.items():
+            if feat_name in club_features.columns:
+                shifted = grouped[feat_name].shift(1)
+                if stat == "mean":
+                    rolled = shifted.rolling(window=window, min_periods=1).mean()
+                lagged_cols[f"{feat_name}_{stat}_L{window}"] = rolled.reset_index(level=0, drop=True)
+        
+        print(f"[OK]")
     
     # Create DataFrame with lagged features
     lagged_df = pd.DataFrame(lagged_cols)
@@ -254,33 +266,47 @@ def compute_comprehensive_lagged_features(
     
     # Add interaction features (diff_*)
     print(f"  Computing interaction features (diff_*)...", end=" ", flush=True)
-    interaction_features = add_interaction_features(games_with_features, lag_windows)
+    interaction_features = add_interaction_features(games_with_features, lag_windows_fast, lag_windows_slow)
     print(f"✓")
     
     return interaction_features
 
 
-def add_interaction_features(df: pd.DataFrame, lag_windows: List[int]) -> pd.DataFrame:
+def add_interaction_features(df: pd.DataFrame, lag_windows_fast: List[int], lag_windows_slow: List[int]) -> pd.DataFrame:
     """Add derived interaction features (diff_*).
     
     Computes relative strength features: home - away for various metrics.
+    Uses appropriate windows for fast vs slow features.
     """
     df = df.copy()
     
-    # Features to compute differences for
-    diff_features = [
+    # Fast features for diff calculations (use fast windows)
+    diff_features_fast = [
         ("points", "sum"),
         ("goal_difference", "mean"),
         ("goals_scored", "mean"),
+    ]
+    
+    # Slow features for diff calculations (use slow windows)
+    diff_features_slow = [
         ("squad_value_total", "mean"),
         ("avg_age", "mean"),
         ("avg_height", "mean"),
-        ("shots", "mean"),
-        ("possession_proxy_events", "mean"),
     ]
     
-    for window in lag_windows:
-        for feat_name, stat in diff_features:
+    # Compute diff features for fast windows
+    for window in lag_windows_fast:
+        for feat_name, stat in diff_features_fast:
+            home_col = f"home_{feat_name}_{stat}_L{window}"
+            away_col = f"away_{feat_name}_{stat}_L{window}"
+            
+            if home_col in df.columns and away_col in df.columns:
+                diff_col = f"diff_{feat_name}_L{window}"
+                df[diff_col] = df[home_col] - df[away_col]
+    
+    # Compute diff features for slow windows
+    for window in lag_windows_slow:
+        for feat_name, stat in diff_features_slow:
             home_col = f"home_{feat_name}_{stat}_L{window}"
             away_col = f"away_{feat_name}_{stat}_L{window}"
             

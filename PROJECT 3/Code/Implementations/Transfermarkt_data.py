@@ -93,13 +93,20 @@ def build_game_datasets(
     for name in file_names:
         print(f"  Loading {name}.csv...", end=" ", flush=True)
         resources[name] = load_csv(data_dir, name)
-        print(f"✓ ({len(resources[name]):,} rows)")
+        print(f"[OK] ({len(resources[name]):,} rows)")
     
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Processing games...")
 
-    # Start with all games - no filtering
+    # Start with all games, optionally filter by competition
     games = resources["games"].copy()
-    print(f"  Processing {len(games):,} games...")
+    
+    # Apply competition filter if provided
+    if competition_id is not None:
+        games = games[games["competition_id"] == competition_id].copy()
+        print(f"  Filtered to competition {competition_id}: {len(games):,} games")
+    else:
+        print(f"  Processing all games: {len(games):,} games...")
+    
     games["season"] = pd.to_numeric(games["season"], errors="coerce")
     games["date"] = pd.to_datetime(games["date"], errors="coerce")
     games["round_number"] = (
@@ -139,11 +146,12 @@ def build_game_datasets(
     club_games["prev_goals_scored"] = group["own_goals"].shift(1)
     club_games["prev_goals_conceded"] = group["opponent_goals"].shift(1)
     
-    # Extract club-level historical features for merging back to games
+    # Extract club-level features for merging back to games
     # Include date for lag calculations
-    club_history = club_games[["game_id", "club_id", "is_home", "date", "prev_points", 
-                                "prev_goal_difference", "prev_goals_scored", 
-                                "prev_goals_conceded"]].copy()
+    # Note: We keep own_goals/opponent_goals for current match (not prev_*)
+    # The lagging happens inside compute_comprehensive_lagged_features via shift(1)
+    club_history = club_games[["game_id", "club_id", "is_home", "date", 
+                                "points", "goal_difference", "own_goals", "opponent_goals"]].copy()
 
     print(f"  Computing appearance features...", end=" ", flush=True)
     appearances = resources["appearances"]
@@ -168,7 +176,7 @@ def build_game_datasets(
         .reset_index()
         .rename(columns={"player_club_id": "club_id"})
     )
-    print(f"✓ ({len(appearance_features):,} club-game combinations)")
+    print(f"[OK] ({len(appearance_features):,} club-game combinations)")
 
     print(f"  Processing player valuations...", end=" ", flush=True)
     player_valuations = resources["player_valuations"].copy()
@@ -186,7 +194,7 @@ def build_game_datasets(
         .reset_index()
         .rename(columns={"market_value_in_eur": "market_value_latest"})
     )
-    print(f"✓ ({len(latest_valuations):,} players)")
+    print(f"[OK] ({len(latest_valuations):,} players)")
 
     print(f"  Processing player data...", end=" ", flush=True)
     players = resources["players"].copy()
@@ -214,7 +222,7 @@ def build_game_datasets(
         )
     else:
         players_subset["player_position"] = pd.NA
-    print(f"✓ ({len(players_subset):,} players)")
+    print(f"[OK] ({len(players_subset):,} players)")
 
     print(f"  Processing lineups...", end=" ", flush=True)
     lineups_raw = resources["game_lineups"].copy()
@@ -237,48 +245,14 @@ def build_game_datasets(
     )
     lineups["match_date"] = pd.to_datetime(lineups["match_date"], errors="coerce")
     lineups["player_id"] = pd.to_numeric(lineups["player_id"], errors="coerce")
-    valuations_time = (
-        player_valuations[["player_id", "date", "market_value_in_eur"]]
-        .dropna(subset=["date"])
-        .rename(
-            columns={
-                "date": "valuation_date",
-                "market_value_in_eur": "market_value_snapshot",
-            }
-        )
-        .dropna(subset=["player_id"])
-        .sort_values(["player_id", "valuation_date"])
-    )
-    if not valuations_time.empty:
-        valuations_time["valuation_month"] = valuations_time["valuation_date"].dt.to_period(
-            "M"
-        )
-        lineups["valuation_month"] = lineups["match_date"].dt.to_period("M")
-        valuations_monthly = (
-            valuations_time.sort_values(["player_id", "valuation_date"])
-            .drop_duplicates(subset=["player_id", "valuation_month"], keep="last")
-            .rename(columns={"market_value_snapshot": "market_value_month"})
-            .drop(columns=["valuation_date"])
-        )
-        lineups = lineups.merge(
-            valuations_monthly,
-            on=["player_id", "valuation_month"],
-            how="left",
-        )
-        lineups["valuation_date"] = pd.NaT
-        lineups["market_value_snapshot"] = lineups["market_value_month"]
-        lineups = lineups.drop(columns=["valuation_month", "market_value_month"])
-    else:
-        lineups["valuation_date"] = pd.NaT
-        lineups["market_value_snapshot"] = pd.NA
+    # Note: valuations already merged above (latest_valuations), will be lagged by lag feature engineering
     lineups = lineups.sort_values(["player_id", "match_date"])
     lineups["date_of_birth"] = pd.to_datetime(lineups["date_of_birth"], errors="coerce")
     lineups["age"] = (
         (lineups["match_date"] - lineups["date_of_birth"]).dt.days / 365.25
     )
-    lineups["player_market_value"] = lineups["market_value_snapshot"].combine_first(
-        lineups["market_value_latest"]
-    )
+    # Use latest valuation directly - lag feature engineering will create lagged versions
+    lineups["player_market_value"] = lineups["market_value_latest"]
     lineups["team_captain"] = pd.to_numeric(
         lineups.get("team_captain"), errors="coerce"
     ).fillna(0)
@@ -294,7 +268,7 @@ def build_game_datasets(
     else:
         lineups["resolved_position"] = lineups["player_position"]
     lineups_filtered = lineups[lineups["game_id"].isin(all_game_ids_set)].copy()
-    print(f"✓ ({len(lineups_filtered):,} lineup entries)")
+    print(f"[OK] ({len(lineups_filtered):,} lineup entries)")
 
     print(f"  Processing transfers...", end=" ", flush=True)
     transfers = resources["transfers"].copy()
@@ -312,7 +286,7 @@ def build_game_datasets(
         .groupby(["player_id", "to_club_id"], as_index=False)
         .first()
     )
-    print(f"✓ ({len(recent_transfers):,} transfers)")
+    print(f"[OK] ({len(recent_transfers):,} transfers)")
     
     print(f"  Merging transfer data with lineups...", end=" ", flush=True)
     lineups_filtered = lineups_filtered.merge(
@@ -334,7 +308,7 @@ def build_game_datasets(
         & lineups_filtered["match_date"].notna()
         & (lineups_filtered["match_date"] >= lineups_filtered["transfer_date"])
     )
-    print(f"✓")
+    print(f"[OK]")
 
     print(f"  Computing lineup continuity features...", end=" ", flush=True)
     starter_sets = (
@@ -358,45 +332,11 @@ def build_game_datasets(
         axis=1,
     )
     continuity_features = starter_sets[["game_id", "club_id", "continuity_index"]]
-    print(f"✓ ({len(continuity_features):,} entries)")
+    print(f"[OK] ({len(continuity_features):,} entries)")
 
-    print(f"  Computing missing key players...", end=" ", flush=True)
-    club_top_players = latest_valuations.merge(
-        players[["player_id", "current_club_id"]],
-        on="player_id",
-        how="left",
-    )
-    if "current_club_id" in club_top_players.columns:
-        club_top_players = (
-            club_top_players.dropna(subset=["current_club_id"])
-            .sort_values(
-                ["current_club_id", "market_value_latest"], ascending=[True, False]
-            )
-            .groupby("current_club_id")
-            .head(5)
-            .groupby("current_club_id")["player_id"]
-            .agg(lambda ids: frozenset(ids))
-            .reset_index()
-            .rename(
-                columns={"current_club_id": "club_id", "player_id": "top_players"}
-            )
-        )
-    else:
-        club_top_players = pd.DataFrame(
-            {"club_id": [], "top_players": []}
-        )
-    missing_key = starter_sets.merge(club_top_players, on="club_id", how="left")
-    missing_key["missing_key_players"] = missing_key.apply(
-        lambda row: (
-            len(row["top_players"] - row["starter_set"])
-            if isinstance(row["top_players"], frozenset)
-            and isinstance(row["starter_set"], frozenset)
-            else pd.NA
-        ),
-        axis=1,
-    )
-    missing_key = missing_key[["game_id", "club_id", "missing_key_players"]]
-    print(f"✓")
+    # REMOVED: missing_key_players calculation
+    # This feature is leaky (uses current_club_id and latest valuations from future)
+    # and was 100% NA in the dataset. Removing entirely.
 
     print(f"  Computing new signings...", end=" ", flush=True)
     new_signings = (
@@ -405,15 +345,15 @@ def build_game_datasets(
         .reset_index()
         .rename(columns={"is_new_signing": "new_signings_played"})
     )
-    print(f"✓")
+    print(f"[OK]")
 
     print(f"  Computing lineup features...", end=" ", flush=True)
+    # Note: n_players kept because it's needed for starters_percentage and is a useful structural feature
     lineup_features = (
         lineups_filtered.groupby(["game_id", "club_id"])
         .agg(
             n_players=("player_id", "count"),
             n_starters=("is_starter", "sum"),
-            n_captains=("team_captain", "sum"),
             avg_height=("height_in_cm", "mean"),
             min_height=("height_in_cm", "min"),
             max_height=("height_in_cm", "max"),
@@ -423,17 +363,10 @@ def build_game_datasets(
             forwards=("resolved_position", lambda s: s.isin(FWD_POSITIONS).sum()),
             avg_age=("age", "mean"),
             median_age=("age", "median"),
-            squad_value_mean=("player_market_value", "mean"),
-            squad_value_max=("player_market_value", "max"),
-            squad_value_min=("player_market_value", "min"),
             squad_value_total=("player_market_value", "sum"),
             starter_market_value_sum=("starter_market_value", "sum"),
         )
         .reset_index()
-    )
-    lineup_features["others"] = (
-        lineup_features["n_players"]
-        - lineup_features[["defenders", "midfielders", "forwards"]].sum(axis=1)
     )
     lineup_features["height_spread"] = lineup_features["height_spread"].fillna(0)
     lineup_features["starters_percentage"] = _safe_ratio(
@@ -445,7 +378,6 @@ def build_game_datasets(
     lineup_features = (
         lineup_features.drop(columns=["starter_market_value_sum"])
         .merge(continuity_features, on=["game_id", "club_id"], how="left")
-        .merge(missing_key, on=["game_id", "club_id"], how="left")
         .merge(new_signings, on=["game_id", "club_id"], how="left")
     )
     # Fix FutureWarning about downcasting - handle pd.NA values properly
@@ -459,43 +391,32 @@ def build_game_datasets(
     lineup_features["new_signings_played"] = lineup_features[
         "new_signings_played"
     ].fillna(0)
-    print(f"✓ ({len(lineup_features):,} club-game combinations)")
+    print(f"[OK] ({len(lineup_features):,} club-game combinations)")
 
     print(f"  Computing event features...", end=" ", flush=True)
     events = resources["game_events"]
     # Filter and clean type in one pass
     events_filtered = events[events["game_id"].isin(all_game_ids_set)].copy()
     events_filtered["type_clean"] = events_filtered["type"].str.lower()
+    
+    # REMOVED: shots, fouls, passes, touches, possession_proxy_events (all constant at 0)
+    # KEEP: goals_event (has actual values)
     event_features = (
         events_filtered
         .groupby(["game_id", "club_id"])
         .agg(
-            n_events=("game_event_id", "count"),
-            fouls=("type_clean", lambda s: s.eq("fouls").sum() + s.eq("foul").sum()),
-            shots=("type_clean", lambda s: s.eq("shots").sum() + s.eq("shot").sum()),
-            subs=(
-                "type_clean",
-                lambda s: s.eq("substitutions").sum() + s.eq("substitution").sum(),
-            ),
             goals_event=(
                 "type_clean",
                 lambda s: s.eq("goals").sum() + s.eq("goal").sum(),
             ),
-            passes=("type_clean", lambda s: s.eq("passes").sum()),
-            touches=("type_clean", lambda s: s.eq("touches").sum()),
         )
         .reset_index()
     )
-    event_features["n_subs_used"] = event_features["subs"]
-    event_features["possession_proxy_events"] = (
-        (event_features["shots"] + event_features["passes"] + event_features["touches"])
-        / event_features["n_events"].replace(0, pd.NA)
-    )
-    print(f"✓ ({len(event_features):,} club-game combinations)")
+    print(f"[OK] ({len(event_features):,} club-game combinations)")
 
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Combining features and computing lagged windows...")
     # Combine all club-level features (these are per-match, not lagged yet)
-    # club_history already includes date column
+    # club_history already includes date and current match stats
     club_features = (
         club_history
         .merge(appearance_features, on=["game_id", "club_id"], how="left")
@@ -503,38 +424,29 @@ def build_game_datasets(
         .merge(event_features, on=["game_id", "club_id"], how="left")
     )
     
-    # Add base features that will be lagged
     # Ensure we have goals_scored and goals_conceded from own_goals/opponent_goals
-    if "prev_goals_scored" in club_features.columns:
-        club_features["goals_scored"] = club_features["prev_goals_scored"]
-    elif "own_goals" in club_games.columns:
-        club_features = club_features.merge(
-            club_games[["game_id", "club_id", "own_goals", "opponent_goals"]],
-            on=["game_id", "club_id"],
-            how="left"
-        )
+    # These are CURRENT match values (not lagged) - lagging happens inside compute_comprehensive_lagged_features
+    if "own_goals" in club_features.columns and "goals_scored" not in club_features.columns:
         club_features["goals_scored"] = club_features["own_goals"]
+    if "opponent_goals" in club_features.columns and "goals_conceded" not in club_features.columns:
         club_features["goals_conceded"] = club_features["opponent_goals"]
     
-    # Ensure points and goal_difference are available
-    if "prev_points" not in club_features.columns:
-        club_features = club_features.merge(
-            club_games[["game_id", "club_id", "points", "goal_difference"]],
-            on=["game_id", "club_id"],
-            how="left"
-        )
-    
-    # Now compute comprehensive lagged features using the new system
+    # Now compute comprehensive lagged features using the optimized window system
     try:
         from .lag_feature_engineering import compute_comprehensive_lagged_features
     except ImportError:
         from lag_feature_engineering import compute_comprehensive_lagged_features
     
-    lag_windows = [1, 3, 5, 10, 20]
+    # Optimized lag windows:
+    # - Fast features (goals, assists, etc.): L3, L10, L20
+    # - Slow features (height, age, squad_value, etc.): L5, L20
+    lag_windows_fast = [3, 10, 20]
+    lag_windows_slow = [5, 20]
     games_features = compute_comprehensive_lagged_features(
         club_features=club_features,
         games_df=games,
-        lag_windows=lag_windows
+        lag_windows_fast=lag_windows_fast,
+        lag_windows_slow=lag_windows_slow
     )
     
     print(f"  Finalizing dataset...", end=" ", flush=True)
@@ -543,7 +455,7 @@ def build_game_datasets(
         .sort_values(["season", "game_id"])
         .reset_index(drop=True)
     )
-    print(f"✓")
+    print(f"[OK]")
     
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Complete! Final dataset: {len(games_features):,} games")
     print(f"  Columns: {len(games_features.columns)}")
@@ -727,11 +639,11 @@ def main() -> None:
     
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Running feature engineering...")
     processed_features, predictive_cols = prepare_features(raw_features)
-    print(f"  ✓ Feature engineering complete")
+    print(f"  [OK] Feature engineering complete")
     
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Reordering columns for modeling...")
     processed_features = reorder_columns_for_modeling(processed_features)
-    print(f"  ✓ Column reordering complete")
+    print(f"  [OK] Column reordering complete")
     
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Saving results...")
     saved_path = save_features(processed_features, output_path)
@@ -745,7 +657,7 @@ def main() -> None:
         print(f"  Also saving CSV version...", end=" ", flush=True)
         processed_features.to_csv(csv_path, index=False)
         csv_size_mb = csv_path.stat().st_size / (1024 * 1024)
-        print(f"✓ ({csv_size_mb:.1f} MB)")
+        print(f"[OK] ({csv_size_mb:.1f} MB)")
     else:
         csv_size_mb = None
     
