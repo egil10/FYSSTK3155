@@ -445,10 +445,10 @@ def build_game_datasets(
     except ImportError:
         from lag_feature_engineering import compute_comprehensive_lagged_features
     
-    # Extended lag windows for comprehensive feature engineering:
-    # - Fast features (goals, points, events): L1, L2, L3, L5, L10, L20
+    # Optimized lag windows (removed L1 due to 16% NA from first-game effect):
+    # - Fast features (goals, points, events): L2, L3, L5, L10, L20
     # - Slow features (height, age, squad_value, etc.): L5, L10, L20
-    lag_windows_fast = [1, 2, 3, 5, 10, 20]
+    lag_windows_fast = [2, 3, 5, 10, 20]
     lag_windows_slow = [5, 10, 20]
     games_features = compute_comprehensive_lagged_features(
         club_features=club_features,
@@ -537,6 +537,12 @@ def reorder_columns_for_modeling(df: pd.DataFrame) -> pd.DataFrame:
         df.loc[draw_mask, "RESULT"] = "D"
         # Ensure it's string type
         df["RESULT"] = df["RESULT"].astype("string")
+    
+    # Step 3.5: Drop high-NA features (club_position has 30% NA, only in leagues)
+    drop_cols = ["home_club_position", "away_club_position"]
+    existing_drop_cols = [col for col in drop_cols if col in df.columns]
+    if existing_drop_cols:
+        df = df.drop(columns=existing_drop_cols)
     elif "home_club_goals" in df.columns and "away_club_goals" in df.columns:
         # Fallback if renaming didn't happen for some reason
         df["RESULT"] = "L"

@@ -1,7 +1,7 @@
 """Comprehensive lag-based feature engineering with strict temporal filtering.
 
 This module implements a complete lag-based feature engineering pipeline that:
-- Computes multi-window lagged features (L1, L2, L3, L5, L10, L20)
+- Computes multi-window lagged features (L2, L3, L5, L10, L20)
 - Applies strict temporal filtering (no data leakage)
 - Follows naming convention: {team}_{feature}_{stat}_L{N}
 - Adds interaction features (diff_*)
@@ -56,26 +56,27 @@ def safe_rolling_agg(
 def compute_comprehensive_lagged_features(
     club_features: pd.DataFrame,
     games_df: pd.DataFrame,
-    lag_windows_fast: List[int] = [1, 2, 3, 5, 10, 20],
+    lag_windows_fast: List[int] = [2, 3, 5, 10, 20],
     lag_windows_slow: List[int] = [5, 10, 20],
 ) -> pd.DataFrame:
     """Compute comprehensive lagged features with strict temporal filtering.
     
-    Uses extended lag windows:
-    - Fast features (goals, points, events): L1, L2, L3, L5, L10, L20
+    Uses optimized lag windows (L1 removed due to 16% NA from first-game effect):
+    - Fast features (goals, points, events): L2, L3, L5, L10, L20
     - Slow features (height, age, squad_value, etc.): L5, L10, L20
     
     Removed features:
     - missing_key_players (leaky + 100% NA)
     - Event features that are constant (shots, fouls, passes, touches, possession_proxy)
     - Redundant features (n_players, others, n_captains)
+    - L1 features (16% NA due to first game of season)
     
     Args:
         club_features: DataFrame with one row per club-game, must include:
             - game_id, club_id, is_home, date
             - All computed features (points, goals, appearances, lineups, events, etc.)
         games_df: DataFrame with game metadata
-        lag_windows_fast: Lag windows for fast-changing features [1, 2, 3, 5, 10, 20]
+        lag_windows_fast: Lag windows for fast-changing features [2, 3, 5, 10, 20]
         lag_windows_slow: Lag windows for slow-changing features [5, 10, 20]
     
     Returns:
