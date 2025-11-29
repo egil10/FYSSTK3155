@@ -1,0 +1,1241 @@
+Matchday,Table_Type,Pos,Team,P,W,D,L,Pts
+1,Actual,1,Brighton and Hove Albion Football Club,1,1,0,0,3
+1,Actual,2,Arsenal Football Club,1,1,0,0,3
+1,Actual,3,Liverpool Football Club,1,1,0,0,3
+1,Actual,4,Manchester City Football Club,1,1,0,0,3
+1,Actual,5,Aston Villa Football Club,1,1,0,0,3
+1,Actual,6,Brentford Football Club,1,1,0,0,3
+1,Actual,7,Newcastle United Football Club,1,1,0,0,3
+1,Actual,8,Manchester United Football Club,1,1,0,0,3
+1,Actual,9,Tottenham Hotspur Football Club,1,0,1,0,1
+1,Actual,10,Nottingham Forest Football Club,1,0,1,0,1
+1,Actual,11,Association Football Club Bournemouth,1,0,1,0,1
+1,Actual,12,Leicester City Football Club,1,0,1,0,1
+1,Actual,13,West Ham United Football Club,1,0,0,1,0
+1,Actual,14,Crystal Palace Football Club,1,0,0,1,0
+1,Actual,15,Southampton Football Club,1,0,0,1,0
+1,Actual,16,Fulham Football Club,1,0,0,1,0
+1,Actual,17,Wolverhampton Wanderers Football Club,1,0,0,1,0
+1,Actual,18,Chelsea Football Club,1,0,0,1,0
+1,Actual,19,Ipswich Town Football Club,1,0,0,1,0
+1,Actual,20,Everton Football Club,1,0,0,1,0
+1,Predicted,1,Liverpool Football Club,1,1,0,0,3
+1,Predicted,2,Newcastle United Football Club,1,1,0,0,3
+1,Predicted,3,Leicester City Football Club,1,1,0,0,3
+1,Predicted,4,Manchester United Football Club,1,1,0,0,3
+1,Predicted,5,Aston Villa Football Club,1,1,0,0,3
+1,Predicted,6,Manchester City Football Club,1,1,0,0,3
+1,Predicted,7,Brentford Football Club,1,1,0,0,3
+1,Predicted,8,Brighton and Hove Albion Football Club,1,1,0,0,3
+1,Predicted,9,Arsenal Football Club,1,0,1,0,1
+1,Predicted,10,Wolverhampton Wanderers Football Club,1,0,1,0,1
+1,Predicted,11,Nottingham Forest Football Club,1,0,1,0,1
+1,Predicted,12,Association Football Club Bournemouth,1,0,1,0,1
+1,Predicted,13,West Ham United Football Club,1,0,0,1,0
+1,Predicted,14,Chelsea Football Club,1,0,0,1,0
+1,Predicted,15,Everton Football Club,1,0,0,1,0
+1,Predicted,16,Crystal Palace Football Club,1,0,0,1,0
+1,Predicted,17,Fulham Football Club,1,0,0,1,0
+1,Predicted,18,Tottenham Hotspur Football Club,1,0,0,1,0
+1,Predicted,19,Southampton Football Club,1,0,0,1,0
+1,Predicted,20,Ipswich Town Football Club,1,0,0,1,0
+2,Actual,1,Manchester City Football Club,2,2,0,0,6
+2,Actual,2,Brighton and Hove Albion Football Club,2,2,0,0,6
+2,Actual,3,Arsenal Football Club,2,2,0,0,6
+2,Actual,4,Liverpool Football Club,2,2,0,0,6
+2,Actual,5,Tottenham Hotspur Football Club,2,1,1,0,4
+2,Actual,6,Newcastle United Football Club,2,1,1,0,4
+2,Actual,7,Nottingham Forest Football Club,2,1,1,0,4
+2,Actual,8,Chelsea Football Club,2,1,0,1,3
+2,Actual,9,West Ham United Football Club,2,1,0,1,3
+2,Actual,10,Manchester United Football Club,2,1,0,1,3
+2,Actual,11,Fulham Football Club,2,1,0,1,3
+2,Actual,12,Aston Villa Football Club,2,1,0,1,3
+2,Actual,13,Brentford Football Club,2,1,0,1,3
+2,Actual,14,Association Football Club Bournemouth,2,0,2,0,2
+2,Actual,15,Leicester City Football Club,2,0,1,1,1
+2,Actual,16,Southampton Football Club,2,0,0,2,0
+2,Actual,17,Crystal Palace Football Club,2,0,0,2,0
+2,Actual,18,Ipswich Town Football Club,2,0,0,2,0
+2,Actual,19,Wolverhampton Wanderers Football Club,2,0,0,2,0
+2,Actual,20,Everton Football Club,2,0,0,2,0
+2,Predicted,1,Leicester City Football Club,2,2,0,0,6
+2,Predicted,2,Newcastle United Football Club,2,2,0,0,6
+2,Predicted,3,Liverpool Football Club,2,2,0,0,6
+2,Predicted,4,Manchester City Football Club,2,2,0,0,6
+2,Predicted,5,Nottingham Forest Football Club,2,1,1,0,4
+2,Predicted,6,Manchester United Football Club,2,1,1,0,4
+2,Predicted,7,Arsenal Football Club,2,1,1,0,4
+2,Predicted,8,Brighton and Hove Albion Football Club,2,1,1,0,4
+2,Predicted,9,West Ham United Football Club,2,1,0,1,3
+2,Predicted,10,Chelsea Football Club,2,1,0,1,3
+2,Predicted,11,Aston Villa Football Club,2,1,0,1,3
+2,Predicted,12,Tottenham Hotspur Football Club,2,1,0,1,3
+2,Predicted,13,Brentford Football Club,2,1,0,1,3
+2,Predicted,14,Wolverhampton Wanderers Football Club,2,0,1,1,1
+2,Predicted,15,Association Football Club Bournemouth,2,0,1,1,1
+2,Predicted,16,Crystal Palace Football Club,2,0,0,2,0
+2,Predicted,17,Ipswich Town Football Club,2,0,0,2,0
+2,Predicted,18,Everton Football Club,2,0,0,2,0
+2,Predicted,19,Fulham Football Club,2,0,0,2,0
+2,Predicted,20,Southampton Football Club,2,0,0,2,0
+3,Actual,1,Manchester City Football Club,3,3,0,0,9
+3,Actual,2,Liverpool Football Club,3,3,0,0,9
+3,Actual,3,Brighton and Hove Albion Football Club,3,2,1,0,7
+3,Actual,4,Arsenal Football Club,3,2,1,0,7
+3,Actual,5,Newcastle United Football Club,3,2,1,0,7
+3,Actual,6,Brentford Football Club,3,2,0,1,6
+3,Actual,7,Aston Villa Football Club,3,2,0,1,6
+3,Actual,8,Association Football Club Bournemouth,3,1,2,0,5
+3,Actual,9,Nottingham Forest Football Club,3,1,2,0,5
+3,Actual,10,Tottenham Hotspur Football Club,3,1,1,1,4
+3,Actual,11,Chelsea Football Club,3,1,1,1,4
+3,Actual,12,Fulham Football Club,3,1,1,1,4
+3,Actual,13,West Ham United Football Club,3,1,0,2,3
+3,Actual,14,Manchester United Football Club,3,1,0,2,3
+3,Actual,15,Leicester City Football Club,3,0,1,2,1
+3,Actual,16,Crystal Palace Football Club,3,0,1,2,1
+3,Actual,17,Ipswich Town Football Club,3,0,1,2,1
+3,Actual,18,Wolverhampton Wanderers Football Club,3,0,1,2,1
+3,Actual,19,Southampton Football Club,3,0,0,3,0
+3,Actual,20,Everton Football Club,3,0,0,3,0
+3,Predicted,1,Leicester City Football Club,3,3,0,0,9
+3,Predicted,2,Newcastle United Football Club,3,3,0,0,9
+3,Predicted,3,Manchester City Football Club,3,3,0,0,9
+3,Predicted,4,Liverpool Football Club,3,2,1,0,7
+3,Predicted,5,Nottingham Forest Football Club,3,2,1,0,7
+3,Predicted,6,Arsenal Football Club,3,2,1,0,7
+3,Predicted,7,Brentford Football Club,3,2,0,1,6
+3,Predicted,8,Manchester United Football Club,3,1,2,0,5
+3,Predicted,9,Association Football Club Bournemouth,3,1,1,1,4
+3,Predicted,10,Chelsea Football Club,3,1,1,1,4
+3,Predicted,11,Brighton and Hove Albion Football Club,3,1,1,1,4
+3,Predicted,12,Aston Villa Football Club,3,1,0,2,3
+3,Predicted,13,West Ham United Football Club,3,1,0,2,3
+3,Predicted,14,Tottenham Hotspur Football Club,3,1,0,2,3
+3,Predicted,15,Fulham Football Club,3,1,0,2,3
+3,Predicted,16,Wolverhampton Wanderers Football Club,3,0,1,2,1
+3,Predicted,17,Crystal Palace Football Club,3,0,1,2,1
+3,Predicted,18,Ipswich Town Football Club,3,0,0,3,0
+3,Predicted,19,Southampton Football Club,3,0,0,3,0
+3,Predicted,20,Everton Football Club,3,0,0,3,0
+4,Actual,1,Manchester City Football Club,4,4,0,0,12
+4,Actual,2,Arsenal Football Club,4,3,1,0,10
+4,Actual,3,Newcastle United Football Club,4,3,1,0,10
+4,Actual,4,Liverpool Football Club,4,3,0,1,9
+4,Actual,5,Aston Villa Football Club,4,3,0,1,9
+4,Actual,6,Brighton and Hove Albion Football Club,4,2,2,0,8
+4,Actual,7,Nottingham Forest Football Club,4,2,2,0,8
+4,Actual,8,Chelsea Football Club,4,2,1,1,7
+4,Actual,9,Brentford Football Club,4,2,0,2,6
+4,Actual,10,Manchester United Football Club,4,2,0,2,6
+4,Actual,11,Association Football Club Bournemouth,4,1,2,1,5
+4,Actual,12,Fulham Football Club,4,1,2,1,5
+4,Actual,13,Tottenham Hotspur Football Club,4,1,1,2,4
+4,Actual,14,West Ham United Football Club,4,1,1,2,4
+4,Actual,15,Leicester City Football Club,4,0,2,2,2
+4,Actual,16,Crystal Palace Football Club,4,0,2,2,2
+4,Actual,17,Ipswich Town Football Club,4,0,2,2,2
+4,Actual,18,Wolverhampton Wanderers Football Club,4,0,1,3,1
+4,Actual,19,Southampton Football Club,4,0,0,4,0
+4,Actual,20,Everton Football Club,4,0,0,4,0
+4,Predicted,1,Newcastle United Football Club,4,4,0,0,12
+4,Predicted,2,Manchester City Football Club,4,4,0,0,12
+4,Predicted,3,Nottingham Forest Football Club,4,3,1,0,10
+4,Predicted,4,Arsenal Football Club,4,3,1,0,10
+4,Predicted,5,Leicester City Football Club,4,3,0,1,9
+4,Predicted,6,Association Football Club Bournemouth,4,2,1,1,7
+4,Predicted,7,Brighton and Hove Albion Football Club,4,2,1,1,7
+4,Predicted,8,Liverpool Football Club,4,2,1,1,7
+4,Predicted,9,Manchester United Football Club,4,1,3,0,6
+4,Predicted,10,Aston Villa Football Club,4,2,0,2,6
+4,Predicted,11,Brentford Football Club,4,2,0,2,6
+4,Predicted,12,Fulham Football Club,4,2,0,2,6
+4,Predicted,13,Crystal Palace Football Club,4,1,1,2,4
+4,Predicted,14,Chelsea Football Club,4,1,1,2,4
+4,Predicted,15,West Ham United Football Club,4,1,0,3,3
+4,Predicted,16,Tottenham Hotspur Football Club,4,1,0,3,3
+4,Predicted,17,Wolverhampton Wanderers Football Club,4,0,1,3,1
+4,Predicted,18,Southampton Football Club,4,0,1,3,1
+4,Predicted,19,Everton Football Club,4,0,0,4,0
+4,Predicted,20,Ipswich Town Football Club,4,0,0,4,0
+5,Actual,1,Manchester City Football Club,5,4,1,0,13
+5,Actual,2,Liverpool Football Club,5,4,0,1,12
+5,Actual,3,Aston Villa Football Club,5,4,0,1,12
+5,Actual,4,Arsenal Football Club,5,3,2,0,11
+5,Actual,5,Chelsea Football Club,5,3,1,1,10
+5,Actual,6,Newcastle United Football Club,5,3,1,1,10
+5,Actual,7,Brighton and Hove Albion Football Club,5,2,3,0,9
+5,Actual,8,Nottingham Forest Football Club,5,2,3,0,9
+5,Actual,9,Fulham Football Club,5,2,2,1,8
+5,Actual,10,Tottenham Hotspur Football Club,5,2,1,2,7
+5,Actual,11,Manchester United Football Club,5,2,1,2,7
+5,Actual,12,Brentford Football Club,5,2,0,3,6
+5,Actual,13,Association Football Club Bournemouth,5,1,2,2,5
+5,Actual,14,West Ham United Football Club,5,1,1,3,4
+5,Actual,15,Leicester City Football Club,5,0,3,2,3
+5,Actual,16,Crystal Palace Football Club,5,0,3,2,3
+5,Actual,17,Ipswich Town Football Club,5,0,3,2,3
+5,Actual,18,Southampton Football Club,5,0,1,4,1
+5,Actual,19,Wolverhampton Wanderers Football Club,5,0,1,4,1
+5,Actual,20,Everton Football Club,5,0,1,4,1
+5,Predicted,1,Newcastle United Football Club,5,5,0,0,15
+5,Predicted,2,Arsenal Football Club,5,4,1,0,13
+5,Predicted,3,Leicester City Football Club,5,4,0,1,12
+5,Predicted,4,Manchester City Football Club,5,4,0,1,12
+5,Predicted,5,Nottingham Forest Football Club,5,3,2,0,11
+5,Predicted,6,Liverpool Football Club,5,3,1,1,10
+5,Predicted,7,Aston Villa Football Club,5,3,0,2,9
+5,Predicted,8,Brighton and Hove Albion Football Club,5,2,2,1,8
+5,Predicted,9,Association Football Club Bournemouth,5,2,1,2,7
+5,Predicted,10,Crystal Palace Football Club,5,2,1,2,7
+5,Predicted,11,Chelsea Football Club,5,2,1,2,7
+5,Predicted,12,Manchester United Football Club,5,1,3,1,6
+5,Predicted,13,Tottenham Hotspur Football Club,5,2,0,3,6
+5,Predicted,14,Fulham Football Club,5,2,0,3,6
+5,Predicted,15,Brentford Football Club,5,2,0,3,6
+5,Predicted,16,Southampton Football Club,5,1,1,3,4
+5,Predicted,17,West Ham United Football Club,5,1,0,4,3
+5,Predicted,18,Wolverhampton Wanderers Football Club,5,0,1,4,1
+5,Predicted,19,Everton Football Club,5,0,0,5,0
+5,Predicted,20,Ipswich Town Football Club,5,0,0,5,0
+6,Actual,1,Liverpool Football Club,6,5,0,1,15
+6,Actual,2,Manchester City Football Club,6,4,2,0,14
+6,Actual,3,Arsenal Football Club,6,4,2,0,14
+6,Actual,4,Chelsea Football Club,6,4,1,1,13
+6,Actual,5,Aston Villa Football Club,6,4,1,1,13
+6,Actual,6,Fulham Football Club,6,3,2,1,11
+6,Actual,7,Newcastle United Football Club,6,3,2,1,11
+6,Actual,8,Tottenham Hotspur Football Club,6,3,1,2,10
+6,Actual,9,Brighton and Hove Albion Football Club,6,2,3,1,9
+6,Actual,10,Nottingham Forest Football Club,6,2,3,1,9
+6,Actual,11,Association Football Club Bournemouth,6,2,2,2,8
+6,Actual,12,Brentford Football Club,6,2,1,3,7
+6,Actual,13,Manchester United Football Club,6,2,1,3,7
+6,Actual,14,West Ham United Football Club,6,1,2,3,5
+6,Actual,15,Ipswich Town Football Club,6,0,4,2,4
+6,Actual,16,Everton Football Club,6,1,1,4,4
+6,Actual,17,Leicester City Football Club,6,0,3,3,3
+6,Actual,18,Crystal Palace Football Club,6,0,3,3,3
+6,Actual,19,Southampton Football Club,6,0,1,5,1
+6,Actual,20,Wolverhampton Wanderers Football Club,6,0,1,5,1
+6,Predicted,1,Newcastle United Football Club,6,5,1,0,16
+6,Predicted,2,Arsenal Football Club,6,5,1,0,16
+6,Predicted,3,Liverpool Football Club,6,4,1,1,13
+6,Predicted,4,Manchester City Football Club,6,4,1,1,13
+6,Predicted,5,Leicester City Football Club,6,4,0,2,12
+6,Predicted,6,Aston Villa Football Club,6,4,0,2,12
+6,Predicted,7,Nottingham Forest Football Club,6,3,2,1,11
+6,Predicted,8,Association Football Club Bournemouth,6,3,1,2,10
+6,Predicted,9,Chelsea Football Club,6,3,1,2,10
+6,Predicted,10,Tottenham Hotspur Football Club,6,3,0,3,9
+6,Predicted,11,Fulham Football Club,6,3,0,3,9
+6,Predicted,12,Brighton and Hove Albion Football Club,6,2,2,2,8
+6,Predicted,13,Crystal Palace Football Club,6,2,2,2,8
+6,Predicted,14,West Ham United Football Club,6,2,0,4,6
+6,Predicted,15,Manchester United Football Club,6,1,3,2,6
+6,Predicted,16,Brentford Football Club,6,2,0,4,6
+6,Predicted,17,Southampton Football Club,6,1,1,4,4
+6,Predicted,18,Wolverhampton Wanderers Football Club,6,0,1,5,1
+6,Predicted,19,Everton Football Club,6,0,1,5,1
+6,Predicted,20,Ipswich Town Football Club,6,0,0,6,0
+7,Actual,1,Liverpool Football Club,7,6,0,1,18
+7,Actual,2,Manchester City Football Club,7,5,2,0,17
+7,Actual,3,Arsenal Football Club,7,5,2,0,17
+7,Actual,4,Chelsea Football Club,7,4,2,1,14
+7,Actual,5,Aston Villa Football Club,7,4,2,1,14
+7,Actual,6,Brighton and Hove Albion Football Club,7,3,3,1,12
+7,Actual,7,Newcastle United Football Club,7,3,3,1,12
+7,Actual,8,Fulham Football Club,7,3,2,2,11
+7,Actual,9,Tottenham Hotspur Football Club,7,3,1,3,10
+7,Actual,10,Nottingham Forest Football Club,7,2,4,1,10
+7,Actual,11,Brentford Football Club,7,3,1,3,10
+7,Actual,12,West Ham United Football Club,7,2,2,3,8
+7,Actual,13,Association Football Club Bournemouth,7,2,2,3,8
+7,Actual,14,Manchester United Football Club,7,2,2,3,8
+7,Actual,15,Leicester City Football Club,7,1,3,3,6
+7,Actual,16,Everton Football Club,7,1,2,4,5
+7,Actual,17,Ipswich Town Football Club,7,0,4,3,4
+7,Actual,18,Crystal Palace Football Club,7,0,3,4,3
+7,Actual,19,Southampton Football Club,7,0,1,6,1
+7,Actual,20,Wolverhampton Wanderers Football Club,7,0,1,6,1
+7,Predicted,1,Newcastle United Football Club,7,6,1,0,19
+7,Predicted,2,Arsenal Football Club,7,5,2,0,17
+7,Predicted,3,Liverpool Football Club,7,5,1,1,16
+7,Predicted,4,Manchester City Football Club,7,5,1,1,16
+7,Predicted,5,Leicester City Football Club,7,5,0,2,15
+7,Predicted,6,Aston Villa Football Club,7,4,1,2,13
+7,Predicted,7,Chelsea Football Club,7,4,1,2,13
+7,Predicted,8,Tottenham Hotspur Football Club,7,4,0,3,12
+7,Predicted,9,Nottingham Forest Football Club,7,3,2,2,11
+7,Predicted,10,Association Football Club Bournemouth,7,3,1,3,10
+7,Predicted,11,West Ham United Football Club,7,3,0,4,9
+7,Predicted,12,Fulham Football Club,7,3,0,4,9
+7,Predicted,13,Brentford Football Club,7,3,0,4,9
+7,Predicted,14,Crystal Palace Football Club,7,2,2,3,8
+7,Predicted,15,Brighton and Hove Albion Football Club,7,2,2,3,8
+7,Predicted,16,Manchester United Football Club,7,1,4,2,7
+7,Predicted,17,Southampton Football Club,7,1,2,4,5
+7,Predicted,18,Wolverhampton Wanderers Football Club,7,0,1,6,1
+7,Predicted,19,Everton Football Club,7,0,1,6,1
+7,Predicted,20,Ipswich Town Football Club,7,0,0,7,0
+8,Actual,1,Liverpool Football Club,8,7,0,1,21
+8,Actual,2,Manchester City Football Club,8,6,2,0,20
+8,Actual,3,Arsenal Football Club,8,5,2,1,17
+8,Actual,4,Aston Villa Football Club,8,5,2,1,17
+8,Actual,5,Brighton and Hove Albion Football Club,8,4,3,1,15
+8,Actual,6,Chelsea Football Club,8,4,2,2,14
+8,Actual,7,Tottenham Hotspur Football Club,8,4,1,3,13
+8,Actual,8,Nottingham Forest Football Club,8,3,4,1,13
+8,Actual,9,Newcastle United Football Club,8,3,3,2,12
+8,Actual,10,Fulham Football Club,8,3,2,3,11
+8,Actual,11,Association Football Club Bournemouth,8,3,2,3,11
+8,Actual,12,Manchester United Football Club,8,3,2,3,11
+8,Actual,13,Brentford Football Club,8,3,1,4,10
+8,Actual,14,Leicester City Football Club,8,2,3,3,9
+8,Actual,15,West Ham United Football Club,8,2,2,4,8
+8,Actual,16,Everton Football Club,8,2,2,4,8
+8,Actual,17,Ipswich Town Football Club,8,0,4,4,4
+8,Actual,18,Crystal Palace Football Club,8,0,3,5,3
+8,Actual,19,Southampton Football Club,8,0,1,7,1
+8,Actual,20,Wolverhampton Wanderers Football Club,8,0,1,7,1
+8,Predicted,1,Newcastle United Football Club,8,6,1,1,19
+8,Predicted,2,Liverpool Football Club,8,6,1,1,19
+8,Predicted,3,Manchester City Football Club,8,6,1,1,19
+8,Predicted,4,Arsenal Football Club,8,5,2,1,17
+8,Predicted,5,Leicester City Football Club,8,5,1,2,16
+8,Predicted,6,Tottenham Hotspur Football Club,8,5,0,3,15
+8,Predicted,7,Nottingham Forest Football Club,8,4,2,2,14
+8,Predicted,8,Association Football Club Bournemouth,8,4,1,3,13
+8,Predicted,9,Aston Villa Football Club,8,4,1,3,13
+8,Predicted,10,Chelsea Football Club,8,4,1,3,13
+8,Predicted,11,Fulham Football Club,8,4,0,4,12
+8,Predicted,12,Brighton and Hove Albion Football Club,8,3,2,3,11
+8,Predicted,13,Manchester United Football Club,8,2,4,2,10
+8,Predicted,14,West Ham United Football Club,8,3,0,5,9
+8,Predicted,15,Brentford Football Club,8,3,0,5,9
+8,Predicted,16,Crystal Palace Football Club,8,2,2,4,8
+8,Predicted,17,Southampton Football Club,8,1,3,4,6
+8,Predicted,18,Ipswich Town Football Club,8,1,0,7,3
+8,Predicted,19,Wolverhampton Wanderers Football Club,8,0,1,7,1
+8,Predicted,20,Everton Football Club,8,0,1,7,1
+9,Actual,1,Manchester City Football Club,9,7,2,0,23
+9,Actual,2,Liverpool Football Club,9,7,1,1,22
+9,Actual,3,Arsenal Football Club,9,5,3,1,18
+9,Actual,4,Aston Villa Football Club,9,5,3,1,18
+9,Actual,5,Chelsea Football Club,9,5,2,2,17
+9,Actual,6,Brighton and Hove Albion Football Club,9,4,4,1,16
+9,Actual,7,Nottingham Forest Football Club,9,4,4,1,16
+9,Actual,8,Tottenham Hotspur Football Club,9,4,1,4,13
+9,Actual,9,Brentford Football Club,9,4,1,4,13
+9,Actual,10,Fulham Football Club,9,3,3,3,12
+9,Actual,11,Association Football Club Bournemouth,9,3,3,3,12
+9,Actual,12,Newcastle United Football Club,9,3,3,3,12
+9,Actual,13,West Ham United Football Club,9,3,2,4,11
+9,Actual,14,Manchester United Football Club,9,3,2,4,11
+9,Actual,15,Leicester City Football Club,9,2,3,4,9
+9,Actual,16,Everton Football Club,9,2,3,4,9
+9,Actual,17,Crystal Palace Football Club,9,1,3,5,6
+9,Actual,18,Ipswich Town Football Club,9,0,4,5,4
+9,Actual,19,Wolverhampton Wanderers Football Club,9,0,2,7,2
+9,Actual,20,Southampton Football Club,9,0,1,8,1
+9,Predicted,1,Liverpool Football Club,9,7,1,1,22
+9,Predicted,2,Manchester City Football Club,9,7,1,1,22
+9,Predicted,3,Newcastle United Football Club,9,6,1,2,19
+9,Predicted,4,Tottenham Hotspur Football Club,9,6,0,3,18
+9,Predicted,5,Leicester City Football Club,9,5,2,2,17
+9,Predicted,6,Arsenal Football Club,9,5,2,2,17
+9,Predicted,7,Chelsea Football Club,9,5,1,3,16
+9,Predicted,8,Aston Villa Football Club,9,5,1,3,16
+9,Predicted,9,Nottingham Forest Football Club,9,4,3,2,15
+9,Predicted,10,Association Football Club Bournemouth,9,4,1,4,13
+9,Predicted,11,Fulham Football Club,9,4,1,4,13
+9,Predicted,12,Brighton and Hove Albion Football Club,9,3,3,3,12
+9,Predicted,13,Brentford Football Club,9,4,0,5,12
+9,Predicted,14,Manchester United Football Club,9,2,5,2,11
+9,Predicted,15,West Ham United Football Club,9,3,1,5,10
+9,Predicted,16,Crystal Palace Football Club,9,2,2,5,8
+9,Predicted,17,Southampton Football Club,9,1,3,5,6
+9,Predicted,18,Ipswich Town Football Club,9,1,0,8,3
+9,Predicted,19,Wolverhampton Wanderers Football Club,9,0,2,7,2
+9,Predicted,20,Everton Football Club,9,0,2,7,2
+10,Actual,1,Liverpool Football Club,10,8,1,1,25
+10,Actual,2,Manchester City Football Club,10,7,2,1,23
+10,Actual,3,Nottingham Forest Football Club,10,5,4,1,19
+10,Actual,4,Chelsea Football Club,10,5,3,2,18
+10,Actual,5,Arsenal Football Club,10,5,3,2,18
+10,Actual,6,Aston Villa Football Club,10,5,3,2,18
+10,Actual,7,Tottenham Hotspur Football Club,10,5,1,4,16
+10,Actual,8,Brighton and Hove Albion Football Club,10,4,4,2,16
+10,Actual,9,Fulham Football Club,10,4,3,3,15
+10,Actual,10,Association Football Club Bournemouth,10,4,3,3,15
+10,Actual,11,Newcastle United Football Club,10,4,3,3,15
+10,Actual,12,Brentford Football Club,10,4,1,5,13
+10,Actual,13,Manchester United Football Club,10,3,3,4,12
+10,Actual,14,West Ham United Football Club,10,3,2,5,11
+10,Actual,15,Leicester City Football Club,10,2,4,4,10
+10,Actual,16,Everton Football Club,10,2,3,5,9
+10,Actual,17,Crystal Palace Football Club,10,1,4,5,7
+10,Actual,18,Ipswich Town Football Club,10,0,5,5,5
+10,Actual,19,Southampton Football Club,10,1,1,8,4
+10,Actual,20,Wolverhampton Wanderers Football Club,10,0,3,7,3
+10,Predicted,1,Liverpool Football Club,10,8,1,1,25
+10,Predicted,2,Manchester City Football Club,10,8,1,1,25
+10,Predicted,3,Arsenal Football Club,10,6,2,2,20
+10,Predicted,4,Newcastle United Football Club,10,6,1,3,19
+10,Predicted,5,Chelsea Football Club,10,6,1,3,19
+10,Predicted,6,Tottenham Hotspur Football Club,10,6,1,3,19
+10,Predicted,7,Leicester City Football Club,10,5,3,2,18
+10,Predicted,8,Nottingham Forest Football Club,10,5,3,2,18
+10,Predicted,9,Aston Villa Football Club,10,5,2,3,17
+10,Predicted,10,Fulham Football Club,10,4,2,4,14
+10,Predicted,11,Association Football Club Bournemouth,10,4,1,5,13
+10,Predicted,12,Brentford Football Club,10,4,1,5,13
+10,Predicted,13,Brighton and Hove Albion Football Club,10,3,3,4,12
+10,Predicted,14,Manchester United Football Club,10,2,5,3,11
+10,Predicted,15,West Ham United Football Club,10,3,1,6,10
+10,Predicted,16,Crystal Palace Football Club,10,2,3,5,9
+10,Predicted,17,Southampton Football Club,10,1,4,5,7
+10,Predicted,18,Ipswich Town Football Club,10,1,1,8,4
+10,Predicted,19,Wolverhampton Wanderers Football Club,10,0,3,7,3
+10,Predicted,20,Everton Football Club,10,0,3,7,3
+11,Actual,1,Liverpool Football Club,11,9,1,1,28
+11,Actual,2,Manchester City Football Club,11,7,2,2,23
+11,Actual,3,Chelsea Football Club,11,5,4,2,19
+11,Actual,4,Arsenal Football Club,11,5,4,2,19
+11,Actual,5,Nottingham Forest Football Club,11,5,4,2,19
+11,Actual,6,Brighton and Hove Albion Football Club,11,5,4,2,19
+11,Actual,7,Fulham Football Club,11,5,3,3,18
+11,Actual,8,Newcastle United Football Club,11,5,3,3,18
+11,Actual,9,Aston Villa Football Club,11,5,3,3,18
+11,Actual,10,Tottenham Hotspur Football Club,11,5,1,5,16
+11,Actual,11,Brentford Football Club,11,5,1,5,16
+11,Actual,12,Association Football Club Bournemouth,11,4,3,4,15
+11,Actual,13,Manchester United Football Club,11,4,3,4,15
+11,Actual,14,West Ham United Football Club,11,3,3,5,12
+11,Actual,15,Leicester City Football Club,11,2,4,5,10
+11,Actual,16,Everton Football Club,11,2,4,5,10
+11,Actual,17,Ipswich Town Football Club,11,1,5,5,8
+11,Actual,18,Crystal Palace Football Club,11,1,4,6,7
+11,Actual,19,Wolverhampton Wanderers Football Club,11,1,3,7,6
+11,Actual,20,Southampton Football Club,11,1,1,9,4
+11,Predicted,1,Liverpool Football Club,11,9,1,1,28
+11,Predicted,2,Manchester City Football Club,11,8,2,1,26
+11,Predicted,3,Tottenham Hotspur Football Club,11,7,1,3,22
+11,Predicted,4,Leicester City Football Club,11,6,3,2,21
+11,Predicted,5,Nottingham Forest Football Club,11,6,3,2,21
+11,Predicted,6,Arsenal Football Club,11,6,3,2,21
+11,Predicted,7,Chelsea Football Club,11,6,2,3,20
+11,Predicted,8,Newcastle United Football Club,11,6,1,4,19
+11,Predicted,9,Fulham Football Club,11,5,2,4,17
+11,Predicted,10,Aston Villa Football Club,11,5,2,4,17
+11,Predicted,11,Association Football Club Bournemouth,11,4,2,5,14
+11,Predicted,12,Brentford Football Club,11,4,2,5,14
+11,Predicted,13,Brighton and Hove Albion Football Club,11,3,4,4,13
+11,Predicted,14,West Ham United Football Club,11,4,1,6,13
+11,Predicted,15,Manchester United Football Club,11,2,5,4,11
+11,Predicted,16,Crystal Palace Football Club,11,2,3,6,9
+11,Predicted,17,Southampton Football Club,11,1,4,6,7
+11,Predicted,18,Wolverhampton Wanderers Football Club,11,1,3,7,6
+11,Predicted,19,Ipswich Town Football Club,11,1,1,9,4
+11,Predicted,20,Everton Football Club,11,0,3,8,3
+12,Actual,1,Liverpool Football Club,12,10,1,1,31
+12,Actual,2,Manchester City Football Club,12,7,2,3,23
+12,Actual,3,Chelsea Football Club,12,6,4,2,22
+12,Actual,4,Arsenal Football Club,12,6,4,2,22
+12,Actual,5,Brighton and Hove Albion Football Club,12,6,4,2,22
+12,Actual,6,Tottenham Hotspur Football Club,12,6,1,5,19
+12,Actual,7,Nottingham Forest Football Club,12,5,4,3,19
+12,Actual,8,Aston Villa Football Club,12,5,4,3,19
+12,Actual,9,Fulham Football Club,12,5,3,4,18
+12,Actual,10,Newcastle United Football Club,12,5,3,4,18
+12,Actual,11,Brentford Football Club,12,5,2,5,17
+12,Actual,12,Manchester United Football Club,12,4,4,4,16
+12,Actual,13,Association Football Club Bournemouth,12,4,3,5,15
+12,Actual,14,West Ham United Football Club,12,4,3,5,15
+12,Actual,15,Everton Football Club,12,2,5,5,11
+12,Actual,16,Leicester City Football Club,12,2,4,6,10
+12,Actual,17,Wolverhampton Wanderers Football Club,12,2,3,7,9
+12,Actual,18,Ipswich Town Football Club,12,1,6,5,9
+12,Actual,19,Crystal Palace Football Club,12,1,5,6,8
+12,Actual,20,Southampton Football Club,12,1,1,10,4
+12,Predicted,1,Manchester City Football Club,12,9,2,1,29
+12,Predicted,2,Liverpool Football Club,12,9,1,2,28
+12,Predicted,3,Arsenal Football Club,12,7,3,2,24
+12,Predicted,4,Chelsea Football Club,12,7,2,3,23
+12,Predicted,5,Tottenham Hotspur Football Club,12,7,1,4,22
+12,Predicted,6,Leicester City Football Club,12,6,3,3,21
+12,Predicted,7,Nottingham Forest Football Club,12,6,3,3,21
+12,Predicted,8,Newcastle United Football Club,12,6,2,4,20
+12,Predicted,9,Aston Villa Football Club,12,6,2,4,20
+12,Predicted,10,Fulham Football Club,12,5,3,4,18
+12,Predicted,11,Brentford Football Club,12,5,2,5,17
+12,Predicted,12,Association Football Club Bournemouth,12,4,3,5,15
+12,Predicted,13,Brighton and Hove Albion Football Club,12,3,5,4,14
+12,Predicted,14,West Ham United Football Club,12,4,2,6,14
+12,Predicted,15,Manchester United Football Club,12,2,6,4,12
+12,Predicted,16,Southampton Football Club,12,2,4,6,10
+12,Predicted,17,Crystal Palace Football Club,12,2,3,7,9
+12,Predicted,18,Wolverhampton Wanderers Football Club,12,1,4,7,7
+12,Predicted,19,Ipswich Town Football Club,12,1,2,9,5
+12,Predicted,20,Everton Football Club,12,0,3,9,3
+13,Actual,1,Liverpool Football Club,13,11,1,1,34
+13,Actual,2,Chelsea Football Club,13,7,4,2,25
+13,Actual,3,Arsenal Football Club,13,7,4,2,25
+13,Actual,4,Brighton and Hove Albion Football Club,13,6,5,2,23
+13,Actual,5,Manchester City Football Club,13,7,2,4,23
+13,Actual,6,Nottingham Forest Football Club,13,6,4,3,22
+13,Actual,7,Tottenham Hotspur Football Club,13,6,2,5,20
+13,Actual,8,Brentford Football Club,13,6,2,5,20
+13,Actual,9,Manchester United Football Club,13,5,4,4,19
+13,Actual,10,Fulham Football Club,13,5,4,4,19
+13,Actual,11,Newcastle United Football Club,13,5,4,4,19
+13,Actual,12,Aston Villa Football Club,13,5,4,4,19
+13,Actual,13,Association Football Club Bournemouth,13,5,3,5,18
+13,Actual,14,West Ham United Football Club,13,4,3,6,15
+13,Actual,15,Everton Football Club,13,2,5,6,11
+13,Actual,16,Leicester City Football Club,13,2,4,7,10
+13,Actual,17,Crystal Palace Football Club,13,1,6,6,9
+13,Actual,18,Wolverhampton Wanderers Football Club,13,2,3,8,9
+13,Actual,19,Ipswich Town Football Club,13,1,6,6,9
+13,Actual,20,Southampton Football Club,13,1,2,10,5
+13,Predicted,1,Liverpool Football Club,13,10,1,2,31
+13,Predicted,2,Manchester City Football Club,13,9,2,2,29
+13,Predicted,3,Chelsea Football Club,13,8,2,3,26
+13,Predicted,4,Tottenham Hotspur Football Club,13,8,1,4,25
+13,Predicted,5,Leicester City Football Club,13,7,3,3,24
+13,Predicted,6,Nottingham Forest Football Club,13,7,3,3,24
+13,Predicted,7,Arsenal Football Club,13,7,3,3,24
+13,Predicted,8,Newcastle United Football Club,13,6,2,5,20
+13,Predicted,9,Aston Villa Football Club,13,6,2,5,20
+13,Predicted,10,Association Football Club Bournemouth,13,5,3,5,18
+13,Predicted,11,Fulham Football Club,13,5,3,5,18
+13,Predicted,12,West Ham United Football Club,13,5,2,6,17
+13,Predicted,13,Brighton and Hove Albion Football Club,13,4,5,4,17
+13,Predicted,14,Brentford Football Club,13,5,2,6,17
+13,Predicted,15,Manchester United Football Club,13,3,6,4,15
+13,Predicted,16,Crystal Palace Football Club,13,3,3,7,12
+13,Predicted,17,Southampton Football Club,13,2,4,7,10
+13,Predicted,18,Wolverhampton Wanderers Football Club,13,1,4,8,7
+13,Predicted,19,Ipswich Town Football Club,13,1,2,10,5
+13,Predicted,20,Everton Football Club,13,0,3,10,3
+14,Actual,1,Liverpool Football Club,14,11,2,1,35
+14,Actual,2,Chelsea Football Club,14,8,4,2,28
+14,Actual,3,Arsenal Football Club,14,8,4,2,28
+14,Actual,4,Manchester City Football Club,14,8,2,4,26
+14,Actual,5,Brighton and Hove Albion Football Club,14,6,5,3,23
+14,Actual,6,Fulham Football Club,14,6,4,4,22
+14,Actual,7,Nottingham Forest Football Club,14,6,4,4,22
+14,Actual,8,Aston Villa Football Club,14,6,4,4,22
+14,Actual,9,Association Football Club Bournemouth,14,6,3,5,21
+14,Actual,10,Tottenham Hotspur Football Club,14,6,2,6,20
+14,Actual,11,Brentford Football Club,14,6,2,6,20
+14,Actual,12,Newcastle United Football Club,14,5,5,4,20
+14,Actual,13,Manchester United Football Club,14,5,4,5,19
+14,Actual,14,West Ham United Football Club,14,4,3,7,15
+14,Actual,15,Everton Football Club,14,3,5,6,14
+14,Actual,16,Leicester City Football Club,14,3,4,7,13
+14,Actual,17,Crystal Palace Football Club,14,2,6,6,12
+14,Actual,18,Ipswich Town Football Club,14,1,6,7,9
+14,Actual,19,Wolverhampton Wanderers Football Club,14,2,3,9,9
+14,Actual,20,Southampton Football Club,14,1,2,11,5
+14,Predicted,1,Liverpool Football Club,14,11,1,2,34
+14,Predicted,2,Manchester City Football Club,14,10,2,2,32
+14,Predicted,3,Chelsea Football Club,14,9,2,3,29
+14,Predicted,4,Tottenham Hotspur Football Club,14,9,1,4,28
+14,Predicted,5,Leicester City Football Club,14,8,3,3,27
+14,Predicted,6,Arsenal Football Club,14,8,3,3,27
+14,Predicted,7,Nottingham Forest Football Club,14,7,3,4,24
+14,Predicted,8,Aston Villa Football Club,14,6,3,5,21
+14,Predicted,9,Newcastle United Football Club,14,6,2,6,20
+14,Predicted,10,Brighton and Hove Albion Football Club,14,5,5,4,20
+14,Predicted,11,Association Football Club Bournemouth,14,5,3,6,18
+14,Predicted,12,Fulham Football Club,14,5,3,6,18
+14,Predicted,13,Brentford Football Club,14,5,3,6,18
+14,Predicted,14,West Ham United Football Club,14,5,2,7,17
+14,Predicted,15,Manchester United Football Club,14,3,6,5,15
+14,Predicted,16,Crystal Palace Football Club,14,3,3,8,12
+14,Predicted,17,Southampton Football Club,14,2,4,8,10
+14,Predicted,18,Wolverhampton Wanderers Football Club,14,2,4,8,10
+14,Predicted,19,Ipswich Town Football Club,14,2,2,10,8
+14,Predicted,20,Everton Football Club,14,0,3,11,3
+15,Actual,1,Liverpool Football Club,15,11,3,1,36
+15,Actual,2,Chelsea Football Club,15,9,4,2,31
+15,Actual,3,Arsenal Football Club,15,8,5,2,29
+15,Actual,4,Manchester City Football Club,15,8,3,4,27
+15,Actual,5,Nottingham Forest Football Club,15,7,4,4,25
+15,Actual,6,Aston Villa Football Club,15,7,4,4,25
+15,Actual,7,Brighton and Hove Albion Football Club,15,6,6,3,24
+15,Actual,8,Association Football Club Bournemouth,15,7,3,5,24
+15,Actual,9,Brentford Football Club,15,7,2,6,23
+15,Actual,10,Fulham Football Club,15,6,5,4,23
+15,Actual,11,Tottenham Hotspur Football Club,15,6,2,7,20
+15,Actual,12,Newcastle United Football Club,15,5,5,5,20
+15,Actual,13,Manchester United Football Club,15,5,4,6,19
+15,Actual,14,West Ham United Football Club,15,5,3,7,18
+15,Actual,15,Everton Football Club,15,3,6,6,15
+15,Actual,16,Leicester City Football Club,15,3,5,7,14
+15,Actual,17,Crystal Palace Football Club,15,2,7,6,13
+15,Actual,18,Ipswich Town Football Club,15,1,6,8,9
+15,Actual,19,Wolverhampton Wanderers Football Club,15,2,3,10,9
+15,Actual,20,Southampton Football Club,15,1,2,12,5
+15,Predicted,1,Liverpool Football Club,15,12,1,2,37
+15,Predicted,2,Manchester City Football Club,15,10,3,2,33
+15,Predicted,3,Chelsea Football Club,15,10,2,3,32
+15,Predicted,4,Arsenal Football Club,15,9,3,3,30
+15,Predicted,5,Tottenham Hotspur Football Club,15,9,1,5,28
+15,Predicted,6,Nottingham Forest Football Club,15,8,3,4,27
+15,Predicted,7,Leicester City Football Club,15,8,3,4,27
+15,Predicted,8,Aston Villa Football Club,15,7,3,5,24
+15,Predicted,9,Brighton and Hove Albion Football Club,15,6,5,4,23
+15,Predicted,10,Association Football Club Bournemouth,15,6,3,6,21
+15,Predicted,11,Newcastle United Football Club,15,6,3,6,21
+15,Predicted,12,Brentford Football Club,15,5,4,6,19
+15,Predicted,13,Fulham Football Club,15,5,3,7,18
+15,Predicted,14,West Ham United Football Club,15,5,3,7,18
+15,Predicted,15,Manchester United Football Club,15,3,6,6,15
+15,Predicted,16,Crystal Palace Football Club,15,3,4,8,13
+15,Predicted,17,Wolverhampton Wanderers Football Club,15,2,5,8,11
+15,Predicted,18,Southampton Football Club,15,2,4,9,10
+15,Predicted,19,Ipswich Town Football Club,15,2,2,11,8
+15,Predicted,20,Everton Football Club,15,0,3,12,3
+16,Actual,1,Liverpool Football Club,16,11,4,1,37
+16,Actual,2,Chelsea Football Club,16,10,4,2,34
+16,Actual,3,Arsenal Football Club,16,8,6,2,30
+16,Actual,4,Nottingham Forest Football Club,16,8,4,4,28
+16,Actual,5,Manchester City Football Club,16,8,3,5,27
+16,Actual,6,Association Football Club Bournemouth,16,7,4,5,25
+16,Actual,7,Aston Villa Football Club,16,7,4,5,25
+16,Actual,8,Fulham Football Club,16,6,6,4,24
+16,Actual,9,Brighton and Hove Albion Football Club,16,6,6,4,24
+16,Actual,10,Tottenham Hotspur Football Club,16,7,2,7,23
+16,Actual,11,Brentford Football Club,16,7,2,7,23
+16,Actual,12,Newcastle United Football Club,16,6,5,5,23
+16,Actual,13,Manchester United Football Club,16,6,4,6,22
+16,Actual,14,West Ham United Football Club,16,5,4,7,19
+16,Actual,15,Crystal Palace Football Club,16,3,7,6,16
+16,Actual,16,Everton Football Club,16,3,7,6,16
+16,Actual,17,Leicester City Football Club,16,3,5,8,14
+16,Actual,18,Ipswich Town Football Club,16,2,6,8,12
+16,Actual,19,Wolverhampton Wanderers Football Club,16,2,3,11,9
+16,Actual,20,Southampton Football Club,16,1,2,13,5
+16,Predicted,1,Liverpool Football Club,16,13,1,2,40
+16,Predicted,2,Chelsea Football Club,16,11,2,3,35
+16,Predicted,3,Manchester City Football Club,16,10,3,3,33
+16,Predicted,4,Arsenal Football Club,16,10,3,3,33
+16,Predicted,5,Tottenham Hotspur Football Club,16,9,2,5,29
+16,Predicted,6,Nottingham Forest Football Club,16,8,4,4,28
+16,Predicted,7,Leicester City Football Club,16,8,3,5,27
+16,Predicted,8,Aston Villa Football Club,16,7,4,5,25
+16,Predicted,9,Association Football Club Bournemouth,16,7,3,6,24
+16,Predicted,10,Newcastle United Football Club,16,7,3,6,24
+16,Predicted,11,Brighton and Hove Albion Football Club,16,6,6,4,24
+16,Predicted,12,Brentford Football Club,16,5,4,7,19
+16,Predicted,13,Fulham Football Club,16,5,3,8,18
+16,Predicted,14,Manchester United Football Club,16,4,6,6,18
+16,Predicted,15,West Ham United Football Club,16,5,3,8,18
+16,Predicted,16,Crystal Palace Football Club,16,3,5,8,14
+16,Predicted,17,Southampton Football Club,16,2,5,9,11
+16,Predicted,18,Wolverhampton Wanderers Football Club,16,2,5,9,11
+16,Predicted,19,Ipswich Town Football Club,16,3,2,11,11
+16,Predicted,20,Everton Football Club,16,0,3,13,3
+17,Actual,1,Liverpool Football Club,17,12,4,1,40
+17,Actual,2,Chelsea Football Club,17,10,5,2,35
+17,Actual,3,Arsenal Football Club,17,9,6,2,33
+17,Actual,4,Nottingham Forest Football Club,17,9,4,4,31
+17,Actual,5,Association Football Club Bournemouth,17,8,4,5,28
+17,Actual,6,Aston Villa Football Club,17,8,4,5,28
+17,Actual,7,Manchester City Football Club,17,8,3,6,27
+17,Actual,8,Newcastle United Football Club,17,7,5,5,26
+17,Actual,9,Fulham Football Club,17,6,7,4,25
+17,Actual,10,Brighton and Hove Albion Football Club,17,6,7,4,25
+17,Actual,11,Tottenham Hotspur Football Club,17,7,2,8,23
+17,Actual,12,Brentford Football Club,17,7,2,8,23
+17,Actual,13,Manchester United Football Club,17,6,4,7,22
+17,Actual,14,West Ham United Football Club,17,5,5,7,20
+17,Actual,15,Everton Football Club,17,3,8,6,17
+17,Actual,16,Crystal Palace Football Club,17,3,7,7,16
+17,Actual,17,Leicester City Football Club,17,3,5,9,14
+17,Actual,18,Wolverhampton Wanderers Football Club,17,3,3,11,12
+17,Actual,19,Ipswich Town Football Club,17,2,6,9,12
+17,Actual,20,Southampton Football Club,17,1,3,13,6
+17,Predicted,1,Liverpool Football Club,17,14,1,2,43
+17,Predicted,2,Chelsea Football Club,17,12,2,3,38
+17,Predicted,3,Manchester City Football Club,17,11,3,3,36
+17,Predicted,4,Arsenal Football Club,17,11,3,3,36
+17,Predicted,5,Nottingham Forest Football Club,17,9,4,4,31
+17,Predicted,6,Leicester City Football Club,17,9,3,5,30
+17,Predicted,7,Tottenham Hotspur Football Club,17,9,2,6,29
+17,Predicted,8,Association Football Club Bournemouth,17,7,4,6,25
+17,Predicted,9,Newcastle United Football Club,17,7,4,6,25
+17,Predicted,10,Aston Villa Football Club,17,7,4,6,25
+17,Predicted,11,Brighton and Hove Albion Football Club,17,6,6,5,24
+17,Predicted,12,Fulham Football Club,17,6,3,8,21
+17,Predicted,13,West Ham United Football Club,17,6,3,8,21
+17,Predicted,14,Manchester United Football Club,17,4,7,6,19
+17,Predicted,15,Brentford Football Club,17,5,4,8,19
+17,Predicted,16,Crystal Palace Football Club,17,3,5,9,14
+17,Predicted,17,Ipswich Town Football Club,17,3,3,11,12
+17,Predicted,18,Wolverhampton Wanderers Football Club,17,2,5,10,11
+17,Predicted,19,Southampton Football Club,17,2,5,10,11
+17,Predicted,20,Everton Football Club,17,0,3,14,3
+18,Actual,1,Liverpool Football Club,18,13,4,1,43
+18,Actual,2,Arsenal Football Club,18,10,6,2,36
+18,Actual,3,Chelsea Football Club,18,10,5,3,35
+18,Actual,4,Nottingham Forest Football Club,18,10,4,4,34
+18,Actual,5,Newcastle United Football Club,18,8,5,5,29
+18,Actual,6,Association Football Club Bournemouth,18,8,5,5,29
+18,Actual,7,Manchester City Football Club,18,8,4,6,28
+18,Actual,8,Fulham Football Club,18,7,7,4,28
+18,Actual,9,Aston Villa Football Club,18,8,4,6,28
+18,Actual,10,Brighton and Hove Albion Football Club,18,6,8,4,26
+18,Actual,11,Brentford Football Club,18,7,3,8,24
+18,Actual,12,Tottenham Hotspur Football Club,18,7,2,9,23
+18,Actual,13,West Ham United Football Club,18,6,5,7,23
+18,Actual,14,Manchester United Football Club,18,6,4,8,22
+18,Actual,15,Everton Football Club,18,3,9,6,18
+18,Actual,16,Crystal Palace Football Club,18,3,8,7,17
+18,Actual,17,Wolverhampton Wanderers Football Club,18,4,3,11,15
+18,Actual,18,Leicester City Football Club,18,3,5,10,14
+18,Actual,19,Ipswich Town Football Club,18,2,6,10,12
+18,Actual,20,Southampton Football Club,18,1,3,14,6
+18,Predicted,1,Liverpool Football Club,18,15,1,2,46
+18,Predicted,2,Chelsea Football Club,18,13,2,3,41
+18,Predicted,3,Arsenal Football Club,18,12,3,3,39
+18,Predicted,4,Manchester City Football Club,18,11,4,3,37
+18,Predicted,5,Nottingham Forest Football Club,18,10,4,4,34
+18,Predicted,6,Leicester City Football Club,18,9,3,6,30
+18,Predicted,7,Tottenham Hotspur Football Club,18,9,2,7,29
+18,Predicted,8,Association Football Club Bournemouth,18,8,4,6,28
+18,Predicted,9,Newcastle United Football Club,18,8,4,6,28
+18,Predicted,10,Aston Villa Football Club,18,7,4,7,25
+18,Predicted,11,Brighton and Hove Albion Football Club,18,6,7,5,25
+18,Predicted,12,West Ham United Football Club,18,7,3,8,24
+18,Predicted,13,Fulham Football Club,18,6,3,9,21
+18,Predicted,14,Brentford Football Club,18,5,5,8,20
+18,Predicted,15,Manchester United Football Club,18,4,7,7,19
+18,Predicted,16,Crystal Palace Football Club,18,3,5,10,14
+18,Predicted,17,Wolverhampton Wanderers Football Club,18,3,5,10,14
+18,Predicted,18,Ipswich Town Football Club,18,3,3,12,12
+18,Predicted,19,Southampton Football Club,18,2,5,11,11
+18,Predicted,20,Everton Football Club,18,0,4,14,4
+19,Actual,1,Liverpool Football Club,19,14,4,1,46
+19,Actual,2,Arsenal Football Club,19,11,6,2,39
+19,Actual,3,Nottingham Forest Football Club,19,11,4,4,37
+19,Actual,4,Chelsea Football Club,19,10,5,4,35
+19,Actual,5,Newcastle United Football Club,19,9,5,5,32
+19,Actual,6,Manchester City Football Club,19,9,4,6,31
+19,Actual,7,Association Football Club Bournemouth,19,8,6,5,30
+19,Actual,8,Fulham Football Club,19,7,8,4,29
+19,Actual,9,Aston Villa Football Club,19,8,5,6,29
+19,Actual,10,Brighton and Hove Albion Football Club,19,6,9,4,27
+19,Actual,11,Tottenham Hotspur Football Club,19,7,3,9,24
+19,Actual,12,Brentford Football Club,19,7,3,9,24
+19,Actual,13,West Ham United Football Club,19,6,5,8,23
+19,Actual,14,Manchester United Football Club,19,6,4,9,22
+19,Actual,15,Crystal Palace Football Club,19,4,8,7,20
+19,Actual,16,Everton Football Club,19,3,9,7,18
+19,Actual,17,Wolverhampton Wanderers Football Club,19,4,4,11,16
+19,Actual,18,Ipswich Town Football Club,19,3,6,10,15
+19,Actual,19,Leicester City Football Club,19,3,5,11,14
+19,Actual,20,Southampton Football Club,19,1,3,15,6
+19,Predicted,1,Liverpool Football Club,19,15,2,2,47
+19,Predicted,2,Chelsea Football Club,19,14,2,3,44
+19,Predicted,3,Arsenal Football Club,19,13,3,3,42
+19,Predicted,4,Manchester City Football Club,19,12,4,3,40
+19,Predicted,5,Nottingham Forest Football Club,19,11,4,4,37
+19,Predicted,6,Association Football Club Bournemouth,19,9,4,6,31
+19,Predicted,7,Leicester City Football Club,19,9,3,7,30
+19,Predicted,8,Tottenham Hotspur Football Club,19,9,2,8,29
+19,Predicted,9,Aston Villa Football Club,19,8,4,7,28
+19,Predicted,10,Newcastle United Football Club,19,8,4,7,28
+19,Predicted,11,Brighton and Hove Albion Football Club,19,6,7,6,25
+19,Predicted,12,West Ham United Football Club,19,7,4,8,25
+19,Predicted,13,Manchester United Football Club,19,5,7,7,22
+19,Predicted,14,Fulham Football Club,19,6,3,10,21
+19,Predicted,15,Brentford Football Club,19,5,5,9,20
+19,Predicted,16,Wolverhampton Wanderers Football Club,19,4,5,10,17
+19,Predicted,17,Crystal Palace Football Club,19,3,6,10,15
+19,Predicted,18,Southampton Football Club,19,2,6,11,12
+19,Predicted,19,Ipswich Town Football Club,19,3,3,13,12
+19,Predicted,20,Everton Football Club,19,0,4,15,4
+20,Actual,1,Liverpool Football Club,20,14,5,1,47
+20,Actual,2,Arsenal Football Club,20,11,7,2,40
+20,Actual,3,Nottingham Forest Football Club,20,12,4,4,40
+20,Actual,4,Chelsea Football Club,20,10,6,4,36
+20,Actual,5,Newcastle United Football Club,20,10,5,5,35
+20,Actual,6,Manchester City Football Club,20,10,4,6,34
+20,Actual,7,Association Football Club Bournemouth,20,9,6,5,33
+20,Actual,8,Aston Villa Football Club,20,9,5,6,32
+20,Actual,9,Fulham Football Club,20,7,9,4,30
+20,Actual,10,Brighton and Hove Albion Football Club,20,6,10,4,28
+20,Actual,11,Brentford Football Club,20,8,3,9,27
+20,Actual,12,Tottenham Hotspur Football Club,20,7,3,10,24
+20,Actual,13,Manchester United Football Club,20,6,5,9,23
+20,Actual,14,West Ham United Football Club,20,6,5,9,23
+20,Actual,15,Crystal Palace Football Club,20,4,9,7,21
+20,Actual,16,Everton Football Club,20,3,9,8,18
+20,Actual,17,Wolverhampton Wanderers Football Club,20,4,4,12,16
+20,Actual,18,Ipswich Town Football Club,20,3,7,10,16
+20,Actual,19,Leicester City Football Club,20,3,5,12,14
+20,Actual,20,Southampton Football Club,20,1,3,16,6
+20,Predicted,1,Liverpool Football Club,20,16,2,2,50
+20,Predicted,2,Chelsea Football Club,20,14,3,3,45
+20,Predicted,3,Manchester City Football Club,20,13,4,3,43
+20,Predicted,4,Arsenal Football Club,20,13,3,4,42
+20,Predicted,5,Nottingham Forest Football Club,20,12,4,4,40
+20,Predicted,6,Association Football Club Bournemouth,20,10,4,6,34
+20,Predicted,7,Aston Villa Football Club,20,9,4,7,31
+20,Predicted,8,Newcastle United Football Club,20,9,4,7,31
+20,Predicted,9,Leicester City Football Club,20,9,3,8,30
+20,Predicted,10,Tottenham Hotspur Football Club,20,9,2,9,29
+20,Predicted,11,Brighton and Hove Albion Football Club,20,7,7,6,28
+20,Predicted,12,West Ham United Football Club,20,7,4,9,25
+20,Predicted,13,Fulham Football Club,20,7,3,10,24
+20,Predicted,14,Brentford Football Club,20,6,5,9,23
+20,Predicted,15,Manchester United Football Club,20,5,7,8,22
+20,Predicted,16,Wolverhampton Wanderers Football Club,20,4,5,11,17
+20,Predicted,17,Crystal Palace Football Club,20,3,7,10,16
+20,Predicted,18,Southampton Football Club,20,2,6,12,12
+20,Predicted,19,Ipswich Town Football Club,20,3,3,14,12
+20,Predicted,20,Everton Football Club,20,0,4,16,4
+21,Actual,1,Liverpool Football Club,21,14,6,1,48
+21,Actual,2,Arsenal Football Club,21,12,7,2,43
+21,Actual,3,Nottingham Forest Football Club,21,12,5,4,41
+21,Actual,4,Newcastle United Football Club,21,11,5,5,38
+21,Actual,5,Chelsea Football Club,21,10,7,4,37
+21,Actual,6,Manchester City Football Club,21,10,5,6,35
+21,Actual,7,Aston Villa Football Club,21,10,5,6,35
+21,Actual,8,Association Football Club Bournemouth,21,9,7,5,34
+21,Actual,9,Brighton and Hove Albion Football Club,21,7,10,4,31
+21,Actual,10,Fulham Football Club,21,7,9,5,30
+21,Actual,11,Brentford Football Club,21,8,4,9,28
+21,Actual,12,Manchester United Football Club,21,7,5,9,26
+21,Actual,13,West Ham United Football Club,21,7,5,9,26
+21,Actual,14,Tottenham Hotspur Football Club,21,7,3,11,24
+21,Actual,15,Crystal Palace Football Club,21,5,9,7,24
+21,Actual,16,Everton Football Club,21,3,9,9,18
+21,Actual,17,Wolverhampton Wanderers Football Club,21,4,4,13,16
+21,Actual,18,Ipswich Town Football Club,21,3,7,11,16
+21,Actual,19,Leicester City Football Club,21,3,5,13,14
+21,Actual,20,Southampton Football Club,21,1,3,17,6
+21,Predicted,1,Liverpool Football Club,21,16,3,2,51
+21,Predicted,2,Chelsea Football Club,21,14,4,3,46
+21,Predicted,3,Arsenal Football Club,21,14,3,4,45
+21,Predicted,4,Manchester City Football Club,21,13,5,3,44
+21,Predicted,5,Nottingham Forest Football Club,21,12,5,4,41
+21,Predicted,6,Association Football Club Bournemouth,21,10,5,6,35
+21,Predicted,7,Newcastle United Football Club,21,10,4,7,34
+21,Predicted,8,Aston Villa Football Club,21,9,5,7,32
+21,Predicted,9,Brighton and Hove Albion Football Club,21,8,7,6,31
+21,Predicted,10,Leicester City Football Club,21,9,4,8,31
+21,Predicted,11,Tottenham Hotspur Football Club,21,9,2,10,29
+21,Predicted,12,West Ham United Football Club,21,8,4,9,28
+21,Predicted,13,Manchester United Football Club,21,6,7,8,25
+21,Predicted,14,Fulham Football Club,21,7,3,11,24
+21,Predicted,15,Brentford Football Club,21,6,6,9,24
+21,Predicted,16,Crystal Palace Football Club,21,3,8,10,17
+21,Predicted,17,Wolverhampton Wanderers Football Club,21,4,5,12,17
+21,Predicted,18,Southampton Football Club,21,2,6,13,12
+21,Predicted,19,Ipswich Town Football Club,21,3,3,15,12
+21,Predicted,20,Everton Football Club,21,0,5,16,5
+22,Actual,1,Liverpool Football Club,22,15,6,1,51
+22,Actual,2,Arsenal Football Club,22,12,8,2,44
+22,Actual,3,Nottingham Forest Football Club,22,13,5,4,44
+22,Actual,4,Chelsea Football Club,22,11,7,4,40
+22,Actual,5,Manchester City Football Club,22,11,5,6,38
+22,Actual,6,Newcastle United Football Club,22,11,5,6,38
+22,Actual,7,Association Football Club Bournemouth,22,10,7,5,37
+22,Actual,8,Aston Villa Football Club,22,10,6,6,36
+22,Actual,9,Brighton and Hove Albion Football Club,22,8,10,4,34
+22,Actual,10,Fulham Football Club,22,8,9,5,33
+22,Actual,11,Brentford Football Club,22,8,4,10,28
+22,Actual,12,Crystal Palace Football Club,22,6,9,7,27
+22,Actual,13,Manchester United Football Club,22,7,5,10,26
+22,Actual,14,West Ham United Football Club,22,7,5,10,26
+22,Actual,15,Tottenham Hotspur Football Club,22,7,3,12,24
+22,Actual,16,Everton Football Club,22,4,9,9,21
+22,Actual,17,Wolverhampton Wanderers Football Club,22,4,4,14,16
+22,Actual,18,Ipswich Town Football Club,22,3,7,12,16
+22,Actual,19,Leicester City Football Club,22,3,5,14,14
+22,Actual,20,Southampton Football Club,22,1,3,18,6
+22,Predicted,1,Liverpool Football Club,22,17,3,2,54
+22,Predicted,2,Chelsea Football Club,22,15,4,3,49
+22,Predicted,3,Manchester City Football Club,22,13,6,3,45
+22,Predicted,4,Arsenal Football Club,22,14,3,5,45
+22,Predicted,5,Nottingham Forest Football Club,22,13,5,4,44
+22,Predicted,6,Newcastle United Football Club,22,11,4,7,37
+22,Predicted,7,Association Football Club Bournemouth,22,10,5,7,35
+22,Predicted,8,Aston Villa Football Club,22,10,5,7,35
+22,Predicted,9,Brighton and Hove Albion Football Club,22,9,7,6,34
+22,Predicted,10,Tottenham Hotspur Football Club,22,10,2,10,32
+22,Predicted,11,Leicester City Football Club,22,9,4,9,31
+22,Predicted,12,West Ham United Football Club,22,8,5,9,29
+22,Predicted,13,Fulham Football Club,22,8,3,11,27
+22,Predicted,14,Manchester United Football Club,22,6,7,9,25
+22,Predicted,15,Brentford Football Club,22,6,6,10,24
+22,Predicted,16,Crystal Palace Football Club,22,3,9,10,18
+22,Predicted,17,Wolverhampton Wanderers Football Club,22,4,5,13,17
+22,Predicted,18,Ipswich Town Football Club,22,3,4,15,13
+22,Predicted,19,Southampton Football Club,22,2,6,14,12
+22,Predicted,20,Everton Football Club,22,0,5,17,5
+23,Actual,1,Liverpool Football Club,23,16,6,1,54
+23,Actual,2,Arsenal Football Club,23,13,8,2,47
+23,Actual,3,Nottingham Forest Football Club,23,13,5,5,44
+23,Actual,4,Manchester City Football Club,23,12,5,6,41
+23,Actual,5,Newcastle United Football Club,23,12,5,6,41
+23,Actual,6,Chelsea Football Club,23,11,7,5,40
+23,Actual,7,Association Football Club Bournemouth,23,11,7,5,40
+23,Actual,8,Aston Villa Football Club,23,10,7,6,37
+23,Actual,9,Brighton and Hove Albion Football Club,23,8,10,5,34
+23,Actual,10,Fulham Football Club,23,8,9,6,33
+23,Actual,11,Brentford Football Club,23,9,4,10,31
+23,Actual,12,Manchester United Football Club,23,8,5,10,29
+23,Actual,13,Crystal Palace Football Club,23,6,9,8,27
+23,Actual,14,West Ham United Football Club,23,7,6,10,27
+23,Actual,15,Tottenham Hotspur Football Club,23,7,3,13,24
+23,Actual,16,Everton Football Club,23,5,9,9,24
+23,Actual,17,Leicester City Football Club,23,4,5,14,17
+23,Actual,18,Wolverhampton Wanderers Football Club,23,4,4,15,16
+23,Actual,19,Ipswich Town Football Club,23,3,7,13,16
+23,Actual,20,Southampton Football Club,23,1,3,19,6
+23,Predicted,1,Liverpool Football Club,23,18,3,2,57
+23,Predicted,2,Chelsea Football Club,23,16,4,3,52
+23,Predicted,3,Arsenal Football Club,23,15,3,5,48
+23,Predicted,4,Nottingham Forest Football Club,23,14,5,4,47
+23,Predicted,5,Manchester City Football Club,23,13,6,4,45
+23,Predicted,6,Newcastle United Football Club,23,12,4,7,40
+23,Predicted,7,Brighton and Hove Albion Football Club,23,10,7,6,37
+23,Predicted,8,Aston Villa Football Club,23,10,6,7,36
+23,Predicted,9,Association Football Club Bournemouth,23,10,5,8,35
+23,Predicted,10,Leicester City Football Club,23,10,4,9,34
+23,Predicted,11,Tottenham Hotspur Football Club,23,10,2,11,32
+23,Predicted,12,West Ham United Football Club,23,8,6,9,30
+23,Predicted,13,Fulham Football Club,23,9,3,11,30
+23,Predicted,14,Brentford Football Club,23,7,6,10,27
+23,Predicted,15,Manchester United Football Club,23,6,7,10,25
+23,Predicted,16,Crystal Palace Football Club,23,3,9,11,18
+23,Predicted,17,Wolverhampton Wanderers Football Club,23,4,5,14,17
+23,Predicted,18,Ipswich Town Football Club,23,3,4,16,13
+23,Predicted,19,Southampton Football Club,23,2,6,15,12
+23,Predicted,20,Everton Football Club,23,0,5,18,5
+24,Actual,1,Liverpool Football Club,24,17,6,1,57
+24,Actual,2,Arsenal Football Club,24,14,8,2,50
+24,Actual,3,Nottingham Forest Football Club,24,14,5,5,47
+24,Actual,4,Chelsea Football Club,24,12,7,5,43
+24,Actual,5,Manchester City Football Club,24,12,5,7,41
+24,Actual,6,Newcastle United Football Club,24,12,5,7,41
+24,Actual,7,Association Football Club Bournemouth,24,11,7,6,40
+24,Actual,8,Aston Villa Football Club,24,10,7,7,37
+24,Actual,9,Fulham Football Club,24,9,9,6,36
+24,Actual,10,Brighton and Hove Albion Football Club,24,8,10,6,34
+24,Actual,11,Brentford Football Club,24,9,4,11,31
+24,Actual,12,Crystal Palace Football Club,24,7,9,8,30
+24,Actual,13,Manchester United Football Club,24,8,5,11,29
+24,Actual,14,Tottenham Hotspur Football Club,24,8,3,13,27
+24,Actual,15,Everton Football Club,24,6,9,9,27
+24,Actual,16,West Ham United Football Club,24,7,6,11,27
+24,Actual,17,Wolverhampton Wanderers Football Club,24,5,4,15,19
+24,Actual,18,Leicester City Football Club,24,4,5,15,17
+24,Actual,19,Ipswich Town Football Club,24,3,7,14,16
+24,Actual,20,Southampton Football Club,24,2,3,19,9
+24,Predicted,1,Liverpool Football Club,24,18,3,3,57
+24,Predicted,2,Chelsea Football Club,24,17,4,3,55
+24,Predicted,3,Arsenal Football Club,24,16,3,5,51
+24,Predicted,4,Nottingham Forest Football Club,24,15,5,4,50
+24,Predicted,5,Manchester City Football Club,24,13,6,5,45
+24,Predicted,6,Newcastle United Football Club,24,12,4,8,40
+24,Predicted,7,Aston Villa Football Club,24,11,6,7,39
+24,Predicted,8,Association Football Club Bournemouth,24,11,5,8,38
+24,Predicted,9,Brighton and Hove Albion Football Club,24,10,7,7,37
+24,Predicted,10,Tottenham Hotspur Football Club,24,11,2,11,35
+24,Predicted,11,Leicester City Football Club,24,10,4,10,34
+24,Predicted,12,Fulham Football Club,24,10,3,11,33
+24,Predicted,13,West Ham United Football Club,24,8,6,10,30
+24,Predicted,14,Brentford Football Club,24,7,6,11,27
+24,Predicted,15,Manchester United Football Club,24,6,8,10,26
+24,Predicted,16,Crystal Palace Football Club,24,3,10,11,19
+24,Predicted,17,Wolverhampton Wanderers Football Club,24,4,5,15,17
+24,Predicted,18,Ipswich Town Football Club,24,4,4,16,16
+24,Predicted,19,Southampton Football Club,24,2,6,16,12
+24,Predicted,20,Everton Football Club,24,1,5,18,8
+25,Actual,1,Liverpool Football Club,25,18,6,1,60
+25,Actual,2,Arsenal Football Club,25,15,8,2,53
+25,Actual,3,Nottingham Forest Football Club,25,14,5,6,47
+25,Actual,4,Manchester City Football Club,25,13,5,7,44
+25,Actual,5,Association Football Club Bournemouth,25,12,7,6,43
+25,Actual,6,Chelsea Football Club,25,12,7,6,43
+25,Actual,7,Newcastle United Football Club,25,12,5,8,41
+25,Actual,8,Fulham Football Club,25,10,9,6,39
+25,Actual,9,Aston Villa Football Club,25,10,8,7,38
+25,Actual,10,Brighton and Hove Albion Football Club,25,9,10,6,37
+25,Actual,11,Brentford Football Club,25,10,4,11,34
+25,Actual,12,Tottenham Hotspur Football Club,25,9,3,13,30
+25,Actual,13,Crystal Palace Football Club,25,7,9,9,30
+25,Actual,14,Everton Football Club,25,7,9,9,30
+25,Actual,15,Manchester United Football Club,25,8,5,12,29
+25,Actual,16,West Ham United Football Club,25,7,6,12,27
+25,Actual,17,Wolverhampton Wanderers Football Club,25,5,4,16,19
+25,Actual,18,Ipswich Town Football Club,25,3,8,14,17
+25,Actual,19,Leicester City Football Club,25,4,5,16,17
+25,Actual,20,Southampton Football Club,25,2,3,20,9
+25,Predicted,1,Liverpool Football Club,25,19,3,3,60
+25,Predicted,2,Chelsea Football Club,25,17,4,4,55
+25,Predicted,3,Arsenal Football Club,25,17,3,5,54
+25,Predicted,4,Nottingham Forest Football Club,25,15,6,4,51
+25,Predicted,5,Manchester City Football Club,25,13,7,5,46
+25,Predicted,6,Aston Villa Football Club,25,12,6,7,42
+25,Predicted,7,Association Football Club Bournemouth,25,12,5,8,41
+25,Predicted,8,Newcastle United Football Club,25,12,5,8,41
+25,Predicted,9,Brighton and Hove Albion Football Club,25,11,7,7,40
+25,Predicted,10,Tottenham Hotspur Football Club,25,11,2,12,35
+25,Predicted,11,Fulham Football Club,25,10,4,11,34
+25,Predicted,12,Leicester City Football Club,25,10,4,11,34
+25,Predicted,13,West Ham United Football Club,25,8,6,11,30
+25,Predicted,14,Brentford Football Club,25,8,6,11,30
+25,Predicted,15,Manchester United Football Club,25,7,8,10,29
+25,Predicted,16,Crystal Palace Football Club,25,3,11,11,20
+25,Predicted,17,Wolverhampton Wanderers Football Club,25,4,5,16,17
+25,Predicted,18,Ipswich Town Football Club,25,4,4,17,16
+25,Predicted,19,Southampton Football Club,25,2,6,17,12
+25,Predicted,20,Everton Football Club,25,1,6,18,9
+26,Actual,1,Liverpool Football Club,26,19,6,1,63
+26,Actual,2,Arsenal Football Club,26,15,8,3,53
+26,Actual,3,Nottingham Forest Football Club,26,14,5,7,47
+26,Actual,4,Manchester City Football Club,26,13,5,8,44
+26,Actual,5,Newcastle United Football Club,26,13,5,8,44
+26,Actual,6,Association Football Club Bournemouth,26,12,7,7,43
+26,Actual,7,Chelsea Football Club,26,12,7,7,43
+26,Actual,8,Aston Villa Football Club,26,11,8,7,41
+26,Actual,9,Brighton and Hove Albion Football Club,26,10,10,6,40
+26,Actual,10,Fulham Football Club,26,10,9,7,39
+26,Actual,11,Brentford Football Club,26,11,4,11,37
+26,Actual,12,Tottenham Hotspur Football Club,26,10,3,13,33
+26,Actual,13,Crystal Palace Football Club,26,8,9,9,33
+26,Actual,14,Everton Football Club,26,7,10,9,31
+26,Actual,15,Manchester United Football Club,26,8,6,12,30
+26,Actual,16,West Ham United Football Club,26,8,6,12,30
+26,Actual,17,Wolverhampton Wanderers Football Club,26,6,4,16,22
+26,Actual,18,Ipswich Town Football Club,26,3,8,15,17
+26,Actual,19,Leicester City Football Club,26,4,5,17,17
+26,Actual,20,Southampton Football Club,26,2,3,21,9
+26,Predicted,1,Liverpool Football Club,26,20,3,3,63
+26,Predicted,2,Arsenal Football Club,26,18,3,5,57
+26,Predicted,3,Chelsea Football Club,26,17,4,5,55
+26,Predicted,4,Nottingham Forest Football Club,26,16,6,4,54
+26,Predicted,5,Manchester City Football Club,26,13,7,6,46
+26,Predicted,6,Aston Villa Football Club,26,13,6,7,45
+26,Predicted,7,Association Football Club Bournemouth,26,13,5,8,44
+26,Predicted,8,Brighton and Hove Albion Football Club,26,12,7,7,43
+26,Predicted,9,Newcastle United Football Club,26,12,5,9,41
+26,Predicted,10,Tottenham Hotspur Football Club,26,11,3,12,36
+26,Predicted,11,Fulham Football Club,26,10,5,11,35
+26,Predicted,12,Leicester City Football Club,26,10,4,12,34
+26,Predicted,13,Brentford Football Club,26,9,6,11,33
+26,Predicted,14,West Ham United Football Club,26,8,6,12,30
+26,Predicted,15,Manchester United Football Club,26,7,8,11,29
+26,Predicted,16,Crystal Palace Football Club,26,3,12,11,21
+26,Predicted,17,Wolverhampton Wanderers Football Club,26,4,5,17,17
+26,Predicted,18,Ipswich Town Football Club,26,4,5,17,17
+26,Predicted,19,Everton Football Club,26,2,6,18,12
+26,Predicted,20,Southampton Football Club,26,2,6,18,12
+27,Actual,1,Liverpool Football Club,27,20,6,1,66
+27,Actual,2,Arsenal Football Club,27,15,9,3,54
+27,Actual,3,Nottingham Forest Football Club,27,14,6,7,48
+27,Actual,4,Manchester City Football Club,27,14,5,8,47
+27,Actual,5,Chelsea Football Club,27,13,7,7,46
+27,Actual,6,Newcastle United Football Club,27,13,5,9,44
+27,Actual,7,Association Football Club Bournemouth,27,12,7,8,43
+27,Actual,8,Brighton and Hove Albion Football Club,27,11,10,6,43
+27,Actual,9,Fulham Football Club,27,11,9,7,42
+27,Actual,10,Aston Villa Football Club,27,11,8,8,41
+27,Actual,11,Brentford Football Club,27,11,5,11,38
+27,Actual,12,Crystal Palace Football Club,27,9,9,9,36
+27,Actual,13,Tottenham Hotspur Football Club,27,10,3,14,33
+27,Actual,14,Manchester United Football Club,27,9,6,12,33
+27,Actual,15,West Ham United Football Club,27,9,6,12,33
+27,Actual,16,Everton Football Club,27,7,11,9,32
+27,Actual,17,Wolverhampton Wanderers Football Club,27,6,4,17,22
+27,Actual,18,Ipswich Town Football Club,27,3,8,16,17
+27,Actual,19,Leicester City Football Club,27,4,5,18,17
+27,Actual,20,Southampton Football Club,27,2,3,22,9
+27,Predicted,1,Liverpool Football Club,27,20,3,4,63
+27,Predicted,2,Chelsea Football Club,27,18,4,5,58
+27,Predicted,3,Nottingham Forest Football Club,27,17,6,4,57
+27,Predicted,4,Arsenal Football Club,27,18,3,6,57
+27,Predicted,5,Manchester City Football Club,27,14,7,6,49
+27,Predicted,6,Association Football Club Bournemouth,27,14,5,8,47
+27,Predicted,7,Aston Villa Football Club,27,13,6,8,45
+27,Predicted,8,Newcastle United Football Club,27,13,5,9,44
+27,Predicted,9,Brighton and Hove Albion Football Club,27,12,7,8,43
+27,Predicted,10,Fulham Football Club,27,11,5,11,38
+27,Predicted,11,Tottenham Hotspur Football Club,27,11,3,13,36
+27,Predicted,12,Leicester City Football Club,27,10,4,13,34
+27,Predicted,13,West Ham United Football Club,27,9,6,12,33
+27,Predicted,14,Brentford Football Club,27,9,6,12,33
+27,Predicted,15,Manchester United Football Club,27,8,8,11,32
+27,Predicted,16,Crystal Palace Football Club,27,4,12,11,24
+27,Predicted,17,Wolverhampton Wanderers Football Club,27,4,5,18,17
+27,Predicted,18,Ipswich Town Football Club,27,4,5,18,17
+27,Predicted,19,Everton Football Club,27,3,6,18,15
+27,Predicted,20,Southampton Football Club,27,2,6,19,12
+28,Actual,1,Liverpool Football Club,28,21,6,1,69
+28,Actual,2,Arsenal Football Club,28,15,10,3,55
+28,Actual,3,Nottingham Forest Football Club,28,15,6,7,51
+28,Actual,4,Chelsea Football Club,28,14,7,7,49
+28,Actual,5,Manchester City Football Club,28,14,5,9,47
+28,Actual,6,Newcastle United Football Club,28,14,5,9,47
+28,Actual,7,Brighton and Hove Albion Football Club,28,12,10,6,46
+28,Actual,8,Association Football Club Bournemouth,28,12,8,8,44
+28,Actual,9,Aston Villa Football Club,28,12,8,8,44
+28,Actual,10,Fulham Football Club,28,11,9,8,42
+28,Actual,11,Crystal Palace Football Club,28,10,9,9,39
+28,Actual,12,Brentford Football Club,28,11,5,12,38
+28,Actual,13,Tottenham Hotspur Football Club,28,10,4,14,34
+28,Actual,14,Manchester United Football Club,28,9,7,12,34
+28,Actual,15,Everton Football Club,28,7,12,9,33
+28,Actual,16,West Ham United Football Club,28,9,6,13,33
+28,Actual,17,Wolverhampton Wanderers Football Club,28,6,5,17,23
+28,Actual,18,Ipswich Town Football Club,28,3,8,17,17
+28,Actual,19,Leicester City Football Club,28,4,5,19,17
+28,Actual,20,Southampton Football Club,28,2,3,23,9
+28,Predicted,1,Liverpool Football Club,28,21,3,4,66
+28,Predicted,2,Chelsea Football Club,28,19,4,5,61
+28,Predicted,3,Nottingham Forest Football Club,28,18,6,4,60
+28,Predicted,4,Arsenal Football Club,28,19,3,6,60
+28,Predicted,5,Manchester City Football Club,28,14,7,7,49
+28,Predicted,6,Association Football Club Bournemouth,28,14,5,9,47
+28,Predicted,7,Brighton and Hove Albion Football Club,28,13,7,8,46
+28,Predicted,8,Aston Villa Football Club,28,13,6,9,45
+28,Predicted,9,Newcastle United Football Club,28,13,5,10,44
+28,Predicted,10,Tottenham Hotspur Football Club,28,12,3,13,39
+28,Predicted,11,Fulham Football Club,28,11,5,12,38
+28,Predicted,12,West Ham United Football Club,28,10,6,12,36
+28,Predicted,13,Brentford Football Club,28,10,6,12,36
+28,Predicted,14,Leicester City Football Club,28,10,4,14,34
+28,Predicted,15,Manchester United Football Club,28,8,8,12,32
+28,Predicted,16,Crystal Palace Football Club,28,4,13,11,25
+28,Predicted,17,Everton Football Club,28,4,6,18,18
+28,Predicted,18,Ipswich Town Football Club,28,4,6,18,18
+28,Predicted,19,Wolverhampton Wanderers Football Club,28,4,5,19,17
+28,Predicted,20,Southampton Football Club,28,2,6,20,12
+29,Actual,1,Liverpool Football Club,29,21,7,1,70
+29,Actual,2,Arsenal Football Club,29,16,10,3,58
+29,Actual,3,Nottingham Forest Football Club,29,16,6,7,54
+29,Actual,4,Chelsea Football Club,29,14,7,8,49
+29,Actual,5,Manchester City Football Club,29,14,6,9,48
+29,Actual,6,Newcastle United Football Club,28,14,5,9,47
+29,Actual,7,Brighton and Hove Albion Football Club,29,12,11,6,47
+29,Actual,8,Fulham Football Club,29,12,9,8,45
+29,Actual,9,Aston Villa Football Club,29,12,9,8,45
+29,Actual,10,Association Football Club Bournemouth,29,12,8,9,44
+29,Actual,11,Brentford Football Club,29,12,5,12,41
+29,Actual,12,Crystal Palace Football Club,28,10,9,9,39
+29,Actual,13,Manchester United Football Club,29,10,7,12,37
+29,Actual,14,Tottenham Hotspur Football Club,29,10,4,15,34
+29,Actual,15,Everton Football Club,29,7,13,9,34
+29,Actual,16,West Ham United Football Club,29,9,7,13,34
+29,Actual,17,Wolverhampton Wanderers Football Club,29,7,5,17,26
+29,Actual,18,Ipswich Town Football Club,29,3,8,18,17
+29,Actual,19,Leicester City Football Club,29,4,5,20,17
+29,Actual,20,Southampton Football Club,29,2,3,24,9
+29,Predicted,1,Liverpool Football Club,29,22,3,4,69
+29,Predicted,2,Nottingham Forest Football Club,29,19,6,4,63
+29,Predicted,3,Arsenal Football Club,29,20,3,6,63
+29,Predicted,4,Chelsea Football Club,29,19,4,6,61
+29,Predicted,5,Brighton and Hove Albion Football Club,29,14,7,8,49
+29,Predicted,6,Manchester City Football Club,29,14,7,8,49
+29,Predicted,7,Association Football Club Bournemouth,29,14,5,10,47
+29,Predicted,8,Aston Villa Football Club,29,13,6,10,45
+29,Predicted,9,Newcastle United Football Club,28,13,5,10,44
+29,Predicted,10,Fulham Football Club,29,12,5,12,41
+29,Predicted,11,Tottenham Hotspur Football Club,29,12,3,14,39
+29,Predicted,12,Brentford Football Club,29,11,6,12,39
+29,Predicted,13,West Ham United Football Club,29,10,7,12,37
+29,Predicted,14,Leicester City Football Club,29,11,4,14,37
+29,Predicted,15,Manchester United Football Club,29,8,8,13,32
+29,Predicted,16,Crystal Palace Football Club,28,4,13,11,25
+29,Predicted,17,Everton Football Club,29,4,7,18,19
+29,Predicted,18,Ipswich Town Football Club,29,4,6,19,18
+29,Predicted,19,Wolverhampton Wanderers Football Club,29,4,5,20,17
+29,Predicted,20,Southampton Football Club,29,3,6,20,15
+30,Actual,1,Liverpool Football Club,30,22,7,1,73
+30,Actual,2,Arsenal Football Club,30,17,10,3,61
+30,Actual,3,Nottingham Forest Football Club,30,17,6,7,57
+30,Actual,4,Chelsea Football Club,30,15,7,8,52
+30,Actual,5,Manchester City Football Club,30,15,6,9,51
+30,Actual,6,Newcastle United Football Club,29,15,5,9,50
+30,Actual,7,Aston Villa Football Club,30,13,9,8,48
+30,Actual,8,Brighton and Hove Albion Football Club,30,12,11,7,47
+30,Actual,9,Fulham Football Club,30,12,9,9,45
+30,Actual,10,Association Football Club Bournemouth,30,12,8,10,44
+30,Actual,11,Brentford Football Club,30,12,5,13,41
+30,Actual,12,Crystal Palace Football Club,29,10,10,9,40
+30,Actual,13,Manchester United Football Club,30,10,7,13,37
+30,Actual,14,Tottenham Hotspur Football Club,30,10,4,16,34
+30,Actual,15,Everton Football Club,30,7,13,10,34
+30,Actual,16,West Ham United Football Club,30,9,7,14,34
+30,Actual,17,Wolverhampton Wanderers Football Club,30,8,5,17,29
+30,Actual,18,Ipswich Town Football Club,30,4,8,18,20
+30,Actual,19,Leicester City Football Club,30,4,5,21,17
+30,Actual,20,Southampton Football Club,30,2,4,24,10
+30,Predicted,1,Liverpool Football Club,30,23,3,4,72
+30,Predicted,2,Nottingham Forest Football Club,30,20,6,4,66
+30,Predicted,3,Arsenal Football Club,30,21,3,6,66
+30,Predicted,4,Chelsea Football Club,30,20,4,6,64
+30,Predicted,5,Brighton and Hove Albion Football Club,30,15,7,8,52
+30,Predicted,6,Manchester City Football Club,30,15,7,8,52
+30,Predicted,7,Association Football Club Bournemouth,30,14,6,10,48
+30,Predicted,8,Newcastle United Football Club,29,14,5,10,47
+30,Predicted,9,Aston Villa Football Club,30,13,6,11,45
+30,Predicted,10,Fulham Football Club,30,12,5,13,41
+30,Predicted,11,West Ham United Football Club,30,11,7,12,40
+30,Predicted,12,Tottenham Hotspur Football Club,30,12,3,15,39
+30,Predicted,13,Brentford Football Club,30,11,6,13,39
+30,Predicted,14,Leicester City Football Club,30,11,4,15,37
+30,Predicted,15,Manchester United Football Club,30,8,8,14,32
+30,Predicted,16,Crystal Palace Football Club,29,4,14,11,26
+30,Predicted,17,Everton Football Club,30,4,7,19,19
+30,Predicted,18,Ipswich Town Football Club,30,4,7,19,19
+30,Predicted,19,Wolverhampton Wanderers Football Club,30,4,5,21,17
+30,Predicted,20,Southampton Football Club,30,3,7,20,16
+31,Actual,1,Liverpool Football Club,31,22,7,2,73
+31,Actual,2,Arsenal Football Club,31,17,11,3,62
+31,Actual,3,Nottingham Forest Football Club,31,17,6,8,57
+31,Actual,4,Chelsea Football Club,31,15,8,8,53
+31,Actual,5,Newcastle United Football Club,30,16,5,9,53
+31,Actual,6,Manchester City Football Club,31,15,7,9,52
+31,Actual,7,Aston Villa Football Club,31,14,9,8,51
+31,Actual,8,Fulham Football Club,31,13,9,9,48
+31,Actual,9,Brighton and Hove Albion Football Club,31,12,11,8,47
+31,Actual,10,Association Football Club Bournemouth,31,12,9,10,45
+31,Actual,11,Crystal Palace Football Club,30,11,10,9,43
+31,Actual,12,Brentford Football Club,31,12,6,13,42
+31,Actual,13,Manchester United Football Club,31,10,8,13,38
+31,Actual,14,Tottenham Hotspur Football Club,31,11,4,16,37
+31,Actual,15,Everton Football Club,31,7,14,10,35
+31,Actual,16,West Ham United Football Club,31,9,8,14,35
+31,Actual,17,Wolverhampton Wanderers Football Club,31,9,5,17,32
+31,Actual,18,Ipswich Town Football Club,31,4,8,19,20
+31,Actual,19,Leicester City Football Club,31,4,5,22,17
+31,Actual,20,Southampton Football Club,31,2,4,25,10
+31,Predicted,1,Liverpool Football Club,31,23,3,5,72
+31,Predicted,2,Nottingham Forest Football Club,31,21,6,4,69
+31,Predicted,3,Arsenal Football Club,31,22,3,6,69
+31,Predicted,4,Chelsea Football Club,31,20,5,6,65
+31,Predicted,5,Manchester City Football Club,31,15,8,8,53
+31,Predicted,6,Brighton and Hove Albion Football Club,31,15,7,9,52
+31,Predicted,7,Newcastle United Football Club,30,15,5,10,50
+31,Predicted,8,Association Football Club Bournemouth,31,14,7,10,49
+31,Predicted,9,Aston Villa Football Club,31,13,6,12,45
+31,Predicted,10,Fulham Football Club,31,13,5,13,44
+31,Predicted,11,West Ham United Football Club,31,11,8,12,41
+31,Predicted,12,Tottenham Hotspur Football Club,31,12,4,15,40
+31,Predicted,13,Brentford Football Club,31,11,7,13,40
+31,Predicted,14,Leicester City Football Club,31,11,4,16,37
+31,Predicted,15,Manchester United Football Club,31,8,9,14,33
+31,Predicted,16,Crystal Palace Football Club,30,5,14,11,29
+31,Predicted,17,Ipswich Town Football Club,31,5,7,19,22
+31,Predicted,18,Everton Football Club,31,4,7,20,19
+31,Predicted,19,Southampton Football Club,31,3,8,20,17
+31,Predicted,20,Wolverhampton Wanderers Football Club,31,4,5,22,17
