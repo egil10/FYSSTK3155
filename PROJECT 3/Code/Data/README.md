@@ -2,8 +2,11 @@
 
 This folder stores both the raw Transfermarkt exports and the derived
 feature tables. Raw CSVs are large and remain ignored by git,
-while the aggregated feature files (`pl_team_features.*` and `game_features.*`) 
+while the aggregated feature files (`game_features.parquet` and `pl_team_features.*`) 
 are whitelisted so the project can ship ready-made dataset snapshots.
+
+**Note:** The main dataset (`game_features.parquet`) is saved in Parquet format for 
+optimal compression (~74% smaller than CSV) while preserving all data types.
 
 ### Raw CSV bundle _(ignored by git)_
 Drop the official Transfermarkt CSVs here with the original filenames:
@@ -24,16 +27,31 @@ for modelling work.
 
 ### Build feature tables
 
-#### Game-level features (one row per game)
-Build aggregated features for all games (no filtering by competition or season):
+#### Game-level features (one row per game) - **RECOMMENDED**
+
+Build comprehensive lag-based features for all games with strict temporal filtering:
 
 ```bash
-python Code/Implementations/Transfermarkt_data.py \
-  --output Code/Data/game_features.csv
+python Code/Implementations/Transfermarkt_data.py
 ```
 
-This produces `game_features.csv` with one row per game, containing features for both 
-home and away teams (prefixed with `home_` and `away_`).
+This produces `game_features.parquet` (default) with:
+- **One row per game** with features for both home and away teams
+- **Strict lag-based features** following naming convention: `{team}_{feature}_{stat}_L{N}`
+- **Multi-window lags**: L1, L3, L5, L10, L20 for all features
+- **No data leakage**: All features use only data from matches before the current game
+- **Interaction features**: `diff_*` features for relative strength metrics
+- **Column structure**: Metadata (ID_*) → RESULT (W/D/L) → Predictor features
+
+**Column naming convention:**
+- Metadata: `ID_GAME`, `ID_COMPETITION`, `ID_DATE`, etc. (never used in training)
+- Target: `RESULT` (W/D/L based on home/away goals)
+- Features: `home_points_sum_L3`, `away_goals_mean_L10`, `diff_squad_value_total_L5`, etc.
+
+**File format:**
+- Default output is **Parquet** (73% smaller than CSV, ~64 MB vs ~243 MB)
+- Use `--also-save-csv` if you need CSV format
+- Use `--output` to specify custom path/format
 
 #### Premier League team features (legacy, club-level)
 For the original Premier League club-level dataset:
@@ -46,24 +64,60 @@ python Code/Implementations/Transfermarkt_data.py \
   --output Code/Data/pl_team_features.csv
 ```
 
-Key command-line options:
-- `--data-dir` – alternate location of the raw CSVs (defaults to this folder).
-- `--output` – `.csv` or `.parquet` path for the aggregated dataset.
-- `--start-season` – First season to include (optional, defaults to all seasons).
-- `--end-season` – Last season to include (optional, defaults to all seasons).
-- `--competition-id` – Transfermarkt competition code (optional, defaults to all competitions).
+**Key command-line options:**
+- `--data-dir` – alternate location of the raw CSVs (defaults to this folder)
+- `--output` – output path (default: `Code/Data/game_features.parquet`)
+- `--also-save-csv` – also save CSV version alongside Parquet
+- `--start-season` – first season to include (optional, defaults to all seasons)
+- `--end-season` – last season to include (optional, defaults to all seasons)
+- `--competition-id` – competition code to filter (optional, defaults to all competitions)
 
-The script produces leak-free modelling features via `prepare_features`. A
-list of columns safe to use for prediction is written to
-`Code/Data/predictive_features.txt`.
+**Feature engineering:**
+- All features are **strictly lagged** (no data leakage)
+- Multi-window rolling statistics: L1, L3, L5, L10, L20
+- Feature groups: club performance, appearances, lineups, events
+- Interaction features: home-away differences for key metrics
+- A list of predictive columns is written to `Code/Data/predictive_features.txt`
+
+**Converting CSV to Parquet:**
+If you have an existing CSV file, convert it to save space:
+```bash
+python Code/Implementations/convert_csv_to_parquet.py Code/Data/game_features.csv
+```
 
 ### What's inside the feature tables
 
-#### `game_features.*` (one row per game)
-Each row represents a single game with features for both home and away teams.
-All team-specific features are prefixed with `home_` or `away_` (e.g., 
-`home_squad_value_total`, `away_avg_age`). This format is ideal for game-level 
-predictions where you want one row per match.
+#### `game_features.parquet` (one row per game) - **MAIN DATASET**
+
+**Structure:**
+1. **Metadata columns** (ID_* prefix): Game identifiers, dates, teams, managers, etc.
+   - Never used in model training
+   - Examples: `ID_GAME`, `ID_DATE`, `ID_HOME_TEAM`, `ID_REFIREE`
+
+2. **Target variable** (`RESULT`): Match outcome
+   - Values: "W" (home win), "D" (draw), "L" (home loss)
+   - Computed from `ID_HOME_GOALS` and `ID_AWAY_GOALS`
+
+3. **Predictor features** (lagged, no leakage):
+   - **Club performance**: `home_points_sum_L3`, `away_goal_difference_mean_L10`, etc.
+   - **Appearances**: `home_goals_mean_L5`, `away_assists_mean_L1`, etc.
+   - **Lineup/squad**: `home_squad_value_total_mean_L20`, `away_avg_age_mean_L5`, etc.
+   - **Events**: `home_shots_mean_L3`, `away_possession_proxy_events_mean_L10`, etc.
+   - **Interactions**: `diff_points_L5`, `diff_squad_value_total_L10`, etc.
+
+**Feature naming pattern:**
+```
+{team}_{feature}_{statistic}_L{window}
+```
+- `team`: `home` or `away`
+- `feature`: e.g., `points`, `goals`, `squad_value_total`, `shots`
+- `statistic`: `mean`, `sum`, `max`, `min`
+- `window`: `1`, `3`, `5`, `10`, `20` (number of previous matches)
+
+**Example features:**
+- `home_points_sum_L3` - Sum of points from last 3 matches (home team)
+- `away_goals_mean_L10` - Average goals scored in last 10 matches (away team)
+- `diff_squad_value_total_L5` - Difference in squad value (home - away) over last 5 matches
 
 #### `pl_team_features.*` (one row per club-game)
 Each row is a club-game entry designed to mirror the tidyverse pipeline we used
@@ -112,8 +166,30 @@ why it exists.
 | `passes`, `touches` | Possession-oriented actions (when present in the feed). |
 | `possession_proxy_events` | `(shots + passes + touches) / n_events` as a crude possession stand-in.
 
-Feel free to inspect the CSV directly or convert to Parquet for smaller file
-size and typed columns. The 2021–2025 Premier League slice is ~1.5 MB as CSV and
-even smaller as Parquet, so it is checked into git for convenience. Rerun the
-script whenever you refresh the raw data and commit the new snapshot if needed.
+### Using the dataset
 
+**Reading Parquet files:**
+```python
+import pandas as pd
+
+# Read the main dataset
+df = pd.read_parquet("Code/Data/game_features.parquet")
+
+# All features are ready for time-series cross-validation
+# Metadata columns (ID_*) should be excluded from training
+# RESULT is the target variable
+# All other columns are lagged predictors
+```
+
+**File sizes:**
+- `game_features.parquet`: ~64 MB (compressed from 243 MB CSV)
+- Compression ratio: ~74% smaller
+- Preserves all data types and is faster to read/write
+
+**Time-series cross-validation:**
+The dataset is structured for strict temporal validation:
+- Sort by `ID_DATE` before splitting
+- Use only data before the test period for training
+- All features are pre-lagged, so no leakage risk
+
+Rerun the script whenever you refresh the raw data and commit the new snapshot if needed.
