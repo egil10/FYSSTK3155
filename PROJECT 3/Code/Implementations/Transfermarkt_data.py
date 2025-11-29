@@ -540,6 +540,104 @@ def build_game_datasets(
     return games_features
 
 
+def reorder_columns_for_modeling(df: pd.DataFrame) -> pd.DataFrame:
+    """Reorder columns: metadata (ID_ prefix) → RESULT → predictor features.
+    
+    Returns DataFrame with columns in this order:
+    1. Metadata columns (renamed with ID_ prefix)
+    2. RESULT column (W/D/L)
+    3. All predictor features (home_* and away_* features)
+    """
+    df = df.copy()
+    
+    # Define metadata column mappings (old_name -> new_name)
+    metadata_mappings = {
+        "game_id": "ID_GAME",
+        "competition_id": "ID_COMPETITION",
+        "season": "ID_SEASON",
+        "round": "ID_ROUND",
+        "date": "ID_DATE",
+        "home_club_id": "ID_HOME_CLUB",
+        "away_club_id": "ID_AWAY_CLUB",
+        "home_club_name": "ID_HOME_TEAM",
+        "away_club_name": "ID_AWAY_TEAM",
+        "home_club_manager_name": "ID_HOME_MANAGER",
+        "away_club_manager_name": "ID_AWAY_MANAGER",
+        "stadium": "ID_STADIUM",
+        "attendance": "ID_ATTENDANCE",
+        "referee": "ID_REFIREE",
+        "url": "ID_URL",
+        "round_number": "ID_ROUND_NUMBER",
+        "home_club_goals": "ID_HOME_GOALS",
+        "away_club_goals": "ID_AWAY_GOALS",
+        "aggregate": "ID_AGGREGATE",
+        "competition_type": "ID_COMPETITION_TYPE",
+        "home_club_formation": "ID_HOME_FORMATION",
+        "away_club_formation": "ID_AWAY_FORMATION",
+    }
+    
+    # Define metadata column order (in the exact order specified by user)
+    metadata_order = [
+        "ID_GAME", "ID_COMPETITION", "ID_SEASON", "ID_ROUND", "ID_DATE",
+        "ID_HOME_CLUB", "ID_AWAY_CLUB", "ID_HOME_TEAM", "ID_AWAY_TEAM",
+        "ID_HOME_MANAGER", "ID_AWAY_MANAGER", "ID_STADIUM", "ID_ATTENDANCE",
+        "ID_REFIREE", "ID_URL", "ID_ROUND_NUMBER", "ID_HOME_GOALS", "ID_AWAY_GOALS",
+        "ID_AGGREGATE", "ID_COMPETITION_TYPE", "ID_HOME_FORMATION", "ID_AWAY_FORMATION",
+    ]
+    
+    # Step 1: Rename metadata columns
+    rename_dict = {}
+    for old_name, new_name in metadata_mappings.items():
+        if old_name in df.columns:
+            rename_dict[old_name] = new_name
+    df = df.rename(columns=rename_dict)
+    
+    # Step 2: Remove target_result if it exists (we're creating RESULT instead)
+    if "target_result" in df.columns:
+        df = df.drop(columns=["target_result"])
+    
+    # Step 3: Create RESULT column from ID_HOME_GOALS and ID_AWAY_GOALS
+    # After renaming, these should be ID_HOME_GOALS and ID_AWAY_GOALS
+    if "ID_HOME_GOALS" in df.columns and "ID_AWAY_GOALS" in df.columns:
+        # Create RESULT column as string type
+        df["RESULT"] = "L"  # Default to loss
+        win_mask = df["ID_HOME_GOALS"] > df["ID_AWAY_GOALS"]
+        draw_mask = df["ID_HOME_GOALS"] == df["ID_AWAY_GOALS"]
+        df.loc[win_mask, "RESULT"] = "W"
+        df.loc[draw_mask, "RESULT"] = "D"
+        # Ensure it's string type
+        df["RESULT"] = df["RESULT"].astype("string")
+    elif "home_club_goals" in df.columns and "away_club_goals" in df.columns:
+        # Fallback if renaming didn't happen for some reason
+        df["RESULT"] = "L"
+        win_mask = df["home_club_goals"] > df["away_club_goals"]
+        draw_mask = df["home_club_goals"] == df["away_club_goals"]
+        df.loc[win_mask, "RESULT"] = "W"
+        df.loc[draw_mask, "RESULT"] = "D"
+        df["RESULT"] = df["RESULT"].astype("string")
+    
+    # Step 4: Identify all columns after renaming
+    metadata_cols_present = [col for col in metadata_order if col in df.columns]
+    result_col = ["RESULT"] if "RESULT" in df.columns else []
+    
+    # All other columns are predictor features - preserve their current relative order
+    all_cols = list(df.columns)
+    predictor_cols = [
+        col for col in all_cols 
+        if col not in metadata_cols_present and col != "RESULT"
+    ]
+    
+    # Step 5: Reorder columns: metadata → RESULT → predictors (preserve predictor order)
+    final_column_order = metadata_cols_present + result_col + predictor_cols
+    
+    # Ensure we have all columns (should be the same, but double-check)
+    missing_cols = [col for col in df.columns if col not in final_column_order]
+    if missing_cols:
+        final_column_order = final_column_order + missing_cols
+    
+    return df[final_column_order]
+
+
 def save_features(df: pd.DataFrame, output_path: Path) -> Path:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     if output_path.suffix.lower() == ".parquet":
@@ -613,6 +711,10 @@ def main() -> None:
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Running feature engineering...")
     processed_features, predictive_cols = prepare_features(raw_features)
     print(f"  ✓ Feature engineering complete")
+    
+    print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Reordering columns for modeling...")
+    processed_features = reorder_columns_for_modeling(processed_features)
+    print(f"  ✓ Column reordering complete")
     
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Saving results...")
     saved_path = save_features(processed_features, output_path)
