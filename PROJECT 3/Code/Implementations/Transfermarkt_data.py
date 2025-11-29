@@ -140,7 +140,8 @@ def build_game_datasets(
     club_games["prev_goals_conceded"] = group["opponent_goals"].shift(1)
     
     # Extract club-level historical features for merging back to games
-    club_history = club_games[["game_id", "club_id", "is_home", "prev_points", 
+    # Include date for lag calculations
+    club_history = club_games[["game_id", "club_id", "is_home", "date", "prev_points", 
                                 "prev_goal_difference", "prev_goals_scored", 
                                 "prev_goals_conceded"]].copy()
 
@@ -492,8 +493,9 @@ def build_game_datasets(
     )
     print(f"✓ ({len(event_features):,} club-game combinations)")
 
-    print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Combining and merging features...")
-    # Combine all club-level features
+    print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Combining features and computing lagged windows...")
+    # Combine all club-level features (these are per-match, not lagged yet)
+    # club_history already includes date column
     club_features = (
         club_history
         .merge(appearance_features, on=["game_id", "club_id"], how="left")
@@ -501,31 +503,39 @@ def build_game_datasets(
         .merge(event_features, on=["game_id", "club_id"], how="left")
     )
     
-    # Split into home and away features
-    home_mask = club_features["is_home"] == True
-    away_mask = club_features["is_home"] == False
+    # Add base features that will be lagged
+    # Ensure we have goals_scored and goals_conceded from own_goals/opponent_goals
+    if "prev_goals_scored" in club_features.columns:
+        club_features["goals_scored"] = club_features["prev_goals_scored"]
+    elif "own_goals" in club_games.columns:
+        club_features = club_features.merge(
+            club_games[["game_id", "club_id", "own_goals", "opponent_goals"]],
+            on=["game_id", "club_id"],
+            how="left"
+        )
+        club_features["goals_scored"] = club_features["own_goals"]
+        club_features["goals_conceded"] = club_features["opponent_goals"]
     
-    home_features = (
-        club_features[home_mask]
-        .drop(columns=["club_id", "is_home"])
-        .add_prefix("home_")
-        .rename(columns={"home_game_id": "game_id"})
+    # Ensure points and goal_difference are available
+    if "prev_points" not in club_features.columns:
+        club_features = club_features.merge(
+            club_games[["game_id", "club_id", "points", "goal_difference"]],
+            on=["game_id", "club_id"],
+            how="left"
+        )
+    
+    # Now compute comprehensive lagged features using the new system
+    try:
+        from .lag_feature_engineering import compute_comprehensive_lagged_features
+    except ImportError:
+        from lag_feature_engineering import compute_comprehensive_lagged_features
+    
+    lag_windows = [1, 3, 5, 10, 20]
+    games_features = compute_comprehensive_lagged_features(
+        club_features=club_features,
+        games_df=games,
+        lag_windows=lag_windows
     )
-    
-    away_features = (
-        club_features[away_mask]
-        .drop(columns=["club_id", "is_home"])
-        .add_prefix("away_")
-        .rename(columns={"away_game_id": "game_id"})
-    )
-    
-    print(f"  Merging home features ({len(home_features):,} games)...", end=" ", flush=True)
-    games_features = games.merge(home_features, on="game_id", how="left")
-    print(f"✓")
-    
-    print(f"  Merging away features ({len(away_features):,} games)...", end=" ", flush=True)
-    games_features = games_features.merge(away_features, on="game_id", how="left")
-    print(f"✓")
     
     print(f"  Finalizing dataset...", end=" ", flush=True)
     games_features = (
@@ -639,9 +649,11 @@ def reorder_columns_for_modeling(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def save_features(df: pd.DataFrame, output_path: Path) -> Path:
+    """Save features to file, using appropriate format and compression."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
     if output_path.suffix.lower() == ".parquet":
-        df.to_parquet(output_path, index=False)
+        # Use snappy compression for good balance of speed and compression
+        df.to_parquet(output_path, index=False, compression='snappy')
     else:
         df.to_csv(output_path, index=False)
     return output_path
@@ -673,7 +685,12 @@ def parse_args() -> argparse.Namespace:
         "--output",
         type=Path,
         default=None,
-        help="Where to save the aggregated dataset (default: Code/Data/game_features.csv).",
+        help="Where to save the aggregated dataset (default: Code/Data/game_features.parquet).",
+    )
+    parser.add_argument(
+        "--also-save-csv",
+        action="store_true",
+        help="Also save CSV version alongside Parquet (for compatibility).",
     )
     parser.add_argument(
         "--competition-id",
@@ -695,7 +712,7 @@ def main() -> None:
     output_path = (
         args.output
         if args.output is not None
-        else Path(__file__).resolve().parents[1] / "Data" / "game_features.csv"
+        else Path(__file__).resolve().parents[1] / "Data" / "game_features.parquet"
     )
     
     print(f"\nData directory: {data_dir}")
@@ -718,6 +735,20 @@ def main() -> None:
     
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Saving results...")
     saved_path = save_features(processed_features, output_path)
+    
+    # Get file size
+    file_size_mb = saved_path.stat().st_size / (1024 * 1024)
+    
+    # Optionally save CSV version
+    if args.also_save_csv or output_path.suffix.lower() == ".csv":
+        csv_path = output_path.with_suffix(".csv")
+        print(f"  Also saving CSV version...", end=" ", flush=True)
+        processed_features.to_csv(csv_path, index=False)
+        csv_size_mb = csv_path.stat().st_size / (1024 * 1024)
+        print(f"✓ ({csv_size_mb:.1f} MB)")
+    else:
+        csv_size_mb = None
+    
     PREDICTIVE_METADATA_PATH.write_text("\n".join(predictive_cols))
     
     elapsed = (datetime.now() - start_time).total_seconds()
@@ -728,6 +759,11 @@ def main() -> None:
     print(f"Total columns: {len(processed_features.columns)}")
     print(f"Predictive feature count: {len(predictive_cols)}")
     print(f"Saved dataset to: {saved_path}")
+    print(f"  File size: {file_size_mb:.1f} MB ({saved_path.suffix.upper()})")
+    if csv_size_mb:
+        compression_ratio = (1 - file_size_mb / csv_size_mb) * 100
+        print(f"  CSV size: {csv_size_mb:.1f} MB")
+        print(f"  Compression: {compression_ratio:.1f}% smaller")
     print(f"Total processing time: {elapsed:.1f} seconds ({elapsed/60:.1f} minutes)")
     print(f"{'=' * 80}\n")
 

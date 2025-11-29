@@ -3,8 +3,9 @@ Code/Data/*
 !Code/Data/.gitkeep
 !Code/Data/pl_team_features.csv
 !Code/Data/pl_team_features.parquet
-!Code/Data/game_features.csv
 !Code/Data/game_features.parquet
+# CSV is typically much larger, comment out if you need it
+# !Code/Data/game_features.csv
 !Code/Data/predictive_features.txt
 !Code/Data/README.md
 
