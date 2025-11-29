@@ -1,9 +1,9 @@
 ## Transfermarkt Data Guide
 
 This folder stores both the raw Transfermarkt exports and the derived
-Premier-League feature table. Raw CSVs are large and remain ignored by git,
-while the aggregated `pl_team_features.*` files are whitelisted so the project
-can ship a ready-made dataset snapshot.
+feature tables. Raw CSVs are large and remain ignored by git,
+while the aggregated feature files (`pl_team_features.*` and `game_features.*`) 
+are whitelisted so the project can ship ready-made dataset snapshots.
 
 ### Raw CSV bundle _(ignored by git)_
 Drop the official Transfermarkt CSVs here with the original filenames:
@@ -22,26 +22,50 @@ You can also enrich the dataset with public player-rating data such as the
 which provides per-match performance metrics that can be joined on player IDs
 for modelling work.
 
-### Build the Premier League feature table
-From `PROJECT 3` run:
+### Build feature tables
+
+#### Game-level features (one row per game)
+Build aggregated features for all games (no filtering by competition or season):
+
+```bash
+python Code/Implementations/Transfermarkt_data.py \
+  --output Code/Data/game_features.csv
+```
+
+This produces `game_features.csv` with one row per game, containing features for both 
+home and away teams (prefixed with `home_` and `away_`).
+
+#### Premier League team features (legacy, club-level)
+For the original Premier League club-level dataset:
 
 ```bash
 python Code/Implementations/Transfermarkt_data.py \
   --start-season 2021 \
   --end-season 2025 \
+  --competition-id GB1 \
   --output Code/Data/pl_team_features.csv
 ```
 
 Key command-line options:
 - `--data-dir` – alternate location of the raw CSVs (defaults to this folder).
 - `--output` – `.csv` or `.parquet` path for the aggregated dataset.
-- `--competition-id` – Transfermarkt competition code (default `GB1` for EPL).
+- `--start-season` – First season to include (optional, defaults to all seasons).
+- `--end-season` – Last season to include (optional, defaults to all seasons).
+- `--competition-id` – Transfermarkt competition code (optional, defaults to all competitions).
 
-The script now also produces leak-free modelling features via `prepare_features`. A
+The script produces leak-free modelling features via `prepare_features`. A
 list of columns safe to use for prediction is written to
 `Code/Data/predictive_features.txt`.
 
-### What’s inside `pl_team_features.*`
+### What's inside the feature tables
+
+#### `game_features.*` (one row per game)
+Each row represents a single game with features for both home and away teams.
+All team-specific features are prefixed with `home_` or `away_` (e.g., 
+`home_squad_value_total`, `away_avg_age`). This format is ideal for game-level 
+predictions where you want one row per match.
+
+#### `pl_team_features.*` (one row per club-game)
 Each row is a club-game entry designed to mirror the tidyverse pipeline we used
 in R. Below is a full column reference so you know exactly what is persisted and
 why it exists.

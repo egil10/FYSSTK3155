@@ -1,11 +1,16 @@
-"""Build aggregated Transfermarkt features for Premier League clubs."""
+"""Build aggregated Transfermarkt features for all games (one row per game)."""
 
 from __future__ import annotations
 
 import argparse
 from pathlib import Path
+from datetime import datetime
+import multiprocessing as mp
+from functools import partial
+from typing import Dict, Any
 
 import pandas as pd
+import numpy as np
 
 try:
     from .feature_engineering import (
@@ -55,33 +60,46 @@ def _season_to_year(value: str | int | float) -> int | None:
 
 
 def load_csv(data_dir: Path, name: str) -> pd.DataFrame:
+    """Load CSV with optimized settings for large files."""
     file_path = data_dir / f"{name}.csv"
     if not file_path.exists():
         raise FileNotFoundError(f"Missing expected file: {file_path}")
-    return pd.read_csv(file_path)
+    # Use low_memory=False for better type inference on large files
+    # Use engine='c' for faster parsing
+    return pd.read_csv(file_path, low_memory=False, engine='c')
 
 
-def build_pl_datasets(
+def build_game_datasets(
     data_dir: Path,
-    start_season: int,
-    end_season: int,
-    competition_id: str = DEFAULT_COMPETITION_ID,
+    start_season: int = None,
+    end_season: int = None,
+    competition_id: str = None,
 ) -> pd.DataFrame:
-    """Replicate the R aggregation pipeline using pandas."""
-    resources = {
-        "appearances": load_csv(data_dir, "appearances"),
-        "clubs": load_csv(data_dir, "clubs"),
-        "club_games": load_csv(data_dir, "club_games"),
-        "competitions": load_csv(data_dir, "competitions"),
-        "games": load_csv(data_dir, "games"),
-        "game_events": load_csv(data_dir, "game_events"),
-        "game_lineups": load_csv(data_dir, "game_lineups"),
-        "players": load_csv(data_dir, "players"),
-        "player_valuations": load_csv(data_dir, "player_valuations"),
-        "transfers": load_csv(data_dir, "transfers"),
-    }
+    """Build aggregated features for all games using pandas.
+    
+    Returns one row per game with features for both home and away teams.
+    """
+    print("=" * 80)
+    print("BUILDING GAME-LEVEL TRANSFERMARKT DATASET")
+    print("=" * 80)
+    print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Loading data files...")
+    
+    resources = {}
+    file_names = [
+        "appearances", "clubs", "club_games", "competitions", "games",
+        "game_events", "game_lineups", "players", "player_valuations", "transfers"
+    ]
+    
+    for name in file_names:
+        print(f"  Loading {name}.csv...", end=" ", flush=True)
+        resources[name] = load_csv(data_dir, name)
+        print(f"✓ ({len(resources[name]):,} rows)")
+    
+    print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Processing games...")
 
+    # Start with all games - no filtering
     games = resources["games"].copy()
+    print(f"  Processing {len(games):,} games...")
     games["season"] = pd.to_numeric(games["season"], errors="coerce")
     games["date"] = pd.to_datetime(games["date"], errors="coerce")
     games["round_number"] = (
@@ -90,42 +108,48 @@ def build_pl_datasets(
         .str.extract(r"(\d+)")
         .astype(float)
     )
-    pl_games = games[
-        (games["competition_id"] == competition_id)
-        & (games["season"] >= start_season)
-        & (games["season"] <= end_season)
-    ].copy()
-    if pl_games.empty:
-        raise ValueError(
-            "Premier League subset is empty. Check competition id or season limits."
-        )
-    pl_game_ids = pl_games["game_id"].unique()
+    
+    # Get all game IDs as set for faster membership testing
+    all_game_ids_set = set(games["game_id"].unique())
+    all_game_ids = games["game_id"].unique()
+    print(f"  Unique game IDs: {len(all_game_ids):,}")
+    
+    print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Building club-level features...")
 
-    # Club-level rows per match with home/away marker
-    pl_club_games = (
-        pl_games.merge(resources["club_games"], on="game_id", how="left")
+    # We'll augment games.csv directly (1 row per game)
+    # Create club_games view for calculating club-level features
+    club_games = (
+        games.merge(resources["club_games"], on="game_id", how="left")
         .assign(is_home=lambda df: df["club_id"] == df["home_club_id"])
         .reset_index(drop=True)
     )
-    pl_club_games["goal_difference"] = (
-        pl_club_games["own_goals"] - pl_club_games["opponent_goals"]
+    # Optimize points calculation using np.select
+    club_games["goal_difference"] = (
+        club_games["own_goals"] - club_games["opponent_goals"]
     )
-    pl_club_games["points"] = pd.NA
-    win_mask = pl_club_games["own_goals"] > pl_club_games["opponent_goals"]
-    draw_mask = pl_club_games["own_goals"] == pl_club_games["opponent_goals"]
-    pl_club_games.loc[win_mask, "points"] = 3
-    pl_club_games.loc[draw_mask, "points"] = 1
-    pl_club_games["points"] = pd.to_numeric(pl_club_games["points"], errors="coerce")
-    pl_club_games = pl_club_games.sort_values(["club_id", "date", "game_id"])
-    group = pl_club_games.groupby("club_id", group_keys=False)
-    pl_club_games["prev_points"] = group["points"].shift(1)
-    pl_club_games["prev_goal_difference"] = group["goal_difference"].shift(1)
-    pl_club_games["prev_goals_scored"] = group["own_goals"].shift(1)
-    pl_club_games["prev_goals_conceded"] = group["opponent_goals"].shift(1)
+    club_games["points"] = np.select(
+        [club_games["goal_difference"] > 0, club_games["goal_difference"] == 0],
+        [3, 1],
+        default=0
+    ).astype("float64")
+    club_games = club_games.sort_values(["club_id", "date", "game_id"])
+    group = club_games.groupby("club_id", group_keys=False)
+    club_games["prev_points"] = group["points"].shift(1)
+    club_games["prev_goal_difference"] = group["goal_difference"].shift(1)
+    club_games["prev_goals_scored"] = group["own_goals"].shift(1)
+    club_games["prev_goals_conceded"] = group["opponent_goals"].shift(1)
+    
+    # Extract club-level historical features for merging back to games
+    club_history = club_games[["game_id", "club_id", "is_home", "prev_points", 
+                                "prev_goal_difference", "prev_goals_scored", 
+                                "prev_goals_conceded"]].copy()
 
+    print(f"  Computing appearance features...", end=" ", flush=True)
     appearances = resources["appearances"]
+    # Filter first for efficiency
+    appearances_filtered = appearances[appearances["game_id"].isin(all_game_ids_set)]
     appearance_features = (
-        appearances[appearances["game_id"].isin(pl_game_ids)]
+        appearances_filtered
         .groupby(["game_id", "player_club_id"])
         .agg(
             goals_mean=("goals", "mean"),
@@ -143,7 +167,9 @@ def build_pl_datasets(
         .reset_index()
         .rename(columns={"player_club_id": "club_id"})
     )
+    print(f"✓ ({len(appearance_features):,} club-game combinations)")
 
+    print(f"  Processing player valuations...", end=" ", flush=True)
     player_valuations = resources["player_valuations"].copy()
     player_valuations["date"] = pd.to_datetime(
         player_valuations.get("date"), errors="coerce"
@@ -159,7 +185,9 @@ def build_pl_datasets(
         .reset_index()
         .rename(columns={"market_value_in_eur": "market_value_latest"})
     )
+    print(f"✓ ({len(latest_valuations):,} players)")
 
+    print(f"  Processing player data...", end=" ", flush=True)
     players = resources["players"].copy()
     players["date_of_birth"] = pd.to_datetime(
         players.get("date_of_birth"), errors="coerce"
@@ -185,7 +213,9 @@ def build_pl_datasets(
         )
     else:
         players_subset["player_position"] = pd.NA
+    print(f"✓ ({len(players_subset):,} players)")
 
+    print(f"  Processing lineups...", end=" ", flush=True)
     lineups_raw = resources["game_lineups"].copy()
     if "date" in lineups_raw.columns:
         lineups_raw = lineups_raw.rename(columns={"date": "lineup_date"})
@@ -199,7 +229,7 @@ def build_pl_datasets(
             how="left",
         )
         .merge(
-            pl_games[["game_id", "date", "season"]].rename(columns={"date": "match_date"}),
+            games[["game_id", "date", "season"]].rename(columns={"date": "match_date"}),
             on="game_id",
             how="left",
         )
@@ -262,8 +292,10 @@ def build_pl_datasets(
         )
     else:
         lineups["resolved_position"] = lineups["player_position"]
-    lineups_filtered = lineups[lineups["game_id"].isin(pl_game_ids)].copy()
+    lineups_filtered = lineups[lineups["game_id"].isin(all_game_ids_set)].copy()
+    print(f"✓ ({len(lineups_filtered):,} lineup entries)")
 
+    print(f"  Processing transfers...", end=" ", flush=True)
     transfers = resources["transfers"].copy()
     transfers["transfer_date"] = pd.to_datetime(
         transfers.get("transfer_date"), errors="coerce"
@@ -271,17 +303,17 @@ def build_pl_datasets(
     transfers["transfer_season_start"] = transfers["transfer_season"].apply(
         _season_to_year
     )
+    # Use all transfers - no season filtering
     recent_transfers = (
-        transfers[
-            transfers["transfer_season_start"].between(
-                start_season, end_season, inclusive="both"
-            )
-        ]
+        transfers
         .dropna(subset=["to_club_id"])
         .sort_values("transfer_date")
         .groupby(["player_id", "to_club_id"], as_index=False)
         .first()
     )
+    print(f"✓ ({len(recent_transfers):,} transfers)")
+    
+    print(f"  Merging transfer data with lineups...", end=" ", flush=True)
     lineups_filtered = lineups_filtered.merge(
         recent_transfers[
             [
@@ -301,14 +333,16 @@ def build_pl_datasets(
         & lineups_filtered["match_date"].notna()
         & (lineups_filtered["match_date"] >= lineups_filtered["transfer_date"])
     )
+    print(f"✓")
 
+    print(f"  Computing lineup continuity features...", end=" ", flush=True)
     starter_sets = (
         lineups_filtered[lineups_filtered["is_starter"]]
         .groupby(["game_id", "club_id"])["player_id"]
         .agg(lambda ids: frozenset(ids))
         .reset_index()
         .rename(columns={"player_id": "starter_set"})
-        .merge(pl_games[["game_id", "date"]], on="game_id", how="left")
+        .merge(games[["game_id", "date"]], on="game_id", how="left")
         .sort_values(["club_id", "date", "game_id"])
     )
     starter_sets["prev_set"] = starter_sets.groupby("club_id")["starter_set"].shift(1)
@@ -323,7 +357,9 @@ def build_pl_datasets(
         axis=1,
     )
     continuity_features = starter_sets[["game_id", "club_id", "continuity_index"]]
+    print(f"✓ ({len(continuity_features):,} entries)")
 
+    print(f"  Computing missing key players...", end=" ", flush=True)
     club_top_players = latest_valuations.merge(
         players[["player_id", "current_club_id"]],
         on="player_id",
@@ -359,14 +395,18 @@ def build_pl_datasets(
         axis=1,
     )
     missing_key = missing_key[["game_id", "club_id", "missing_key_players"]]
+    print(f"✓")
 
+    print(f"  Computing new signings...", end=" ", flush=True)
     new_signings = (
         lineups_filtered.groupby(["game_id", "club_id"])["is_new_signing"]
         .sum()
         .reset_index()
         .rename(columns={"is_new_signing": "new_signings_played"})
     )
+    print(f"✓")
 
+    print(f"  Computing lineup features...", end=" ", flush=True)
     lineup_features = (
         lineups_filtered.groupby(["game_id", "club_id"])
         .agg(
@@ -407,15 +447,26 @@ def build_pl_datasets(
         .merge(missing_key, on=["game_id", "club_id"], how="left")
         .merge(new_signings, on=["game_id", "club_id"], how="left")
     )
-    lineup_features["continuity_index"] = lineup_features["continuity_index"].fillna(0)
+    # Fix FutureWarning about downcasting - handle pd.NA values properly
+    if "continuity_index" in lineup_features.columns:
+        # Use pd.to_numeric with errors='coerce' to handle pd.NA, then fillna
+        continuity_series = lineup_features["continuity_index"].copy()
+        # Convert to numeric (this converts pd.NA to NaN)
+        continuity_series = pd.to_numeric(continuity_series, errors="coerce")
+        # Fill NaN with 0.0 and ensure float64 type
+        lineup_features["continuity_index"] = continuity_series.fillna(0.0).astype("float64")
     lineup_features["new_signings_played"] = lineup_features[
         "new_signings_played"
     ].fillna(0)
+    print(f"✓ ({len(lineup_features):,} club-game combinations)")
 
+    print(f"  Computing event features...", end=" ", flush=True)
     events = resources["game_events"]
+    # Filter and clean type in one pass
+    events_filtered = events[events["game_id"].isin(all_game_ids_set)].copy()
+    events_filtered["type_clean"] = events_filtered["type"].str.lower()
     event_features = (
-        events[events["game_id"].isin(pl_game_ids)]
-        .assign(type_clean=lambda df: df["type"].str.lower())
+        events_filtered
         .groupby(["game_id", "club_id"])
         .agg(
             n_events=("game_event_id", "count"),
@@ -439,17 +490,54 @@ def build_pl_datasets(
         (event_features["shots"] + event_features["passes"] + event_features["touches"])
         / event_features["n_events"].replace(0, pd.NA)
     )
+    print(f"✓ ({len(event_features):,} club-game combinations)")
 
-    pl_features = (
-        pl_club_games.merge(
-            appearance_features, on=["game_id", "club_id"], how="left"
-        )
+    print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Combining and merging features...")
+    # Combine all club-level features
+    club_features = (
+        club_history
+        .merge(appearance_features, on=["game_id", "club_id"], how="left")
         .merge(lineup_features, on=["game_id", "club_id"], how="left")
         .merge(event_features, on=["game_id", "club_id"], how="left")
-        .sort_values(["season", "game_id", "club_id"])
+    )
+    
+    # Split into home and away features
+    home_mask = club_features["is_home"] == True
+    away_mask = club_features["is_home"] == False
+    
+    home_features = (
+        club_features[home_mask]
+        .drop(columns=["club_id", "is_home"])
+        .add_prefix("home_")
+        .rename(columns={"home_game_id": "game_id"})
+    )
+    
+    away_features = (
+        club_features[away_mask]
+        .drop(columns=["club_id", "is_home"])
+        .add_prefix("away_")
+        .rename(columns={"away_game_id": "game_id"})
+    )
+    
+    print(f"  Merging home features ({len(home_features):,} games)...", end=" ", flush=True)
+    games_features = games.merge(home_features, on="game_id", how="left")
+    print(f"✓")
+    
+    print(f"  Merging away features ({len(away_features):,} games)...", end=" ", flush=True)
+    games_features = games_features.merge(away_features, on="game_id", how="left")
+    print(f"✓")
+    
+    print(f"  Finalizing dataset...", end=" ", flush=True)
+    games_features = (
+        games_features
+        .sort_values(["season", "game_id"])
         .reset_index(drop=True)
     )
-    return pl_features
+    print(f"✓")
+    
+    print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Complete! Final dataset: {len(games_features):,} games")
+    print(f"  Columns: {len(games_features.columns)}")
+    return games_features
 
 
 def save_features(df: pd.DataFrame, output_path: Path) -> Path:
@@ -463,7 +551,7 @@ def save_features(df: pd.DataFrame, output_path: Path) -> Path:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Build Premier League Transfermarkt aggregates."
+        description="Build Transfermarkt game aggregates with features for all games."
     )
     parser.add_argument(
         "--data-dir",
@@ -474,31 +562,32 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--start-season",
         type=int,
-        default=2021,
-        help="First season to include (default: 2021).",
+        default=None,
+        help="First season to include (optional, defaults to all seasons).",
     )
     parser.add_argument(
         "--end-season",
         type=int,
-        default=2025,
-        help="Last season to include (default: 2025).",
+        default=None,
+        help="Last season to include (optional, defaults to all seasons).",
     )
     parser.add_argument(
         "--output",
         type=Path,
         default=None,
-        help="Where to save the aggregated dataset (default: Code/Data/pl_team_features.csv).",
+        help="Where to save the aggregated dataset (default: Code/Data/game_features.csv).",
     )
     parser.add_argument(
         "--competition-id",
         type=str,
-        default=DEFAULT_COMPETITION_ID,
-        help="Transfermarkt competition identifier (default: GB1 for Premier League).",
+        default=None,
+        help="Transfermarkt competition identifier (optional, defaults to all competitions).",
     )
     return parser.parse_args()
 
 
 def main() -> None:
+    start_time = datetime.now()
     args = parse_args()
     data_dir = (
         args.data_dir
@@ -508,20 +597,37 @@ def main() -> None:
     output_path = (
         args.output
         if args.output is not None
-        else Path(__file__).resolve().parents[1] / "Data" / "pl_team_features.csv"
+        else Path(__file__).resolve().parents[1] / "Data" / "game_features.csv"
     )
-    raw_features = build_pl_datasets(
+    
+    print(f"\nData directory: {data_dir}")
+    print(f"Output path: {output_path}\n")
+    
+    raw_features = build_game_datasets(
         data_dir=data_dir,
         start_season=args.start_season,
         end_season=args.end_season,
         competition_id=args.competition_id,
     )
+    
+    print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Running feature engineering...")
     processed_features, predictive_cols = prepare_features(raw_features)
+    print(f"  ✓ Feature engineering complete")
+    
+    print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Saving results...")
     saved_path = save_features(processed_features, output_path)
     PREDICTIVE_METADATA_PATH.write_text("\n".join(predictive_cols))
-    print(f"Built {len(processed_features)} team-game rows.")
-    print(f"Saved dataset to {saved_path}")
+    
+    elapsed = (datetime.now() - start_time).total_seconds()
+    print(f"\n{'=' * 80}")
+    print(f"SUMMARY")
+    print(f"{'=' * 80}")
+    print(f"Built {len(processed_features):,} game rows")
+    print(f"Total columns: {len(processed_features.columns)}")
     print(f"Predictive feature count: {len(predictive_cols)}")
+    print(f"Saved dataset to: {saved_path}")
+    print(f"Total processing time: {elapsed:.1f} seconds ({elapsed/60:.1f} minutes)")
+    print(f"{'=' * 80}\n")
 
 
 if __name__ == "__main__":

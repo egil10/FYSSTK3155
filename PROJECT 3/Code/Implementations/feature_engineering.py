@@ -68,29 +68,58 @@ PREDICTIVE_METADATA_PATH = (
 )
 
 def prepare_features(pl_features: pd.DataFrame) -> Tuple[pd.DataFrame, List[str]]:
-    df = pl_features.sort_values(["club_id", "date", "game_id"]).reset_index(drop=True)
-    grouped = df.groupby("club_id", group_keys=False)
-
-    draw_mask = df["goal_difference"] == 0
-    df["target_result"] = np.select(
-        [df["is_win"] == 1, draw_mask],
-        [RESULT_MAP["win"], RESULT_MAP["draw"]],
-        default=RESULT_MAP["loss"],
-    )
-
-    for col in TRANSFORM_COLUMNS:
-        if col not in df.columns:
-            continue
-        df[f"lag_1_{col}"] = grouped[col].shift(1)
-        if col in ROLLING_COLS:
-            rolling = (
-                grouped[col]
-                .rolling(window=5, min_periods=1)
-                .mean()
-                .reset_index(level=0, drop=True)
-                .shift(1)
+    """Prepare features for either club-level or game-level dataframes."""
+    # Detect if this is game-level data (has home_club_id/away_club_id) or club-level
+    is_game_level = "home_club_id" in pl_features.columns or "home_club_goals" in pl_features.columns
+    
+    if is_game_level:
+        # Game-level data: one row per game with home_ and away_ prefixes
+        df = pl_features.sort_values(["date", "game_id"]).reset_index(drop=True)
+        
+        # Create target_result from game-level columns
+        if "home_club_goals" in df.columns and "away_club_goals" in df.columns:
+            draw_mask = df["home_club_goals"] == df["away_club_goals"]
+            win_mask = df["home_club_goals"] > df["away_club_goals"]
+            df["target_result"] = np.select(
+                [win_mask, draw_mask],
+                [RESULT_MAP["win"], RESULT_MAP["draw"]],
+                default=RESULT_MAP["loss"],
             )
-            df[f"roll_5_avg_{col}"] = rolling
+        
+        # For game-level data, we skip lag features for now as they require club-level grouping
+        # Future enhancement: could calculate lags per club and merge back
+        
+    else:
+        # Club-level data: original logic
+        if "club_id" not in pl_features.columns:
+            # If no club_id and not game-level, return as-is
+            return pl_features, list(pl_features.columns)
+        
+        df = pl_features.sort_values(["club_id", "date", "game_id"]).reset_index(drop=True)
+        grouped = df.groupby("club_id", group_keys=False)
+
+        if "goal_difference" in df.columns:
+            draw_mask = df["goal_difference"] == 0
+            is_win_mask = df["is_win"] == 1 if "is_win" in df.columns else pd.Series([False] * len(df))
+            df["target_result"] = np.select(
+                [is_win_mask, draw_mask],
+                [RESULT_MAP["win"], RESULT_MAP["draw"]],
+                default=RESULT_MAP["loss"],
+            )
+
+        for col in TRANSFORM_COLUMNS:
+            if col not in df.columns:
+                continue
+            df[f"lag_1_{col}"] = grouped[col].shift(1)
+            if col in ROLLING_COLS:
+                rolling = (
+                    grouped[col]
+                    .rolling(window=5, min_periods=1)
+                    .mean()
+                    .reset_index(level=0, drop=True)
+                    .shift(1)
+                )
+                df[f"roll_5_avg_{col}"] = rolling
 
     base_cols = [
         c
