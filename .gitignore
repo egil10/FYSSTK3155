@@ -1,0 +1,6 @@
+
+# macOS
+.DS_Store
+
+# Large raw data
+PROJECT 3/Code/Data_bror/game_events.csv
