@@ -1,0 +1,329 @@
+############################################################
+# Descriptive EDA – updated for cumulative + lagged dataset
+# Publication-grade, consistent with new feature engineering
+############################################################
+
+# ----------------------------
+# Libraries
+# ----------------------------
+library(tidyverse)
+library(scales)
+library(patchwork)
+
+# ----------------------------
+# Paths
+# ----------------------------
+PLOT_DIR  <- "../Plots"
+DATA_PATH <- "../processed_player_value/cumlag_nn_tabular_dataset.csv"
+
+# ----------------------------
+# Safety checks
+# ----------------------------
+stopifnot(
+  dir.exists(PLOT_DIR),
+  file.exists(DATA_PATH)
+)
+
+# ----------------------------
+# Load & clean data
+# ----------------------------
+nn <- read_csv(DATA_PATH, show_col_types = FALSE) %>%
+  filter(
+    is.finite(y_log),
+    is.finite(age_years),
+    is.finite(height_in_cm)
+  )
+
+# ----------------------------
+# Colors
+# ----------------------------
+COL_BLUE <- "#1f4fd8"
+COL_RED  <- "#c9332c"
+COL_YEL  <- "#f2b705"
+COL_GRAY <- "grey70"
+
+# ----------------------------
+# Global theme
+# ----------------------------
+theme_set(
+  theme_minimal(base_family = "sans", base_size = 12) +
+    theme(
+      plot.title = element_text(size = 14, face = "bold", hjust = 0),
+      plot.subtitle = element_text(size = 11, hjust = 0),
+      axis.title = element_text(size = 11),
+      axis.text = element_text(size = 10),
+      panel.grid.minor = element_blank(),
+      panel.grid.major.x = element_blank(),
+      legend.position = "bottom",
+      legend.title = element_blank(),
+      plot.margin = margin(12, 16, 12, 16)
+    )
+)
+
+# ----------------------------
+# PDF writer
+# ----------------------------
+save_pdf <- function(p, name, w = 12, h = 6) {
+  ggsave(
+    filename = file.path(PLOT_DIR, paste0(name, ".pdf")),
+    plot = p,
+    width = w,
+    height = h
+  )
+}
+
+############################################################
+# 1. Market value distribution
+############################################################
+
+p1 <- nn %>%
+  filter(between(
+    y_log,
+    quantile(y_log, 0.005),
+    quantile(y_log, 0.995)
+  )) %>%
+  ggplot(aes(y_log)) +
+  geom_histogram(
+    aes(y = after_stat(density)),
+    bins = 140,
+    fill = COL_BLUE,
+    alpha = 0.30
+  ) +
+  geom_density(color = COL_RED, linewidth = 1.2) +
+  labs(
+    title = "Distribution of player market values",
+    subtitle = "Log scale, trimmed tails",
+    x = "log(Market value)",
+    y = "Density"
+  )
+
+save_pdf(p1, "01_dist_ylog")
+
+############################################################
+# 2. Market value over career lifecycle
+############################################################
+
+p2 <- nn %>%
+  mutate(age_bin = cut(age_years, breaks = seq(15, 45, by = 1))) %>%
+  group_by(age_bin) %>%
+  summarise(
+    age = mean(age_years),
+    y   = mean(y_log),
+    .groups = "drop"
+  ) %>%
+  ggplot(aes(age, y)) +
+  geom_line(color = COL_BLUE, linewidth = 1.1) +
+  geom_smooth(se = FALSE, color = COL_RED, linewidth = 1) +
+  labs(
+    title = "Market value over the career lifecycle",
+    x = "Age (years)",
+    y = "Mean log(Market value)"
+  )
+
+save_pdf(p2, "02_ylog_vs_age")
+
+############################################################
+# 3. Height distribution
+############################################################
+
+p3 <- nn %>%
+  filter(height_in_cm >= 150) %>%
+  ggplot(aes(height_in_cm)) +
+  geom_density(fill = COL_RED, alpha = 0.6) +
+  labs(
+    title = "Height distribution",
+    subtitle = "Players ≥ 150 cm",
+    x = "Height (cm)",
+    y = "Density"
+  )
+
+save_pdf(p3, "03_dist_height")
+
+############################################################
+# 4. Height vs age (mean + IQR)
+############################################################
+
+p4 <- nn %>%
+  filter(height_in_cm >= 150) %>%
+  mutate(age_bin = cut(age_years, breaks = seq(15, 45, by = 2))) %>%
+  group_by(age_bin) %>%
+  summarise(
+    age = mean(age_years),
+    h_mean = mean(height_in_cm),
+    h_q25  = quantile(height_in_cm, 0.25),
+    h_q75  = quantile(height_in_cm, 0.75),
+    .groups = "drop"
+  ) %>%
+  ggplot(aes(age, h_mean)) +
+  geom_ribbon(
+    aes(ymin = h_q25, ymax = h_q75),
+    fill = COL_BLUE,
+    alpha = 0.25
+  ) +
+  geom_line(color = COL_BLUE, linewidth = 1.1) +
+  labs(
+    title = "Height over the career lifecycle",
+    subtitle = "Mean with interquartile range",
+    x = "Age (years)",
+    y = "Height (cm)"
+  )
+
+save_pdf(p4, "04_height_vs_age")
+
+############################################################
+# 5. Market value by position
+############################################################
+
+nn <- nn %>%
+  mutate(position = case_when(
+    pos_ATT ~ "ATT",
+    pos_MID ~ "MID",
+    pos_DEF ~ "DEF",
+    pos_GK  ~ "GK",
+    TRUE    ~ "Other"
+  ))
+
+p5 <- ggplot(nn, aes(position, y_log, fill = position)) +
+  geom_violin(alpha = 0.6, trim = TRUE) +
+  geom_boxplot(width = 0.15, outlier.alpha = 0.03) +
+  scale_fill_manual(values = c(
+    "ATT" = COL_RED,
+    "MID" = COL_BLUE,
+    "DEF" = COL_GRAY,
+    "GK"  = "black",
+    "Other" = "grey85"
+  )) +
+  labs(
+    title = "Market value by playing position",
+    x = NULL,
+    y = "log(Market value)"
+  )
+
+save_pdf(p5, "05_ylog_by_position", 7, 6)
+
+############################################################
+# 6. Big-5 league premium
+############################################################
+
+p6 <- ggplot(nn, aes(factor(is_big5_league), y_log)) +
+  geom_boxplot(fill = COL_BLUE, alpha = 0.75) +
+  scale_x_discrete(labels = c("Non Big-5", "Big-5")) +
+  labs(
+    title = "Big-5 league premium",
+    x = NULL,
+    y = "log(Market value)"
+  )
+
+save_pdf(p6, "06_big5_premium")
+
+############################################################
+# 7. Preferred foot
+############################################################
+
+p7 <- nn %>%
+  mutate(foot = case_when(
+    foot_R ~ "Right",
+    foot_L ~ "Left",
+    foot_B ~ "Both",
+    TRUE   ~ "Unknown"
+  )) %>%
+  ggplot(aes(foot, y_log, fill = foot)) +
+  geom_boxplot(outlier.alpha = 0.03) +
+  scale_fill_manual(values = c(
+    "Right" = COL_BLUE,
+    "Left"  = COL_RED,
+    "Both"  = COL_GRAY,
+    "Unknown" = "grey85"
+  )) +
+  labs(
+    title = "Market value by preferred foot",
+    x = NULL,
+    y = "log(Market value)"
+  )
+
+save_pdf(p7, "07_ylog_by_foot")
+
+############################################################
+# 8. Goals vs assists (recent form: lag-10)
+############################################################
+
+p8 <- nn %>%
+  select(lag_10_goals, lag_10_assists) %>%
+  pivot_longer(everything(), names_to = "metric") %>%
+  filter(value > 0) %>%
+  ggplot(aes(log1p(value), fill = metric, color = metric)) +
+  geom_density(alpha = 0.30, linewidth = 1.2) +
+  scale_color_manual(values = c(
+    lag_10_goals   = COL_RED,
+    lag_10_assists = COL_BLUE
+  )) +
+  scale_fill_manual(values = c(
+    lag_10_goals   = COL_RED,
+    lag_10_assists = COL_BLUE
+  )) +
+  labs(
+    title = "Recent attacking contribution",
+    subtitle = "Lag-10 match window",
+    x = "log(1 + events)",
+    y = "Density"
+  )
+
+save_pdf(p8, "08_goals_assists_lag10")
+
+############################################################
+# 9. Yellow vs red cards (recent form)
+############################################################
+
+p9 <- nn %>%
+  select(lag_10_yellow_cards, lag_10_red_cards) %>%
+  pivot_longer(everything(), names_to = "card") %>%
+  filter(value > 0) %>%
+  ggplot(aes(log1p(value), fill = card, color = card)) +
+  geom_density(alpha = 0.30, linewidth = 1.2) +
+  scale_color_manual(values = c(
+    lag_10_yellow_cards = COL_YEL,
+    lag_10_red_cards    = COL_RED
+  )) +
+  scale_fill_manual(values = c(
+    lag_10_yellow_cards = COL_YEL,
+    lag_10_red_cards    = COL_RED
+  )) +
+  labs(
+    title = "Recent disciplinary intensity",
+    subtitle = "Lag-10 match window",
+    x = "log(1 + cards)",
+    y = "Density"
+  )
+
+save_pdf(p9, "09_cards_lag10")
+
+############################################################
+# 10. Substitutions (career totals)
+############################################################
+
+p10 <- nn %>%
+  select(cumulative_sub_in, cumulative_sub_out) %>%
+  pivot_longer(everything(), names_to = "type") %>%
+  filter(value > 0) %>%
+  ggplot(aes(log1p(value), fill = type, color = type)) +
+  geom_density(alpha = 0.25, linewidth = 1.2) +
+  scale_color_manual(values = c(
+    cumulative_sub_in  = COL_BLUE,
+    cumulative_sub_out = COL_RED
+  )) +
+  scale_fill_manual(values = c(
+    cumulative_sub_in  = COL_BLUE,
+    cumulative_sub_out = COL_RED
+  )) +
+  labs(
+    title = "Substitution patterns over careers",
+    subtitle = "Cumulative totals",
+    x = "log(1 + total substitutions)",
+    y = "Density"
+  )
+
+save_pdf(p10, "10_substitutions_cumulative")
+
+############################################################
+# END
+############################################################
