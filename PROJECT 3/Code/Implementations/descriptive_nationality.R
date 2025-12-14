@@ -23,7 +23,7 @@ DATA_DIR <- "../Data"
 PLOT_DIR <- "../Plots"
 
 # PLOT_DIR  <- "../Plots"
-# DATA_PATH <- "../processed_player_value/cumlag_nn_tabular_dataset.csv"
+# DATA_PATH <- "../Data_Processed/cumlag_nn_tabular_dataset.csv"
 
 # ----------------------------
 # Load data

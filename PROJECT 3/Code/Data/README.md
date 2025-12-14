@@ -60,12 +60,20 @@ Contains match events (goals, assists, cards, substitutions) from football games
 
 ## Data Processing
 
-The notebook `data_aggregating.ipynb` uses this data to:
-- Extract static player features (height, position, foot preference, age)
+The data processing scripts in `Code/Implementations/` use this data to:
+- Extract static player features (height, position, foot preference, age, nationality)
 - Build per-game event features (goals, assists, cards, substitutions)
 - Create time-series sequences for RNN models
-- Generate aggregated features for tabular/neural network models
+- Generate aggregated features (cumulative statistics, lag features)
 - Prepare training datasets for player value prediction
+
+**Processing Scripts:**
+- `data_aggregating.ipynb` - Basic feature extraction
+- `data_agg_cumlag.ipynb` - Adds cumulative and lag features
+- `data_agg_nationality.ipynb` - Adds nationality one-hot encoding
+
+**Output Location:**
+All processed datasets are saved to `Code/Data_Processed/` directory.
 
 ## Notes
 

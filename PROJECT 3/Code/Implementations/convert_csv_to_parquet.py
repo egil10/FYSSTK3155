@@ -8,7 +8,7 @@ from pathlib import Path
 # Project paths
 # ----------------------------
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-OUT_DIR = PROJECT_ROOT / "processed_player_value"
+OUT_DIR = PROJECT_ROOT / "Data_Processed"
 
 # Files to convert (with nat_ prefix)
 FILES_TO_CONVERT = [

@@ -30,8 +30,9 @@ FYSSTK3155/
 │   ├── README.md           # Project 2 documentation
 │   └── project2.ipynb      # Project assignment
 │
-├── PROJECT 3/              # Advanced Topics
-│   └── (in progress)
+├── PROJECT 3/              # Player Value Prediction
+│   ├── Code/               # Data processing and analysis
+│   └── README.md           # Project 3 documentation
 │
 └── README.md               # This file
 ```
@@ -138,11 +139,51 @@ For detailed information, see [PROJECT 1/README.md](PROJECT%201/README.md).
 
 For detailed information, see [PROJECT 2/README.md](PROJECT%202/README.md).
 
-## PROJECT 3: Advanced Topics
+## PROJECT 3: Player Value Prediction
 
-**Status:** In progress
+**Focus:** Time-series modeling and feature engineering for predicting football player market values using Transfermarkt data.
 
-This project will explore advanced machine learning topics and applications.
+### Objectives
+
+- Process and aggregate football player data from Transfermarkt
+- Engineer temporal features (cumulative statistics, lag features)
+- Implement RNN models for sequential player performance data
+- Compare neural network architectures (MLP, RNN) with traditional regression methods
+- Analyze the impact of player nationality and other static features on market value
+
+### Key Components
+
+**Data Processing:**
+- `data_aggregating.ipynb`: Basic feature extraction and dataset creation
+- `data_agg_cumlag.ipynb`: Cumulative and lag feature engineering
+- `data_agg_nationality.ipynb`: Nationality-enhanced feature set with one-hot encoding
+- `convert_csv_to_parquet.py`: Utility to compress large CSV files to Parquet format
+
+**Analysis Notebooks:**
+- `ridge_analysis.ipynb`: Ridge regression baseline models
+- `NN_analysis.ipynb`: Neural network analysis on basic feature set
+- `NN_analysis_nationality.ipynb`: Neural network analysis with nationality features
+- `rnn.ipynb`: RNN implementation for sequential player data
+
+**Data Structure:**
+- Raw data: `Code/Data/` (players, valuations, game events)
+- Processed data: `Code/Data_Processed/` (tabular datasets, RNN sequences, metadata)
+
+### Main Results
+
+- Multiple feature engineering approaches (basic, cumulative, nationality-enhanced)
+- Comparison of Ridge regression, MLP, and RNN models
+- Analysis of feature importance and model performance
+- Temporal feature engineering for player value prediction
+
+### Dependencies
+
+- NumPy, Pandas
+- PyTorch (for RNN models)
+- Scikit-Learn
+- Matplotlib, Seaborn
+
+For detailed information, see [PROJECT 3/README.md](PROJECT%203/README.md).
 
 ## Installation and Setup
 
