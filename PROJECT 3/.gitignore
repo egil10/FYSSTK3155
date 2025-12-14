@@ -9,6 +9,12 @@ Code/Data/*
 !Code/Data/predictive_features.txt
 !Code/Data/README.md
 
+## Large processed datasets (use Parquet instead)
+Code/processed_player_value/*.csv
+!Code/processed_player_value/*.parquet
+!Code/processed_player_value/*.npz
+!Code/processed_player_value/.gitkeep
+
 ## Notebook junk
 *.ipynb_checkpoints
 
