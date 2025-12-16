@@ -9,11 +9,12 @@ Code/Data/*
 !Code/Data/predictive_features.txt
 !Code/Data/README.md
 
-## Large processed datasets (use Parquet instead)
-Code/Data_Processed/*.csv
-!Code/Data_Processed/*.parquet
-!Code/Data_Processed/*.npz
-!Code/Data_Processed/.gitkeep
+## Large processed datasets
+# Ignore the very large nationality dataset CSV (136MB - use Parquet version instead)
+Code/Data_Processed/nat_nn_tabular_dataset.csv
+
+# All other CSV, Parquet, and NPZ files are tracked
+# (No general ignore pattern - only the specific file above is ignored)
 
 ## Notebook junk
 *.ipynb_checkpoints
