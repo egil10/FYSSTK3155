@@ -45,10 +45,11 @@ def prepare_data(
     n_rows_total = len(df)
 
     ### Ensure boolean features are treated as numeric (0/1) ###
-    bool_cols = X_df.select_dtypes(include=["bool"]).columns
+    bool_cols = df.select_dtypes(include=["bool"]).columns
     if len(bool_cols) > 0:
-        X_df[bool_cols] = X_df[bool_cols].astype(np.float32)
-    
+        df = df.copy()
+        df[bool_cols] = df[bool_cols].astype(np.float32)
+
     ### Feature selection ###
     if numeric_only:
         X_df = df.select_dtypes(include=[np.number]).copy()
