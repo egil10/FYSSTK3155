@@ -17,7 +17,7 @@ def prepare_data(
     standardize: bool = True,
 ):
     """
-    Prepare tabular player valuation data for Ridge and MLP.
+    Prepare tabular player valuation data for Ridge and NN.
 
     Input:
         df : pandas DataFrame (already loaded in notebook)
@@ -35,24 +35,23 @@ def prepare_data(
             - summary
     """
 
-    # --------------------
-    # 1. Sanity checks
-    # --------------------
+
+    ### Sanity checks ###
+
     for col in [target_log, target_raw, group_col]:
         if col not in df.columns:
             raise ValueError(f"Missing required column '{col}'")
 
     n_rows_total = len(df)
 
-    # --------------------
-    # 2. Feature selection
-    # --------------------
+
+    ### Feature selection ###
     if numeric_only:
         X_df = df.select_dtypes(include=[np.number]).copy()
     else:
         X_df = df.copy()
 
-    # Drop targets and group column from features
+    ### Drop targets and group column from features ###
     drop_cols = [c for c in [target_log, target_raw, group_col] if c in X_df.columns]
     X_df = X_df.drop(columns=drop_cols, errors="ignore")
 
@@ -61,17 +60,15 @@ def prepare_data(
 
     feature_cols = X_df.columns.tolist()
 
-    # --------------------
-    # 3. Targets and groups
-    # --------------------
+
+    ### Targets and groups ###
+
     X_df = X_df.replace([np.inf, -np.inf], np.nan)
     y_log = df[target_log].replace([np.inf, -np.inf], np.nan)
     y_raw = df[target_raw].replace([np.inf, -np.inf], np.nan)
     groups = df[group_col]
 
-    # --------------------
-    # 4. Drop NaN / inf rows
-    # --------------------
+    ### Drop NaN / inf rows ###
     if drop_na:
         mask = (
             ~X_df.isna().any(axis=1)
@@ -86,17 +83,16 @@ def prepare_data(
 
     n_rows_used = len(X_df)
 
-    # --------------------
-    # 5. Full (cleaned) arrays
-    # --------------------
+
+    ### Full (cleaned) arrays ###
+
     X_full = X_df.to_numpy(dtype=np.float32)
     ylog_full = y_log.to_numpy(dtype=np.float32).reshape(-1, 1)
     yraw_full = y_raw.to_numpy(dtype=np.float32).reshape(-1, 1)
     groups_full = groups.to_numpy()
 
-    # --------------------
-    # 6. Leakage-safe split
-    # --------------------
+    ### Train/test split (leakage safe, groupwise) ###
+
     idx = np.arange(len(X_full))
     splitter = GroupShuffleSplit(
         n_splits=1, test_size=test_size, random_state=seed
@@ -116,16 +112,15 @@ def prepare_data(
     groups_train = groups_full[train_idx]
     groups_test = groups_full[test_idx]
 
-    # Safety check
+    ### Safety check: No player_id in both test and train set ###
     overlap = len(set(groups_train).intersection(set(groups_test)))
     if overlap != 0:
         raise RuntimeError(
             f"Group leakage detected: {overlap} players appear in both train and test."
         )
 
-    # --------------------
-    # 7. Scaling
-    # --------------------
+    ### Scaling ###
+
     scaler = StandardScaler()
     if standardize:
         X_train = scaler.fit_transform(X_train_raw).astype(np.float32)
@@ -134,9 +129,9 @@ def prepare_data(
         X_train = X_train_raw.astype(np.float32)
         X_test = X_test_raw.astype(np.float32)
 
-    # --------------------
-    # 8. Summary
-    # --------------------
+
+    ### Make summary dictionary ###
+
     summary = {
         "n_rows_total": int(n_rows_total),
         "n_rows_used": int(n_rows_used),
