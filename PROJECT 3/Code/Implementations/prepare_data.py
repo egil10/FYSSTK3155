@@ -11,7 +11,7 @@ def prepare_data(
     target_raw: str = "y_raw",
     group_col: str = "player_id",
     test_size: float = 0.2,
-    seed: int = 42,
+    seed: int = 6114,
     numeric_only: bool = True,
     drop_na: bool = True,
     standardize: bool = True,
