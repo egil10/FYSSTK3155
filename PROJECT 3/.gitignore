@@ -8,6 +8,14 @@ Code/Data/*
 # !Code/Data/game_features.csv
 !Code/Data/predictive_features.txt
 !Code/Data/README.md
+!Code/Data/ChampionsLeague2023.json
+
+## Large processed datasets
+# Ignore the very large nationality dataset CSV (136MB - use Parquet version instead)
+Code/Data_Processed/nat_nn_tabular_dataset.csv
+
+# All other CSV, Parquet, and NPZ files are tracked
+# (No general ignore pattern - only the specific file above is ignored)
 
 ## Notebook junk
 *.ipynb_checkpoints

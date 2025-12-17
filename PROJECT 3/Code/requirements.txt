@@ -17,5 +17,7 @@ cycler
 pandas
 pyarrow      # parquet support for aggregated datasets
 
+tqdm
+
 # Optional: for notebooks
 jupyter
