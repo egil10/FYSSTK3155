@@ -4,3 +4,11 @@
 
 # Large raw data
 PROJECT 3/Code/Data_bror/game_events.csv
+
+# Python
+__pycache__/
+*.py[cod]
+
+# R
+.Rhistory
+.RData

@@ -20,6 +20,12 @@ Code/Data_Processed/nat_nn_tabular_dataset.csv
 ## Notebook junk
 *.ipynb_checkpoints
 
+
 ## Python cache
 __pycache__/
+*.pyc
+
+## R
+.Rhistory
+.RData
 
