@@ -8,7 +8,7 @@ Code/Data/*
 # !Code/Data/game_features.csv
 !Code/Data/predictive_features.txt
 !Code/Data/README.md
-!Code/Data/ChampionsLeague2023.json
+!Code/Data/ChampionsLeague2024.json
 
 ## Large processed datasets
 # Ignore the very large nationality dataset CSV (136MB - use Parquet version instead)
