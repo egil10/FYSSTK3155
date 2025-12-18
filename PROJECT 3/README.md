@@ -19,12 +19,12 @@ PROJECT 3/
 ## Workflows & Datasets
 
 ### 1. Core Feature Set
-- **Source**: `Code/Implementations/data_agg_cumlag.ipynb`
+- **Source**: `Code/Implementations/generate_player_core_features.ipynb`
 - **Output**: `player_core_features.csv`
 - **Content**: Player stats, cumulative performance, and 10-game lag features.
 
 ### 2. Extended Feature Set (Nationality)
-- **Source**: `Code/Implementations/data_agg_nationality.ipynb`
+- **Source**: `Code/Implementations/generate_player_extended_features.ipynb`
 - **Output**: `player_extended_features.parquet`
 - **Content**: Includes all core features plus 184 one-hot encoded nationality features. Saved as Parquet for performance.
 

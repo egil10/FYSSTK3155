@@ -17,7 +17,7 @@ Code/
 Run these notebooks to generate the datasets:
 
 ### 1. Core Features
-**Notebook:** `Implementations/data_agg_cumlag.ipynb`  
+**Notebook:** `Implementations/generate_player_core_features.ipynb`  
 **Output:** `Data_Processed/player_core_features.csv`  
 **What it does:**
 - Extracts basic player stats and game events.
@@ -25,7 +25,7 @@ Run these notebooks to generate the datasets:
 - Saves a clean CSV for analysis.
 
 ### 2. Extended Features (Nationality + Parquet)
-**Notebook:** `Implementations/data_agg_nationality.ipynb`  
+**Notebook:** `Implementations/generate_player_extended_features.ipynb`  
 **Output:** `Data_Processed/player_extended_features.parquet`  
 **What it does:**
 - Includes all core features.
